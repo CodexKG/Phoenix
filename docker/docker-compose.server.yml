@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db_phoenix:
+    image: postgres:13
+    env_file:
+      - ../.env.prod
+    volumes:
+      - phoenix_postgres_data:/var/lib/postgresql/data
+
+  rabbitmq_phoenix:
+    image: rabbitmq:3-management
+    ports:
+      - "5674:5672"   # Измените порты здесь
+      - "15674:15672" # Измените порты здесь
+
+  web_phoenix:
+    build:
+      context: ..
+      dockerfile: Dockerfile.server
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:8001
+    volumes:
+      - ../:/app
+      - ../static:/app/static
+      - ../media:/app/media
+    env_file:
+      - ../.env.prod
+    depends_on:
+      - db_phoenix
+      - rabbitmq_phoenix
+    expose:
+      - "8001"
+
+  nginx_phoenix:
+    image: nginx:latest
+    ports:
+      - "8081:80"
+      - "8444:443"
+    volumes:
+      - ../nginx/nginx.server.conf:/etc/nginx/nginx.conf:ro
+      - ../static:/app/static
+      - ../media:/app/media
+      - /etc/letsencrypt/live/luxort.kg/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro
+      - /etc/letsencrypt/live/luxort.kg/privkey.pem:/etc/nginx/certs/privkey.pem:ro
+    depends_on:
+      - web_phoenix
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  phoenix_postgres_data:
