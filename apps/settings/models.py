@@ -15,12 +15,17 @@ class Setting(models.Model):
     )
     logo = ResizedImageField(
         force_format="WEBP", quality=100, 
-        upload_to='uploads/', verbose_name="Фотография", 
+        upload_to='uploads/', verbose_name="Логотип", 
         blank=True, null=True
     )
     mobile_logo = ResizedImageField(
         force_format="WEBP", quality=100, 
-        upload_to='uploads/', verbose_name="Фотография", 
+        upload_to='uploads/', verbose_name="Мобильное лого", 
+        blank=True, null=True
+    )
+    crm_logo = ResizedImageField(
+        force_format="WEBP", quality=100, 
+        upload_to='uploads/', verbose_name="CRM лого", 
         blank=True, null=True
     )
     email = models.EmailField(

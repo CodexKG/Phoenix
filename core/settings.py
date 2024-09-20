@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     #apps
     'apps.settings',
     'apps.crm',
+    'apps.kanban',
+    'apps.erp',
+    'apps.cms',
 
     #rest
     'django_filters',
@@ -85,6 +88,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                #custom
+                'apps.settings.context_processors.global_settings'
             ],
         },
     },
@@ -173,6 +179,7 @@ STATIC_URL = '/static/'
 
 # Эта строка нужна для указания Django, куда собирать статические файлы при запуске collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Используйте другое имя папки, чтобы не путаться с STATICFILES_DIRS
+# STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

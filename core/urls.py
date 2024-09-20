@@ -43,8 +43,16 @@ api_urlpatterns = [
 ]
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/', include(api_urlpatterns))
+    path('django/admin/', admin.site.urls),
+    path('api/v1/', include(api_urlpatterns)),
+
+    #crm
+    path('admin/', include('apps.crm.urls')),
+
+    #apps
+    path('', include('apps.settings.urls')),
+
+    path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
 ]
 
 if settings.DEBUG:
