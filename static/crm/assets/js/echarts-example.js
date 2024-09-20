@@ -1,11 +1,11 @@
 "use strict";
 
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 /* -------------------------------------------------------------------------- */
 /*                                    Utils                                   */
 /* -------------------------------------------------------------------------- */
@@ -24,11 +24,8 @@ var isIterableArray = function isIterableArray(array) {
   return Array.isArray(array) && !!array.length;
 };
 var camelize = function camelize(str) {
-  var text = str.replace(/[-_\s.]+(.)?/g, function (match, capture) {
-    if (capture) {
-      return capture.toUpperCase();
-    }
-    return '';
+  var text = str.replace(/[-_\s.]+(.)?/g, function (_, c) {
+    return c ? c.toUpperCase() : '';
   });
   return "".concat(text.substr(0, 1).toLowerCase()).concat(text.substr(1));
 };
@@ -154,9 +151,7 @@ var getBreakpoint = function getBreakpoint(el) {
 var getSystemTheme = function getSystemTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
-var isDark = function isDark() {
-  return localStorage.getItem('theme') === 'auto' ? getSystemTheme() : localStorage.getItem('theme');
-};
+
 /* --------------------------------- Cookie --------------------------------- */
 
 var setCookie = function setCookie(name, value, expire) {
@@ -269,9 +264,10 @@ var utils = {
   getPastDates: getPastDates,
   getRandomNumber: getRandomNumber,
   removeClass: removeClass,
-  getSystemTheme: getSystemTheme,
-  isDark: isDark
+  getSystemTheme: getSystemTheme
 };
+
+/* eslint-disable */
 var getPosition = function getPosition(pos, params, dom, rect, size) {
   return {
     top: pos[1] - size.contentSize[1] - 10,
@@ -290,11 +286,11 @@ var echartSetOption = function echartSetOption(chart, userOptions, getDefaultOpt
   });
 };
 var tooltipFormatter = function tooltipFormatter(params) {
-  var tooltipItem = '';
+  var tooltipItem = "";
   params.forEach(function (el) {
-    tooltipItem += "<div class='ms-1'>\n        <h6 class=\"text-700\">\n          <span class=\"fas fa-circle me-1 fs-11\" style=\"color:".concat(el.borderColor ? el.borderColor : el.color, "\"></span>\n          ").concat(el.seriesName, " : ").concat(_typeof(el.value) === 'object' ? el.value[1] : el.value, "\n        </h6>\n      </div>");
+    tooltipItem = tooltipItem + "<div class='ms-1'>\n        <h6 class=\"text-700\"><span class=\"fas fa-circle me-1 fs-11\" style=\"color:".concat(el.borderColor ? el.borderColor : el.color, "\"></span>\n          ").concat(el.seriesName, " : ").concat(_typeof(el.value) === 'object' ? el.value[1] : el.value, "\n        </h6>\n      </div>");
   });
-  return "\n    <div>\n      <p class='mb-2 text-600'>\n        ".concat(window.dayjs(params[0].axisValue).isValid() ? window.dayjs(params[0].axisValue).format('MMMM DD') : params[0].axisValue, "\n      </p>\n      ").concat(tooltipItem, "\n    </div>");
+  return "<div>\n            <p class='mb-2 text-600'>\n              ".concat(window.dayjs(params[0].axisValue).isValid() ? window.dayjs(params[0].axisValue).format('MMMM DD') : params[0].axisValue, "\n            </p>\n            ").concat(tooltipItem, "\n          </div>");
 };
 
 /* -------------------------------------------------------------------------- */
@@ -715,6 +711,7 @@ var echartsBarRaceChartInit = function echartsBarRaceChartInit() {
           animationDurationUpdate: 300,
           max: 4 // only the largest 5 bars will be displayed
         },
+
         series: [{
           realtimeSort: true,
           name: 'X',
@@ -1264,9 +1261,14 @@ var echartsWaterFallChartInit = function echartsWaterFallChartInit() {
             color: utils.getGrays()['1100']
           },
           borderWidth: 1,
-          formatter: function formatter(params) {
-            var tar = params[1].value !== '-' ? params[1] : params[2];
-            return "".concat(window.dayjs(tar.name).format('MMM DD'), "<br/>").concat(tar.seriesName, ": ").concat(tar.value);
+          /* eslint-disable prefer-destructuring */formatter: function formatter(params) {
+            var tar;
+            if (params[1].value !== '-') {
+              tar = params[1];
+            } else {
+              tar = params[2];
+            }
+            return "".concat(window.dayjs(tar.name).format('MMM DD'), "<br/>").concat(tar.seriesName, " : ").concat(tar.value);
           },
           transitionDuration: 0,
           axisPointer: {
@@ -1475,6 +1477,8 @@ var echartsBasicBarChartInit = function echartsBasicBarChartInit() {
     echartSetOption(chart, userOptions, getDefaultOptions);
   }
 };
+
+/* eslint-disable */
 
 /* -------------------------------------------------------------------------- */
 /*                             Echarts Bar Chart                             */
@@ -1923,9 +1927,15 @@ var echartsCandlestickMixedChartInit = function echartsCandlestickMixedChartInit
     var userOptions = utils.getData($candleStickMixedChartEl, 'options');
     var chart = window.echarts.init($candleStickMixedChartEl);
     var colorList = [utils.getColor('primary'), utils.getColor('info'), utils.getColor('dark'), utils.getColor('warning')];
+
+    /* eslint-disable no-continue */
     var calculateMA = function calculateMA(dayCount, data) {
       var result = [];
-      for (var i = dayCount; i < data.length; i += 1) {
+      for (var i = 0, len = data.length; i < len; i += 1) {
+        if (i < dayCount) {
+          result.push('-');
+          continue;
+        }
         var sum = 0;
         for (var j = 0; j < dayCount; j += 1) {
           sum += data[i - j][1];
@@ -2318,6 +2328,8 @@ var echartsDoughnutRoundedChartInit = function echartsDoughnutRoundedChartInit()
   }
 };
 
+/* eslint-disable */
+
 /* -------------------------------------------------------------------------- */
 /*                           Echarts Dynamic Line Chart                       */
 /* -------------------------------------------------------------------------- */
@@ -2328,10 +2340,6 @@ var echartsDynamicLineChartInit = function echartsDynamicLineChartInit() {
     // Get options from data attribute
     var userOptions = utils.getData($dynamicLineChartEl, 'options');
     var chart = window.echarts.init($dynamicLineChartEl);
-    var data = [];
-    var now = +new Date(1997, 9, 3);
-    var oneDay = 24 * 3600 * 1000;
-    var value = Math.random() * 1000;
     var randomData = function randomData() {
       now = new Date(+now + oneDay);
       value = value + Math.random() * 21 - 10;
@@ -2340,7 +2348,11 @@ var echartsDynamicLineChartInit = function echartsDynamicLineChartInit() {
         value: [[now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'), Math.round(value)]
       };
     };
-    for (var i = 0; i < 1000; i += 1) {
+    var data = [];
+    var now = +new Date(1997, 9, 3);
+    var oneDay = 24 * 3600 * 1000;
+    var value = Math.random() * 1000;
+    for (var i = 0; i < 1000; i++) {
       data.push(randomData());
     }
     var getDefaultOptions = function getDefaultOptions() {
@@ -2416,7 +2428,7 @@ var echartsDynamicLineChartInit = function echartsDynamicLineChartInit() {
     };
     echartSetOption(chart, userOptions, getDefaultOptions);
     setInterval(function () {
-      for (var _i = 0; _i < 5; _i += 1) {
+      for (var i = 0; i < 5; i++) {
         data.shift();
         data.push(randomData());
       }
@@ -3187,6 +3199,7 @@ var echartsHeatMapChartInit = function echartsHeatMapChartInit() {
             ]
           }
         },
+
         series: [{
           type: 'heatmap',
           data: data,
@@ -3773,6 +3786,7 @@ var echartsLineMarkerChartInit = function echartsLineMarkerChartInit() {
         color: [utils.getColor('primary'), utils.getColor('warning')
         // utils.getColor('danger')
         ],
+
         legend: {
           data: [{
             name: 'Max',
@@ -6579,7 +6593,7 @@ var echartsStackedVerticalChartInit = function echartsStackedVerticalChartInit()
     };
     var getDefaultOptions = function getDefaultOptions() {
       return {
-        color: [utils.getColor('primary'), utils.getColor('info'), utils.isDark() === 'dark' ? '#229BD2' : '#73D3FE', utils.isDark() === 'dark' ? '#195979' : '#A9E4FF'],
+        color: [utils.getColor('primary'), utils.getColor('info'), localStorage.getItem('theme') === 'dark' ? '#229BD2' : '#73D3FE', localStorage.getItem('theme') === 'dark' ? '#195979' : '#A9E4FF'],
         tooltip: {
           trigger: 'item',
           padding: [7, 10],

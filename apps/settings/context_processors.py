@@ -1,5 +1,8 @@
 from apps.settings.models import Setting
 
 def global_settings(request):
-    setting = Setting.objects.latest('id')
+    try:
+        setting = Setting.objects.latest('id')
+    except:
+        setting = {'title':'not found'}
     return {'setting':setting}

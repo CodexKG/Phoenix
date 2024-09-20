@@ -47,10 +47,11 @@ urlpatterns = [
     path('api/v1/', include(api_urlpatterns)),
 
     #crm
-    path('admin/', include('apps.crm.urls')),
+    path('admin/', include('apps.queenbee.urls')),
 
     #apps
     path('', include('apps.settings.urls')),
+    # path('kanban/', include('apps.kanban.urls')),
 
     path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
 ]

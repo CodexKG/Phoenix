@@ -1,0 +1,296 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+.kanban-board {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    scrollbar-width: thin;
+}
+
+.kanban-board::-webkit-scrollbar {
+    height: 12px;
+}
+
+.kanban-board::-webkit-scrollbar-thumb {
+    background-color: #b0b0b0;
+    border-radius: 10px;
+}
+
+.kanban-list {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease; /* Убираем анимацию увеличения, оставляем только тень */
+}
+
+.kanban-list:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Только изменение тени при наведении */
+}
+
+.kanban-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Отступы между карточками */
+    margin-bottom: 15px;
+}
+
+.kanban-card {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: black;
+    transition: box-shadow 0.3s ease;
+}
+
+.kanban-card:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Более глубокая тень при наведении */
+}
+
+.kanban-card h4 {
+    color: black;
+    margin: 0 0 10px 0;
+}
+
+.kanban-card p {
+    margin: 0;
+}
+
+.kanban-board__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.kanban-board__title {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    font-size: 24px;
+    color: black;
+    margin-right: 20px;
+}
+
+.add-list-btn {
+    background-color: #f1f1f1;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-list-btn:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Более глубокая тень при наведении */
+}
+
+.add-card-btn {
+    background-color: #f1f1f1;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: auto;
+    width: 100%;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-card-btn:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Более глубокая тень при наведении */
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Окно фиксировано на экране */
+    z-index: 1000; /* Поверх всех элементов */
+    left: 0;
+    top: 0;
+    width: 100%; /* Занимает всю ширину */
+    height: 100%; /* Занимает всю высоту */
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный темный фон для выделения окна */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Убираем скролл */
+}
+
+/* Центрирование модального контента */
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 40%; /* Ширина модального окна */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Тень вокруг модального окна */
+    text-align: center;
+    position: relative; /* Для кнопки закрытия */
+}
+
+/* Кнопка закрытия */
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Стили для инпута и кнопки */
+.form-control {
+    width: 80%; /* Ширина инпута */
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.add-list-btn {
+    padding: 10px 20px;
+    background-color: #F23F12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-list-btn:hover {
+    background-color: #d63810;
+}
+
+</style>
+
+<main class="main" id="top">
+    <div class="container" data-layout="container">
+        {% include 'queenbee/include/header.html' %}
+
+        <!-- Modal -->
+        <div id="addListModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Добавить новый список</h2>
+                <form id="addListForm">
+                    {% csrf_token %}
+                    <input type="text" name="title" id="listTitle" class="form-control" placeholder="Название списка">
+                    <button type="submit" class="add-list-btn">Добавить список</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const openAddListButton = document.getElementById('openAddListModal');
+                const modal = document.getElementById('addListModal');
+                const closeModal = document.querySelector('.close');
+                const addListForm = document.getElementById('addListForm');
+
+                // Проверка на существование кнопки перед добавлением события
+                if (openAddListButton) {
+                    // Открыть модальное окно
+                    openAddListButton.addEventListener('click', function() {
+                        modal.style.display = 'block';
+                    });
+
+                    // Закрыть модальное окно
+                    closeModal.addEventListener('click', function() {
+                        modal.style.display = 'none';
+                    });
+
+                    // Закрытие модального окна при клике вне его
+                    window.addEventListener('click', function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = 'none';
+                        }
+                    });
+
+                    // Отправить данные формы через AJAX
+                    addListForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        const title = document.getElementById('listTitle').value;
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                        fetch("{% url 'crm_add_list' board.id %}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+                            body: JSON.stringify({ title: title })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert('Ошибка: ' + data.error);
+                            } else {
+                                // Закрыть модальное окно и очистить форму
+                                modal.style.display = 'none';
+                                document.getElementById('listTitle').value = '';
+
+                                // Добавить новый список в DOM
+                                const kanbanBoard = document.querySelector('.kanban-board');
+                                const newListHTML = `
+                                    <div class="kanban-list">
+                                        <h3>${data.title}</h3>
+                                        <div class="kanban-cards">
+                                            <p>Нет задач в этом списке</p>
+                                        </div>
+                                        <button class="add-card-btn">Добавить карточку</button>
+                                    </div>
+                                `;
+                                kanbanBoard.insertAdjacentHTML('beforeend', newListHTML);
+                            }
+                        })
+                        .catch(error => console.error('Ошибка:', error));
+                    });
+                }
+            });
+        </script>
+
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="kanban-board__header">
+                    <div class="kanban-board__title">{{ board.title }}</div>
+                    <button id="openAddListModal" class="add-list-btn">Добавить список</button>
+                </div>
+                <div class="kanban-board">
+                    {% for list in lists %}
+                    <div class="kanban-list">
+                        <h3>{{ list.title }}</h3>
+                        <div class="kanban-cards">
+                            {% for card in list.card_lists.all %}
+                            <div class="kanban-card">
+                                <h4>{{ card.title }}</h4>
+                                <p>{{ card.description }}</p>
+                                <p>Срок: {{ card.due_date|date:"d M Y" }}</p>
+                            </div>
+                            {% empty %}
+                            <p>Нет задач в этом списке</p>
+                            {% endfor %}
+                        </div>
+                        <button class="add-card-btn">Добавить карточку</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

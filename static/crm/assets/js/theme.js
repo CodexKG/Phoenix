@@ -1,6 +1,7 @@
 "use strict";
 
 var _excluded = ["endValue"];
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -9,15 +10,15 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
-function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 /* -------------------------------------------------------------------------- */
 /*                                    Utils                                   */
 /* -------------------------------------------------------------------------- */
@@ -36,11 +37,8 @@ var isIterableArray = function isIterableArray(array) {
   return Array.isArray(array) && !!array.length;
 };
 var camelize = function camelize(str) {
-  var text = str.replace(/[-_\s.]+(.)?/g, function (match, capture) {
-    if (capture) {
-      return capture.toUpperCase();
-    }
-    return '';
+  var text = str.replace(/[-_\s.]+(.)?/g, function (_, c) {
+    return c ? c.toUpperCase() : '';
   });
   return "".concat(text.substr(0, 1).toLowerCase()).concat(text.substr(1));
 };
@@ -166,9 +164,7 @@ var getBreakpoint = function getBreakpoint(el) {
 var getSystemTheme = function getSystemTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
-var isDark = function isDark() {
-  return localStorage.getItem('theme') === 'auto' ? getSystemTheme() : localStorage.getItem('theme');
-};
+
 /* --------------------------------- Cookie --------------------------------- */
 
 var setCookie = function setCookie(name, value, expire) {
@@ -281,8 +277,7 @@ var utils = {
   getPastDates: getPastDates,
   getRandomNumber: getRandomNumber,
   removeClass: removeClass,
-  getSystemTheme: getSystemTheme,
-  isDark: isDark
+  getSystemTheme: getSystemTheme
 };
 
 /* -------------------------------------------------------------------------- */
@@ -391,6 +386,7 @@ var DomNode = /*#__PURE__*/function () {
   }]);
   return DomNode;
 }();
+/* eslint-disable */
 var orders = [{
   id: 1,
   dropdownId: 'order-dropdown-1',
@@ -874,9 +870,8 @@ var orders = [{
 }];
 var advanceAjaxTableInit = function advanceAjaxTableInit() {
   var togglePaginationButtonDisable = function togglePaginationButtonDisable(button, disabled) {
-    var updatedButton = button;
-    updatedButton.disabled = disabled;
-    updatedButton.classList[disabled ? 'add' : 'remove']('disabled');
+    button.disabled = disabled;
+    button.classList[disabled ? 'add' : 'remove']('disabled');
   };
   // Selectors
   var table = document.getElementById('advanceAjaxTable');
@@ -896,8 +891,9 @@ var advanceAjaxTableInit = function advanceAjaxTableInit() {
           shippingType = values.shippingType,
           status = values.status,
           badge = values.badge,
-          amount = values.amount;
-        return "\n          <tr class=\"btn-reveal-trigger\">\n            <td class=\"order py-2 align-middle white-space-nowrap\">\n              <a href=\"https://prium.github.io/falcon/v3.16.0/app/e-commerce/orders/order-details.html\">\n                <strong>".concat(orderId, "</strong>\n              </a>\n              by\n              <strong>").concat(name, "</strong>\n              <br />\n              <a href=\"mailto:").concat(email, "\">").concat(email, "</a>\n            </td>\n            <td class=\"py-2 align-middle\">\n              ").concat(date, "\n            </td>\n            <td class=\"py-2 align-middle white-space-nowrap\">\n              ").concat(address, "\n              <p class=\"mb-0 text-500\">").concat(shippingType, "</p>\n            </td>\n            <td class=\"py-2 align-middle text-center fs-9 white-space-nowrap\">\n              <span class=\"badge rounded-pill d-block badge-subtle-").concat(badge.type, "\">\n                ").concat(status, "\n                <span class=\"ms-1 ").concat(badge.icon, "\" data-fa-transform=\"shrink-2\"></span>\n              </span>\n            </td>\n            <td class=\"py-2 align-middle text-end fs-9 fw-medium\">\n              ").concat(amount, "\n            </td>\n            <td class=\"py-2 align-middle white-space-nowrap text-end\">\n              <div class=\"dropstart font-sans-serif position-static d-inline-block\">\n                <button class=\"btn btn-link text-600 btn-sm dropdown-toggle btn-reveal\" type='button' id=\"order-dropdown-").concat(id, "\" data-bs-toggle=\"dropdown\" data-boundary=\"window\" aria-haspopup=\"true\" aria-expanded=\"false\" data-bs-reference=\"parent\">\n                  <span class=\"fas fa-ellipsis-h fs-10\"></span>\n                </button>\n                <div class=\"dropdown-menu dropdown-menu-end border py-2\" aria-labelledby=\"order-dropdown-").concat(id, "\">\n                  <a href=\"#!\" class=\"dropdown-item\">View</a>\n                  <a href=\"#!\" class=\"dropdown-item\">Edit</a>\n                  <a href=\"#!\" class=\"dropdown-item\">Refund</a>\n                  <div class\"dropdown-divider\"></div>\n                  <a href=\"#!\" class=\"dropdown-item text-warning\">Archive</a>\n                  <a href=\"#!\" class=\"dropdown-item text-warning\">Archive</a>\n                </div>\n              </div>\n            </td>\n          </tr>\n        ");
+          amount = values.amount,
+          total_price = values.total_price;
+        return "\n          <tr class=\"btn-reveal-trigger\">\n           <td class=\"order py-2 align-middle white-space-nowrap\">\n              <a href=\"https://prium.github.io/falcon/v3.16.0/app/e-commerce/orders/order-details.html\">\n                <strong>".concat(orderId, "</strong>\n              </a>\n              by\n              <strong>").concat(name, "</strong>\n              <br />\n              <a href=\"mailto:").concat(email, "\">").concat(email, "</a>\n            </td>\n            <td class=\"py-2 align-middle\">\n              ").concat(date, "\n            </td>\n            <td class=\"py-2 align-middle white-space-nowrap\">\n              ").concat(address, "\n              <p class=\"mb-0 text-500\">").concat(shippingType, "</p>\n            </td>\n            <td class=\"py-2 align-middle text-center fs-9 white-space-nowrap\">\n              <span class=\"badge rounded-pill d-block badge-subtle-").concat(badge.type, "\">\n                ").concat(status, "\n                <span class=\"ms-1 ").concat(badge.icon, "\" data-fa-transform=\"shrink-2\"></span>\n              </span>\n            </td>\n            <td class=\"py-2 align-middle text-end fs-9 fw-medium\">\n              ").concat(amount, "\n            </td>\n            <td class=\"py-2 align-middle white-space-nowrap text-end\">\n              <div class=\"dropstart font-sans-serif position-static d-inline-block\">\n                <button class=\"btn btn-link text-600 btn-sm dropdown-toggle btn-reveal\" type='button' id=\"order-dropdown-").concat(id, "\" data-bs-toggle=\"dropdown\" data-boundary=\"window\" aria-haspopup=\"true\" aria-expanded=\"false\" data-bs-reference=\"parent\">\n                  <span class=\"fas fa-ellipsis-h fs-10\"></span>\n                </button>\n                <div class=\"dropdown-menu dropdown-menu-end border py-2\" aria-labelledby=\"order-dropdown-").concat(id, "\">\n                  <a href=\"#!\" class=\"dropdown-item\">View</a>\n                  <a href=\"#!\" class=\"dropdown-item\">Edit</a>\n                  <a href=\"#!\" class=\"dropdown-item\">Refund</a>\n                  <div class\"dropdown-divider\"></div>\n                  <a href=\"#!\" class=\"dropdown-item text-warning\">Archive</a>\n                  <a href=\"#!\" class=\"dropdown-item text-warning\">Archive</a>\n                </div>\n              </div>\n            </td>\n          </tr>\n        ");
       }
     };
     var paginationButtonNext = table.querySelector('[data-list-pagination="next"]');
@@ -931,9 +927,7 @@ var advanceAjaxTableInit = function advanceAjaxTableInit() {
     var updateListControls = function updateListControls() {
       listInfo && (listInfo.innerHTML = "".concat(orderList.i, " to ").concat(numberOfcurrentItems, " of ").concat(totalItem));
       paginationButtonPrev && togglePaginationButtonDisable(paginationButtonPrev, pageCount === 1);
-      if (paginationButtonNext) {
-        togglePaginationButtonDisable(paginationButtonNext, pageCount === pageQuantity);
-      }
+      paginationButtonNext && togglePaginationButtonDisable(paginationButtonNext, pageCount === pageQuantity);
       if (pageCount > 1 && pageCount < pageQuantity) {
         togglePaginationButtonDisable(paginationButtonNext, false);
         togglePaginationButtonDisable(paginationButtonPrev, false);
@@ -1139,6 +1133,7 @@ var BulkSelect = /*#__PURE__*/function () {
         }
         _this.toggleDisplay();
         _this.bulkSelectRows.forEach(function (el) {
+          // eslint-disable-next-line
           el.checked = _this.element.checked;
         });
       });
@@ -1360,6 +1355,7 @@ var choicesInit = function choicesInit() {
             }
           });
         };
+
         validationItem.addEventListener('submit', function () {
           selectFormValidation();
         });
@@ -1418,21 +1414,19 @@ var cookieNoticeInit = function cookieNoticeInit() {
         cookieExpireTime: 3600000,
         showOnce: false
       }, utils.getData(el, DataKeys.OPTIONS));
-      if (toastOptions.showOnce) {
-        utils.setCookie('notice', false, toastOptions.cookieExpireTime);
-      }
+      toastOptions.showOnce && utils.setCookie('notice', false, toastOptions.cookieExpireTime);
     });
   });
   var btnNoticeToggle = document.querySelector(Selector.DATA_TOGGLE_Notice);
-  if (btnNoticeToggle) {
-    btnNoticeToggle.addEventListener(Events.CLICK, function (_ref) {
-      var currentTarget = _ref.currentTarget;
-      var id = currentTarget.getAttribute('href');
-      var notice = new window.bootstrap.Toast(document.querySelector(id));
-      var el = notice._element;
-      utils.hasClass(el, ClassNames.HIDE) ? notice.show() : notice.hide();
-    });
-  }
+  btnNoticeToggle && btnNoticeToggle.addEventListener(Events.CLICK, function (_ref) {
+    var currentTarget = _ref.currentTarget;
+    var id = currentTarget.getAttribute('href');
+    var notice = new window.bootstrap.Toast(document.querySelector(id));
+
+    /*eslint-disable-next-line*/
+    var el = notice._element;
+    utils.hasClass(el, ClassNames.HIDE) ? notice.show() : notice.hide();
+  });
 };
 
 /* -------------------------------------------------------------------------- */
@@ -1517,6 +1511,61 @@ var dataTablesInit = function dataTablesInit() {
   }
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                  Draggable                                 */
+/* -------------------------------------------------------------------------- */
+
+var draggableInit = function draggableInit() {
+  var Selectors = {
+    BODY: 'body',
+    KANBAN_CONTAINER: '.kanban-container',
+    KABNBAN_COLUMN: '.kanban-column',
+    KANBAN_ITEMS_CONTAINER: '.kanban-items-container',
+    KANBAN_ITEM: '.kanban-item',
+    ADD_CARD_FORM: '.add-card-form'
+  };
+  var Events = {
+    DRAG_START: 'drag:start',
+    DRAG_STOP: 'drag:stop'
+  };
+  var ClassNames = {
+    FORM_ADDED: 'form-added'
+  };
+  var columns = document.querySelectorAll(Selectors.KABNBAN_COLUMN);
+  var columnContainers = document.querySelectorAll(Selectors.KANBAN_ITEMS_CONTAINER);
+  var container = document.querySelector(Selectors.KANBAN_CONTAINER);
+  if (columnContainers.length) {
+    // Initialize Sortable
+    var sortable = new window.Draggable.Sortable(columnContainers, {
+      draggable: Selectors.KANBAN_ITEM,
+      delay: 200,
+      mirror: {
+        appendTo: Selectors.BODY,
+        constrainDimensions: true
+      },
+      scrollable: {
+        draggable: Selectors.KANBAN_ITEM,
+        scrollableElements: [].concat(_toConsumableArray(columnContainers), [container])
+      }
+    });
+
+    // Hide form when drag start
+    sortable.on(Events.DRAG_START, function () {
+      columns.forEach(function (column) {
+        utils.hasClass(column, ClassNames.FORM_ADDED) && column.classList.remove(ClassNames.FORM_ADDED);
+      });
+    });
+
+    // Place forms and other contents bottom of the sortable container
+    sortable.on(Events.DRAG_STOP, function (_ref2) {
+      var el = _ref2.data.source;
+      var columnContainer = el.closest(Selectors.KANBAN_ITEMS_CONTAINER);
+      var form = columnContainer.querySelector(Selectors.ADD_CARD_FORM);
+      !el.nextElementSibling && columnContainer.appendChild(form);
+    });
+  }
+};
+
 /*-----------------------------------------------
 |   Dashboard Table dropdown
 -----------------------------------------------*/
@@ -1558,6 +1607,8 @@ var dropdownOnHover = function dropdownOnHover() {
     navbarArea.addEventListener('mouseover', function (e) {
       if (e.target.className.includes('dropdown-toggle') && window.innerWidth > 992) {
         var dropdownInstance = new window.bootstrap.Dropdown(e.target);
+
+        /* eslint-disable no-underscore-dangle */
         dropdownInstance._element.classList.add('show');
         dropdownInstance._menu.classList.add('show');
         dropdownInstance._menu.setAttribute('data-bs-popper', 'none');
@@ -1568,6 +1619,8 @@ var dropdownOnHover = function dropdownOnHover() {
     });
   }
 };
+
+/* eslint-disable */
 
 /*-----------------------------------------------
 |   Dropzone
@@ -1600,7 +1653,7 @@ var dropzoneInit = function dropzoneInit() {
   var dropzones = document.querySelectorAll(Selector.DROPZONE);
   !!dropzones.length && dropzones.forEach(function (item) {
     var userOptions = utils.getData(item, DATA_KEY.OPTIONS);
-    userOptions = userOptions || {};
+    userOptions = userOptions ? userOptions : {};
     var data = userOptions.data ? userOptions.data : {};
     var options = merge({
       url: '/assets/php/',
@@ -1641,13 +1694,22 @@ var dropzoneInit = function dropzoneInit() {
           if (typeof message !== 'string' && message.error) {
             message = message.error;
           }
-          var errorNodes = Array.from(file.previewElement.querySelectorAll('[data-dz-errormessage]'));
-          errorNodes.forEach(function (node) {
-            node.textContent = message;
-          });
+          var _iterator = _createForOfIteratorHelper(file.previewElement.querySelectorAll('[data-dz-errormessage]')),
+            _step;
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var node = _step.value;
+              node.textContent = message;
+            }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
         }
       }
     }, userOptions);
+    // eslint-disable-next-line
     item.querySelector(Selector.DZ_PREVIEW).innerHTML = '';
     var dropzone = new window.Dropzone(item, options);
     dropzone.on(Events.ADDED_FILE, function () {
@@ -1672,142 +1734,12 @@ var dropzoneInit = function dropzoneInit() {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                   Popover                                  */
-/* -------------------------------------------------------------------------- */
-
-var emojiMartInit = function emojiMartInit() {
-  var _ref2 = window.EmojiMart || {},
-    Picker = _ref2.Picker;
-  if (Picker) {
-    var emojiMartBtns = document.querySelectorAll('[data-emoji-mart]');
-    if (emojiMartBtns) {
-      Array.from(emojiMartBtns).forEach(function (btn) {
-        var inputTarget = utils.getData(btn, 'emoji-mart-input-target');
-        var input = document.querySelector(inputTarget);
-        var picker = new Picker(window._.merge(utils.getData(btn, 'emoji-mart'), {
-          previewPosition: 'none',
-          skinTonePosition: 'none',
-          onEmojiSelect: function onEmojiSelect(e) {
-            if (input) input.innerHTML += e["native"];
-          },
-          onClickOutside: function onClickOutside(e) {
-            if (!picker.contains(e.target) && !btn.contains(e.target)) {
-              picker.classList.add('d-none');
-            }
-          }
-        }));
-        picker.classList.add('d-none');
-        btn.parentElement.appendChild(picker);
-        btn.addEventListener('click', function () {
-          return picker.classList.toggle('d-none');
-        });
-      });
-    }
-  }
-};
-
-/* -------------------------------------------------------------------------- */
-/*                                  Flatpickr                                 */
-/* -------------------------------------------------------------------------- */
-
-var defaultPredefinedRanges = [{
-  id: 'today',
-  label: 'Today',
-  range: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()]
-}, {
-  id: 'this_month',
-  label: 'This Month',
-  range: [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)]
-}, {
-  id: 'last_month',
-  label: 'Last Month',
-  range: [new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1), new Date(new Date().getFullYear(), new Date().getMonth(), 0)]
-}, {
-  id: 'last_7_days',
-  label: 'Last 7 Days',
-  range: [new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date()]
-}, {
-  id: 'last_30_days',
-  label: 'Last 30 Days',
-  range: [new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), new Date()]
-}];
-document.querySelectorAll('.datetimepicker').forEach(function (item) {
-  function applyUserRange(defaultRange, userRange) {
-    var matchingDefault = defaultRange.find(function (mathItem) {
-      return mathItem.id === Object.keys(userRange)[0];
-    });
-    return matchingDefault ? _objectSpread(_objectSpread({}, matchingDefault), {}, {
-      label: userRange[Object.keys(userRange)[0]]
-    }) : userRange;
-  }
-  function findDefaultRange(defaultRange, userRange) {
-    return defaultRange.find(function (rangeItem) {
-      return rangeItem.id === userRange;
-    }) || null;
-  }
-  function generateRangeButtons(predefinedDefaultRanges) {
-    var userDefinedRanges = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    var normalizedUserRanges = Array.isArray(userDefinedRanges) ? userDefinedRanges : predefinedDefaultRanges;
-    var mergedRanges = normalizedUserRanges.map(function (userRange) {
-      if (_typeof(userRange) === 'object') {
-        return applyUserRange(predefinedDefaultRanges, userRange);
-      }
-      return findDefaultRange(predefinedDefaultRanges, userRange);
-    }).filter(Boolean);
-    return "\n      <ul class=\"flatpickr-predefined-ranges list-group list-group-flush\">\n        ".concat(mergedRanges.map(function (_ref3) {
-      var range = _ref3.range,
-        label = _ref3.label;
-      return "\n            <button type=\"button\" \n              data-range=\"".concat(range.map(function (date) {
-        return date instanceof Date ? date.toISOString() : date;
-      }).join(','), "\" \n              class=\"nav-link list-group-item list-group-item-action\">\n              ").concat(label, "\n            </button>\n          ");
-    }).join(''), "\n      </ul>\n    ");
-  }
-  function appendRangeButtonsIfNotExists(calendarContainer, rangeButtonsHtml) {
-    if (!calendarContainer.querySelector('.flatpickr-predefined-ranges')) {
-      calendarContainer.insertAdjacentHTML('afterbegin', rangeButtonsHtml);
-    }
-  }
-  function addRangeButtonClickListeners(instance, calendarContainer) {
-    _toConsumableArray(calendarContainer.querySelectorAll('[data-range]')).map(function (btn) {
-      return btn.addEventListener('click', function () {
-        var startDate = new Date(utils.getData(btn, 'range').split(',')[0]);
-        var endDate = new Date(utils.getData(btn, 'range').split(',')[1]);
-        instance.setDate([startDate, endDate], true);
-        instance.redraw();
-      });
-    });
-  }
-  function initializeFlatpickr(element, options) {
-    function showPredefinedRanges(selectedDates, dateStr, instance) {
-      var calendarContainer = instance.calendarContainer;
-      if (options.predefinedRanges) {
-        calendarContainer.classList.add('predefinedRange');
-        var rangeButtonsHtml = generateRangeButtons(defaultPredefinedRanges, options.predefinedRanges);
-        appendRangeButtonsIfNotExists(calendarContainer, rangeButtonsHtml);
-        addRangeButtonClickListeners(instance, calendarContainer);
-      }
-    }
-    function hidePredefinedRanges(selectedDates, dateStr, instance) {
-      if (options.predefinedRanges) {
-        var calendarContainer = instance.calendarContainer;
-        calendarContainer.classList.remove('predefinedRange');
-      }
-    }
-    var instance = window.flatpickr(element, _objectSpread(_objectSpread({}, options), {}, {
-      onOpen: showPredefinedRanges,
-      onClose: hidePredefinedRanges
-    }));
-    return instance;
-  }
-  var options = utils.getData(item, 'options');
-  initializeFlatpickr(item, options);
-});
-
-/* -------------------------------------------------------------------------- */
 /*                               from-validation                              */
 /* -------------------------------------------------------------------------- */
 
 var formValidationInit = function formValidationInit() {
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
   var forms = document.querySelectorAll('.needs-validation');
 
@@ -1847,7 +1779,7 @@ var renderCalendar = function renderCalendar(el, option) {
   }, option);
   var calendar = new window.FullCalendar.Calendar(el, options);
   calendar.render();
-  (_document$querySelect = document.querySelector('.navbar-vertical-toggle')) === null || _document$querySelect === void 0 || _document$querySelect.addEventListener('navbar.vertical.toggle', function () {
+  (_document$querySelect = document.querySelector('.navbar-vertical-toggle')) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.addEventListener('navbar.vertical.toggle', function () {
     return calendar.updateSize();
   });
   return calendar;
@@ -2818,7 +2750,7 @@ function initMap() {
         zoom: zoom,
         scrollwheel: utils.getData(itm, 'scrollwheel'),
         center: new window.google.maps.LatLng(latLng[0], latLng[1]),
-        styles: utils.isDark() === 'dark' ? mapStyles.Cobalt : mapStyles[mapStyle]
+        styles: localStorage.getItem('theme') === 'dark' ? mapStyles.Cobalt : mapStyles[mapStyle]
       };
       var map = new window.google.maps.Map(mapElement, mapOptions);
       var infowindow = new window.google.maps.InfoWindow({
@@ -2832,10 +2764,10 @@ function initMap() {
       marker.addListener('click', function () {
         infowindow.open(map, marker);
       });
-      themeController && themeController.addEventListener('clickControl', function (_ref4) {
-        var _ref4$detail = _ref4.detail,
-          control = _ref4$detail.control,
-          value = _ref4$detail.value;
+      themeController && themeController.addEventListener('clickControl', function (_ref3) {
+        var _ref3$detail = _ref3.detail,
+          control = _ref3$detail.control,
+          value = _ref3$detail.value;
         if (control === 'theme') {
           map.set('styles', value === 'dark' ? mapStyles.Cobalt : mapStyles[mapStyle]);
         }
@@ -2928,8 +2860,8 @@ var kanbanInit = function kanbanInit() {
 
   // Show add card form and place scrollbar bottom of the list
   addCardButtons && addCardButtons.forEach(function (button) {
-    button.addEventListener(Events.CLICK, function (_ref5) {
-      var el = _ref5.currentTarget;
+    button.addEventListener(Events.CLICK, function (_ref4) {
+      var el = _ref4.currentTarget;
       var column = el.closest(Selectors.KANBAN_COLUMN);
       var container = column.querySelector(Selectors.KANBAN_ITEMS_CONTAINER);
       var scrollHeight = container.scrollHeight;
@@ -2943,30 +2875,30 @@ var kanbanInit = function kanbanInit() {
 
   // Remove add card form
   formHideButtons.forEach(function (button) {
-    button.addEventListener(Events.CLICK, function (_ref6) {
-      var el = _ref6.currentTarget;
+    button.addEventListener(Events.CLICK, function (_ref5) {
+      var el = _ref5.currentTarget;
       el.closest(Selectors.KANBAN_COLUMN).classList.remove(ClassNames.FORM_ADDED);
     });
   });
   if (addListForm) {
     // Hide add list button when the form is going to show
-    addListForm.addEventListener(Events.SHOW_BS_COLLAPSE, function (_ref7) {
-      var el = _ref7.currentTarget;
+    addListForm.addEventListener(Events.SHOW_BS_COLLAPSE, function (_ref6) {
+      var el = _ref6.currentTarget;
       var nextElement = el.nextElementSibling;
       nextElement && nextElement.classList.add(ClassNames.D_NONE);
     });
 
     // Focus input field when the form is shown
-    addListForm.addEventListener(Events.SHOWN_BS_COLLAPSE, function (_ref8) {
-      var el = _ref8.currentTarget;
+    addListForm.addEventListener(Events.SHOWN_BS_COLLAPSE, function (_ref7) {
+      var el = _ref7.currentTarget;
       el.querySelector(Selectors.INPUT_ADD_LIST).focus();
     });
   }
 
   // Hide add list form when the dismiss button is clicked
   collapseDismissButtons.forEach(function (button) {
-    button.addEventListener(Events.CLICK, function (_ref9) {
-      var el = _ref9.currentTarget;
+    button.addEventListener(Events.CLICK, function (_ref8) {
+      var el = _ref8.currentTarget;
       var collapseElement = el.closest(Selectors.COLLAPSE);
       var collapse = window.bootstrap.Collapse.getInstance(collapseElement);
       utils.hasClass(collapseElement.nextElementSibling, ClassNames.D_NONE) && collapseElement.nextElementSibling.classList.remove(ClassNames.D_NONE);
@@ -3959,7 +3891,7 @@ var leafletActiveUserInit = function leafletActiveUserInit() {
   var mapContainer = document.getElementById('map');
   if (L && mapContainer) {
     var getFilterColor = function getFilterColor() {
-      return utils.isDark() === 'dark' ? ['invert:98%', 'grayscale:69%', 'bright:89%', 'contrast:111%', 'hue:205deg', 'saturate:1000%'] : ['bright:101%', 'contrast:101%', 'hue:23deg', 'saturate:225%'];
+      return localStorage.getItem('theme') === 'dark' ? ['invert:98%', 'grayscale:69%', 'bright:89%', 'contrast:111%', 'hue:205deg', 'saturate:1000%'] : ['bright:101%', 'contrast:101%', 'hue:23deg', 'saturate:225%'];
     };
     var tileLayerTheme = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
     var tiles = L.tileLayer.colorFilter(tileLayerTheme, {
@@ -4003,10 +3935,10 @@ var leafletActiveUserInit = function leafletActiveUserInit() {
     });
     map.addLayer(mcg);
     var themeController = document.body;
-    themeController.addEventListener('clickControl', function (_ref10) {
-      var _ref10$detail = _ref10.detail,
-        control = _ref10$detail.control,
-        value = _ref10$detail.value;
+    themeController.addEventListener('clickControl', function (_ref9) {
+      var _ref9$detail = _ref9.detail,
+        control = _ref9$detail.control,
+        value = _ref9$detail.value;
       if (control === 'theme') {
         tiles.updateFilter(value === 'dark' ? ['invert:98%', 'grayscale:69%', 'bright:89%', 'contrast:111%', 'hue:205deg', 'saturate:1000%'] : ['bright:101%', 'contrast:101%', 'hue:23deg', 'saturate:225%']);
       }
@@ -4017,6 +3949,7 @@ var leafletActiveUserInit = function leafletActiveUserInit() {
 /* -------------------------------------------------------------------------- */
 /*                                 Data Table                                 */
 /* -------------------------------------------------------------------------- */
+/* eslint-disable */
 
 var togglePaginationButtonDisable = function togglePaginationButtonDisable(button, disabled) {
   button.disabled = disabled;
@@ -4284,15 +4217,15 @@ var navbarDarkenOnScroll = function navbarDarkenOnScroll() {
     };
   }
   if (navbar) {
-    var theme = utils.isDark();
+    var theme = localStorage.getItem('theme');
     var defaultColorName = theme === 'dark' ? '100' : 'dark';
     var name = utils.getData(navbar, DataKey.NAVBAR_DARKEN_ON_SCROLL);
     toggleThemeClass(theme);
     var themeController = document.body;
-    themeController.addEventListener('clickControl', function (_ref11) {
-      var _ref11$detail = _ref11.detail,
-        control = _ref11$detail.control,
-        value = _ref11$detail.value;
+    themeController.addEventListener('clickControl', function (_ref10) {
+      var _ref10$detail = _ref10.detail,
+        control = _ref10$detail.control,
+        value = _ref10$detail.value;
       if (control === 'theme') {
         toggleThemeClass(value);
         defaultColorName = value === 'dark' ? '100' : 'dark';
@@ -4493,6 +4426,38 @@ var nouisliderInit = function nouisliderInit() {
   }
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                   Popover                                  */
+/* -------------------------------------------------------------------------- */
+var picmoInit = function picmoInit() {
+  var picmoBtns = document.querySelectorAll('[data-picmo]');
+  if (picmoBtns) {
+    Array.from(picmoBtns).forEach(function (btn) {
+      var inputTarget = utils.getData(btn, 'picmo-input-target');
+      var userOptions = utils.getData(btn, 'picmo');
+      var defaultOptions = {
+        referenceElement: btn,
+        triggerElement: btn,
+        position: 'bottom-center',
+        showCloseButton: false
+      };
+      var options = window._.merge(defaultOptions, userOptions);
+      var picker = window.picmoPopup.createPopup({
+        showPreview: false
+      }, _objectSpread({}, options));
+      btn.addEventListener('click', function () {
+        picker.toggle();
+      });
+      var input = document.querySelector(inputTarget);
+      picker.addEventListener('emoji:select', function (selection) {
+        if (input) {
+          input.innerHTML += selection.emoji;
+        }
+      });
+    });
+  }
+};
+
 /*-----------------------------------------------
 |   Inline Player [plyr]
 -----------------------------------------------*/
@@ -4673,8 +4638,8 @@ var searchInit = function searchInit() {
         dropdownMenu.classList.add(ClassName.SHOW);
       });
     }
-    document.addEventListener(Events.CLICK, function (_ref12) {
-      var target = _ref12.target;
+    document.addEventListener(Events.CLICK, function (_ref11) {
+      var target = _ref11.target;
       !searchArea.contains(target) && hideSearchSuggestion(searchArea);
     });
     btnDropdownClose && btnDropdownClose.addEventListener(Events.CLICK, function (e) {
@@ -4709,35 +4674,6 @@ var select2Init = function select2Init() {
   }
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                 SortableJS                                 */
-/* -------------------------------------------------------------------------- */
-
-var sortableInit = function sortableInit() {
-  var getData = utils.getData;
-  var sortableEl = document.querySelectorAll('[data-sortable]');
-  var defaultOptions = {
-    animation: 150,
-    group: {
-      name: 'shared'
-    },
-    delay: 100,
-    delayOnTouchOnly: true,
-    forceFallback: true,
-    onStart: function onStart() {
-      document.body.classList.add('sortable-dragging');
-    },
-    onEnd: function onEnd() {
-      document.body.classList.remove('sortable-dragging');
-    }
-  };
-  sortableEl.forEach(function (el) {
-    var userOptions = getData(el, 'sortable');
-    var options = window._.merge(defaultOptions, userOptions);
-    return window.Sortable.create(el, options);
-  });
-};
-
 /*-----------------------------------------------
 |  Swiper
 -----------------------------------------------*/
@@ -4755,7 +4691,7 @@ var swiperInit = function swiperInit() {
         slides += "\n          <div class='swiper-slide '>\n            <img class='img-fluid rounded mt-1' src=".concat(img.src, " alt=''/>\n          </div>\n        ");
       });
       var thumbs = document.createElement('div');
-      thumbs.setAttribute('class', 'swiper thumb');
+      thumbs.setAttribute('class', 'swiper-container thumb');
       thumbs.innerHTML = "<div class='swiper-wrapper'>".concat(slides, "</div>");
       if (thumbsOptions.parent) {
         var parent = document.querySelector(thumbsOptions.parent);
@@ -4783,9 +4719,15 @@ var swiperInit = function swiperInit() {
   });
 };
 
+// export default themeControl;
+// eslint-disable-next-line
+
 /* -------------------------------------------------------------------------- */
 /*                                Theme Control                               */
 /* -------------------------------------------------------------------------- */
+/* eslint-disable no-param-reassign */
+/* eslint-disable */
+
 var initialDomSetup = function initialDomSetup(element) {
   if (!element) return;
   var dataUrlDom = element.querySelector('[data-theme-control = "navbarPosition"]');
@@ -4833,12 +4775,18 @@ var changeTheme = function changeTheme(element) {
     }
   });
 };
+var localStorageValue = getItemFromStore('theme');
 var handleThemeDropdownIcon = function handleThemeDropdownIcon(value) {
   document.querySelectorAll('[data-theme-dropdown-toggle-icon]').forEach(function (el) {
-    el.classList.toggle('d-none', value !== getData(el, 'theme-dropdown-toggle-icon'));
+    var theme = getData(el, 'theme-dropdown-toggle-icon');
+    if (value === theme) {
+      el.classList.remove('d-none');
+    } else {
+      el.classList.add('d-none');
+    }
   });
 };
-handleThemeDropdownIcon(getItemFromStore('theme'));
+handleThemeDropdownIcon(localStorageValue);
 var themeControl = function themeControl() {
   var themeController = new DomNode(document.body);
   var navbarVertical = document.querySelector('.navbar-vertical');
@@ -4852,7 +4800,7 @@ var themeControl = function themeControl() {
         typeof value === 'boolean' && (value = value ? 'dark' : 'light');
       }
       if (control !== 'navbarPosition') {
-        Object.prototype.hasOwnProperty.call(CONFIG, control) && setItemToStore(control, value);
+        CONFIG.hasOwnProperty(control) && setItemToStore(control, value);
         switch (control) {
           case 'theme':
             {
@@ -4896,15 +4844,15 @@ var themeControl = function themeControl() {
   themeController.on('change', function (e) {
     var target = new DomNode(e.target);
     if (target.data('theme-control') === 'navbarPosition') {
-      Object.prototype.hasOwnProperty.call(CONFIG, 'navbarPosition') && setItemToStore('navbarPosition', e.target.value);
+      CONFIG.hasOwnProperty('navbarPosition') && setItemToStore('navbarPosition', e.target.value);
       var pageUrl = getData(target.node.selectedOptions[0], 'page-url');
-      pageUrl ? window.location.replace(pageUrl) : window.location.replace(window.location.href.split('#')[0]);
+      !!pageUrl ? window.location.replace(pageUrl) : window.location.replace(window.location.href.split('#')[0]);
     }
   });
-  themeController.on('clickControl', function (_ref13) {
-    var _ref13$detail = _ref13.detail,
-      control = _ref13$detail.control,
-      value = _ref13$detail.value;
+  themeController.on('clickControl', function (_ref12) {
+    var _ref12$detail = _ref12.detail,
+      control = _ref12$detail.control,
+      value = _ref12$detail.value;
     if (control === 'theme') {
       handleThemeDropdownIcon(value);
     }
@@ -4925,14 +4873,14 @@ var tinymceInit = function tinymceInit() {
         height: '50vh',
         menubar: false,
         skin: utils.settings.tinymce.theme,
-        content_style: "\n          .mce-content-body {\n            color: ".concat(utils.getColors().emphasis, ";\n            background-color: ").concat(utils.getColor('tinymce-bg'), ";\n          }\n        "),
+        content_style: ".mce-content-body { color: ".concat(utils.getColors().emphasis, "; background-color: ").concat(utils.getColor('tinymce-bg'), " }"),
         mobile: {
           theme: 'mobile',
           toolbar: ['undo', 'bold']
         },
         statusbar: false,
         plugins: 'link,image,lists,table,media',
-        toolbar: 'styles | bold italic link bullist numlist image blockquote table media undo redo',
+        toolbar: 'styleselect | bold italic link bullist numlist image blockquote table media undo redo',
         directionality: utils.getItemFromStore('isRTL') ? 'rtl' : 'ltr',
         theme_advanced_toolbar_align: 'center',
         setup: function setup(editor) {
@@ -4943,17 +4891,14 @@ var tinymceInit = function tinymceInit() {
       });
     }
     var themeController = document.body;
-    if (themeController) {
-      themeController.addEventListener('clickControl', function (_ref14) {
-        var control = _ref14.detail.control;
-        if (control === 'theme') {
-          tinymces.forEach(function (tinymceEl) {
-            var instance = window.tinymce.get(tinymceEl.id);
-            instance.dom.addStyle("\n                .mce-content-body {\n                  color: ".concat(utils.getColors().emphasis, " !important;\n                  background-color: ").concat(utils.getColor('tinymce-bg'), " !important;\n                }\n              "));
-          });
-        }
-      });
-    }
+    themeController && themeController.addEventListener('clickControl', function (_ref13) {
+      var control = _ref13.detail.control;
+      if (control === 'theme') {
+        window.tinyMCE.editors.forEach(function (el) {
+          el.dom.addStyle(".mce-content-body{color: ".concat(utils.getColors().emphasis, " !important; background-color: ").concat(utils.getColor('tinymce-bg'), " !important;}"));
+        });
+      }
+    });
   }
 };
 
@@ -4986,6 +4931,8 @@ var tooltipInit = function tooltipInit() {
     });
   });
 };
+
+/* eslint-disable no-param-reassign */
 
 /* -------------------------------------------------------------------------- */
 /*                                   Treeview                                  */
@@ -5076,6 +5023,7 @@ var treeviewInit = function treeviewInit() {
             makeStriped(treeview);
           } else {
             var childs = e.composedPath()[2].querySelectorAll(Selector.CHILD_SELECTOR);
+            // eslint-disable-next-line
             if (!e.composedPath()[2].classList.contains(ClassName.TREEVIEW) && childs.length === 0) {
               e.composedPath()[2].classList.remove(ClassName.TREEVIEW_BORDER_TRANSPARENT);
             }
@@ -5140,6 +5088,10 @@ var unresolvedTicketsTabInit = function unresolvedTicketsTabInit() {
 /* -------------------------------------------------------------------------- */
 /*                                 step wizard                                */
 /* -------------------------------------------------------------------------- */
+/* eslint-disable no-restricted-syntax */
+/* -------------------------------------------------------------------------- */
+/*                                 step wizard                                */
+/* -------------------------------------------------------------------------- */
 
 var wizardInit = function wizardInit() {
   var getData = utils.getData;
@@ -5172,6 +5124,8 @@ var wizardInit = function wizardInit() {
       bubbles: true,
       cancelable: true
     });
+
+    // eslint-disable-next-line
     var tabs = Array.from(tabToggleButtonEl).map(function (item) {
       return window.bootstrap.Tab.getOrCreateInstance(item);
     });
@@ -5272,7 +5226,7 @@ var events = [{
   location: 'Boston Harborwalk, Christopher Columbus Park, <br /> Boston, MA 02109, United States',
   organizer: 'Boston Harbor Now'
 }, {
-  title: "Crain's New York Business",
+  title: 'Crain\'s New York Business ',
   start: "".concat(currentYear, "-").concat(currentMonth, "-11"),
   description: "Crain's 2020 Hall of Fame. Sponsored Content By Crain's Content Studio. Crain's Content Studio Presents: New Jersey: Perfect for Business. Crain's Business Forum: Letitia James, New York State Attorney General. Crain's NYC Summit: Examining racial disparities during the pandemic",
   className: 'bg-primary-subtle'
@@ -5356,8 +5310,8 @@ var appCalendarInit = function appCalendarInit() {
     DATA_VIEW_TITLE: '[data-view-title]',
     EVENT_DETAILS_MODAL: '#eventDetailsModal',
     EVENT_DETAILS_MODAL_CONTENT: '#eventDetailsModal .modal-content',
-    EVENT_START_DATE: "#addEventModal [name='startDate']",
-    INPUT_TITLE: "[name='title']"
+    EVENT_START_DATE: '#addEventModal [name="startDate"]',
+    INPUT_TITLE: '[name="title"]'
   };
   var Events = {
     CLICK: 'click',
@@ -5372,10 +5326,7 @@ var appCalendarInit = function appCalendarInit() {
     ACTIVE: 'active'
   };
   var eventList = events.reduce(function (acc, val) {
-    if (val.schedules) {
-      return acc.concat(val.schedules.concat(val));
-    }
-    return acc.concat(val);
+    return val.schedules ? acc.concat(val.schedules.concat(val)) : acc.concat(val);
   }, []);
   var updateTitle = function updateTitle(title) {
     document.querySelector(Selectors.CALENDAR_TITLE).textContent = title;
@@ -5416,6 +5367,7 @@ var appCalendarInit = function appCalendarInit() {
       dateClick: function dateClick(info) {
         var modal = new window.bootstrap.Modal(addEventModal);
         modal.show();
+        /*eslint-disable-next-line*/
         var flatpickr = document.querySelector(Selectors.EVENT_START_DATE)._flatpickr;
         flatpickr.setDate([info.dateStr]);
       }
@@ -5478,8 +5430,8 @@ var appCalendarInit = function appCalendarInit() {
       window.bootstrap.Modal.getInstance(addEventModal).hide();
     });
   }
-  addEventModal && addEventModal.addEventListener(Events.SHOWN_BS_MODAL, function (_ref15) {
-    var currentTarget = _ref15.currentTarget;
+  addEventModal && addEventModal.addEventListener(Events.SHOWN_BS_MODAL, function (_ref14) {
+    var currentTarget = _ref14.currentTarget;
     currentTarget.querySelector(Selectors.INPUT_TITLE).focus();
   });
 };
@@ -5563,6 +5515,7 @@ var managementCalendarInit = function managementCalendarInit() {
         dateClick: function dateClick(info) {
           var modal = new window.bootstrap.Modal(addEventModal);
           modal.show();
+          /*eslint-disable-next-line*/
           var flatpickr = document.querySelector(Selectors.EVENT_START_DATE)._flatpickr;
           flatpickr.setDate([info.dateStr]);
         },
@@ -5679,6 +5632,362 @@ var getTemplate = function getTemplate(event) {
 };
 
 /* -------------------------------------------------------------------------- */
+/*                          D3 Packed Bubble Chart                            */
+/* -------------------------------------------------------------------------- */
+
+var D3PackedBubbleInit = function D3PackedBubbleInit() {
+  var $d3PackedBubble = document.querySelector('.d3-packed-bubble-chart');
+  if ($d3PackedBubble) {
+    var width = 960;
+    var height = 960;
+    var itemsSpacing = 30;
+    var svg = d3.select('.d3-packed-bubble-svg');
+    var tooltip = d3.select('.d3-packed-bubble-tooltip');
+    var tooltipDot = tooltip.select('.d3-tooltip-dot');
+    var tooltipName = tooltip.select('.d3-tooltip-name');
+    var tooltipValue = tooltip.select('.d3-tooltip-value');
+    var tooltipStyles = {
+      backgroundColor: utils.getColor('gray-100'),
+      tooltipNameColor: utils.getColor('gray-700'),
+      tooltipValueColor: utils.getColor('gray-700')
+    };
+    var labelStyles = {
+      fill: '#ffffff',
+      fontSize: '1.8rem'
+    };
+    var packedBubbleData = [{
+      name: 'Blockchain',
+      value: 160,
+      color: '#2A7BE4'
+    }, {
+      name: 'NFT',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'HTML',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: 'Crypto',
+      value: 57,
+      color: '#2A7BE4'
+    }, {
+      name: 'Photoshop',
+      value: 117,
+      color: '#2A7BE4'
+    }, {
+      name: 'UX',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'AWS',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: '3D',
+      value: 33,
+      color: '#9DBFEB'
+    }, {
+      name: 'Writing',
+      value: 117,
+      color: '#2A7BE4'
+    }, {
+      name: 'sql',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'Blender',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: 'UI/UX',
+      value: 33,
+      color: '#9DBFEB'
+    }, {
+      name: 'Blockchain',
+      value: 117,
+      color: '#2A7BE4'
+    }, {
+      name: 'css',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'Marketing',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: 'Meta',
+      value: 33,
+      color: '#9DBFEB'
+    }, {
+      name: 'js',
+      value: 12,
+      color: '#0F67D9'
+    }, {
+      name: 'FOREX',
+      value: 66,
+      color: '#7FA5D5'
+    }, {
+      name: 'UI',
+      value: 33,
+      color: '#8ABBFB'
+    }, {
+      name: 'Vector',
+      value: 56,
+      color: '#85B6F5'
+    }, {
+      name: 'CAD',
+      value: 28,
+      color: '#6486B4'
+    }, {
+      name: 'Python',
+      value: 66,
+      color: '#2A7BE4'
+    }, {
+      name: 'Adobe',
+      value: 66,
+      color: '#68A0E9'
+    }, {
+      name: 'C#',
+      value: 20,
+      color: '#385780'
+    }, {
+      name: 'Branding',
+      value: 88,
+      color: '#74A2DE'
+    }, {
+      name: 'Bitcoin',
+      value: 80,
+      color: '#4E7AB4'
+    }, {
+      name: 'AI',
+      value: 34,
+      color: '#71AFFF'
+    }];
+    var generateChart = function generateChart(data) {
+      var bubble = function bubble(bubbleData) {
+        return d3.pack().size([width, height]).padding(itemsSpacing)(d3.hierarchy({
+          children: bubbleData
+        }).sum(function (d) {
+          return d.value;
+        }));
+      };
+      tooltip.style('visibility', 'hidden');
+      svg.attr('width', '100%').attr('height', '100%').attr('viewBox', "-20 10 ".concat(width, " ").concat(height));
+      var root = bubble(data);
+      var node = svg.selectAll().data(root.children).enter().append('g').style('cursor', 'pointer').style('pointer-events', 'all').attr('text-anchor', 'middle').on('mousemove', function (e) {
+        return tooltip.style('top', "".concat(e.clientY - 40, "px")).style('left', "".concat(e.clientX - 40, "px"));
+      }).attr('transform', function (d) {
+        return "translate(".concat(d.x, ", ").concat(d.y, ")");
+      });
+      var circle = node.append('circle').style('fill', function (d) {
+        return d.data.color;
+      }).on('mouseover', function (e, d) {
+        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (diagram) {
+          return diagram.r * 1.1;
+        });
+        tooltip.style('visibility', 'visible').style('z-index', '100000').style('background-color', tooltipStyles.backgroundColor).style('border', "1px solid ".concat(d.data.color));
+        tooltipDot.style('background-color', d.data.color);
+        tooltipName.text(d.data.name).style('color', tooltipStyles.tooltipNameColor);
+        tooltipValue.text(d.data.value).style('color', tooltipStyles.tooltipValueColor);
+      }).on('mouseout', function (e) {
+        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (d) {
+          return d.r;
+        });
+        tooltip.style('visibility', 'hidden');
+      });
+      var label = node.append('text').style('fill', labelStyles.fill).style('font-size', labelStyles.fontSize).style('pointer-events', 'none').style('opacity', 0).attr('dy', '.35em').text(function (d) {
+        return d.data.name;
+      });
+      node.transition().ease(d3.easeExpInOut).duration(1000);
+      circle.transition().ease(d3.easeExpInOut).duration(1000).attr('r', function (d) {
+        return d.r;
+      });
+      label.transition().delay(400).ease(d3.easeExpInOut).duration(2000).style('opacity', 1);
+    };
+    generateChart(packedBubbleData);
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                           Trending Keywords                                */
+/* -------------------------------------------------------------------------- */
+
+var trendingKeywordsInit = function trendingKeywordsInit() {
+  var $d3TrendingKeywords = document.querySelector('.d3-trending-keywords');
+  if ($d3TrendingKeywords) {
+    var width = 960;
+    var height = 960;
+    var itemsSpacing = 30;
+    var svg = d3.select('.d3-trending-keywords-svg');
+    var tooltip = d3.select('.d3-trending-keywords-tooltip');
+    var tooltipDot = tooltip.select('.d3-tooltip-dot');
+    var tooltipName = tooltip.select('.d3-tooltip-name');
+    var tooltipValue = tooltip.select('.d3-tooltip-value');
+    var tooltipStyles = {
+      backgroundColor: utils.getColor('gray-100'),
+      tooltipNameColor: utils.getColor('gray-700'),
+      tooltipValueColor: utils.getColor('gray-700')
+    };
+    var labelStyles = {
+      fill: '#ffffff',
+      fontSize: '1.8rem'
+    };
+    var trendingKeywordsData = [{
+      name: 'Blockchain',
+      value: 160,
+      color: '#2A7BE4'
+    }, {
+      name: 'NFT',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'HTML',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: 'Crypto',
+      value: 57,
+      color: '#2A7BE4'
+    }, {
+      name: 'Photoshop',
+      value: 117,
+      color: '#2A7BE4'
+    }, {
+      name: 'UX',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'AWS',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: '3D',
+      value: 33,
+      color: '#9DBFEB'
+    }, {
+      name: 'Writing',
+      value: 117,
+      color: '#2A7BE4'
+    }, {
+      name: 'sql',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'Blender',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: 'UI/UX',
+      value: 33,
+      color: '#9DBFEB'
+    }, {
+      name: 'Blockchain',
+      value: 117,
+      color: '#2A7BE4'
+    }, {
+      name: 'css',
+      value: 20,
+      color: '#1956A6'
+    }, {
+      name: 'Marketing',
+      value: 90,
+      color: '#195099'
+    }, {
+      name: 'Meta',
+      value: 33,
+      color: '#9DBFEB'
+    }, {
+      name: 'js',
+      value: 12,
+      color: '#0F67D9'
+    }, {
+      name: 'FOREX',
+      value: 66,
+      color: '#7FA5D5'
+    }, {
+      name: 'UI',
+      value: 33,
+      color: '#8ABBFB'
+    }, {
+      name: 'Vector',
+      value: 56,
+      color: '#85B6F5'
+    }, {
+      name: 'CAD',
+      value: 28,
+      color: '#6486B4'
+    }, {
+      name: 'Python',
+      value: 66,
+      color: '#2A7BE4'
+    }, {
+      name: 'Adobe',
+      value: 66,
+      color: '#68A0E9'
+    }, {
+      name: 'C#',
+      value: 20,
+      color: '#385780'
+    }, {
+      name: 'Branding',
+      value: 88,
+      color: '#74A2DE'
+    }, {
+      name: 'Bitcoin',
+      value: 80,
+      color: '#4E7AB4'
+    }, {
+      name: 'AI',
+      value: 34,
+      color: '#71AFFF'
+    }];
+    var generateChart = function generateChart(data) {
+      var bubble = function bubble(bubbleData) {
+        return d3.pack().size([width, height]).padding(itemsSpacing)(d3.hierarchy({
+          children: bubbleData
+        }).sum(function (d) {
+          return d.value;
+        }));
+      };
+      tooltip.style('visibility', 'hidden');
+      svg.attr('width', '100%').attr('height', '100%').attr('viewBox', "-20 10 ".concat(width, " ").concat(height));
+      var root = bubble(data);
+      var node = svg.selectAll().data(root.children).enter().append('g').style('cursor', 'pointer').style('pointer-events', 'all').attr('text-anchor', 'middle').on('mousemove', function (e) {
+        return tooltip.style('top', "".concat(e.clientY - 40, "px")).style('left', "".concat(e.clientX - 40, "px"));
+      }).attr('transform', function (d) {
+        return "translate(".concat(d.x, ", ").concat(d.y, ")");
+      });
+      var circle = node.append('circle').style('fill', function (d) {
+        return d.data.color;
+      }).on('mouseover', function (e, d) {
+        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (diagram) {
+          return diagram.r * 1.1;
+        });
+        tooltip.style('visibility', 'visible').style('z-index', '100000').style('background-color', tooltipStyles.backgroundColor).style('border', "1px solid ".concat(d.data.color));
+        tooltipDot.style('background-color', d.data.color);
+        tooltipName.text(d.data.name).style('color', tooltipStyles.tooltipNameColor);
+        tooltipValue.text(d.data.value).style('color', tooltipStyles.tooltipValueColor);
+      }).on('mouseout', function (e) {
+        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (d) {
+          return d.r;
+        });
+        tooltip.style('visibility', 'hidden');
+      });
+      var label = node.append('text').style('fill', labelStyles.fill).style('font-size', labelStyles.fontSize).style('pointer-events', 'none').style('opacity', 0).attr('dy', '.35em').text(function (d) {
+        return d.data.name;
+      });
+      node.transition().ease(d3.easeExpInOut).duration(1000);
+      circle.transition().ease(d3.easeExpInOut).duration(1000).attr('r', function (d) {
+        return d.r;
+      });
+      label.transition().delay(400).ease(d3.easeExpInOut).duration(2000).style('opacity', 1);
+    };
+    generateChart(trendingKeywordsData);
+  }
+};
+
+/* -------------------------------------------------------------------------- */
 /*                                  bar-chart                                 */
 /* -------------------------------------------------------------------------- */
 
@@ -5730,6 +6039,8 @@ var barChartInit = function barChartInit() {
   };
   chartJsInit(barChartElement, getOptions);
 };
+
+/* eslint-disable */
 
 /* -------------------------------------------------------------------------- */
 /*                            Chart Bubble                                    */
@@ -6251,8 +6562,8 @@ var chartJsInit = function chartJsInit(chartEl, config) {
   var ctx = chartEl.getContext('2d');
   var chart = new window.Chart(ctx, config());
   var themeController = document.body;
-  themeController.addEventListener('clickControl', function (_ref16) {
-    var control = _ref16.detail.control;
+  themeController.addEventListener('clickControl', function (_ref15) {
+    var control = _ref15.detail.control;
     if (control === 'theme') {
       chart.destroy();
       chart = new window.Chart(ctx, config());
@@ -6284,6 +6595,8 @@ var getBubbleDataset = function getBubbleDataset(count, rmin, rmax, min, max) {
   });
 };
 
+/* eslint-disable */
+
 /* -------------------------------------------------------------------------- */
 /*                            Chart Scatter                                   */
 /* -------------------------------------------------------------------------- */
@@ -6314,362 +6627,6 @@ var productShareDoughnutInit = function productShareDoughnutInit() {
     };
   };
   chartJsInit(marketShareDoughnutElement, getOptions);
-};
-
-/* -------------------------------------------------------------------------- */
-/*                          D3 Packed Bubble Chart                            */
-/* -------------------------------------------------------------------------- */
-
-var D3PackedBubbleInit = function D3PackedBubbleInit() {
-  var $d3PackedBubble = document.querySelector('.d3-packed-bubble-chart');
-  if ($d3PackedBubble) {
-    var width = 960;
-    var height = 960;
-    var itemsSpacing = 30;
-    var svg = d3.select('.d3-packed-bubble-svg');
-    var tooltip = d3.select('.d3-packed-bubble-tooltip');
-    var tooltipDot = tooltip.select('.d3-tooltip-dot');
-    var tooltipName = tooltip.select('.d3-tooltip-name');
-    var tooltipValue = tooltip.select('.d3-tooltip-value');
-    var tooltipStyles = {
-      backgroundColor: utils.getColor('gray-100'),
-      tooltipNameColor: utils.getColor('gray-700'),
-      tooltipValueColor: utils.getColor('gray-700')
-    };
-    var labelStyles = {
-      fill: '#ffffff',
-      fontSize: '1.8rem'
-    };
-    var packedBubbleData = [{
-      name: 'Blockchain',
-      value: 160,
-      color: '#2A7BE4'
-    }, {
-      name: 'NFT',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'HTML',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: 'Crypto',
-      value: 57,
-      color: '#2A7BE4'
-    }, {
-      name: 'Photoshop',
-      value: 117,
-      color: '#2A7BE4'
-    }, {
-      name: 'UX',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'AWS',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: '3D',
-      value: 33,
-      color: '#9DBFEB'
-    }, {
-      name: 'Writing',
-      value: 117,
-      color: '#2A7BE4'
-    }, {
-      name: 'sql',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'Blender',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: 'UI/UX',
-      value: 33,
-      color: '#9DBFEB'
-    }, {
-      name: 'Blockchain',
-      value: 117,
-      color: '#2A7BE4'
-    }, {
-      name: 'css',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'Marketing',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: 'Meta',
-      value: 33,
-      color: '#9DBFEB'
-    }, {
-      name: 'js',
-      value: 12,
-      color: '#0F67D9'
-    }, {
-      name: 'FOREX',
-      value: 66,
-      color: '#7FA5D5'
-    }, {
-      name: 'UI',
-      value: 33,
-      color: '#8ABBFB'
-    }, {
-      name: 'Vector',
-      value: 56,
-      color: '#85B6F5'
-    }, {
-      name: 'CAD',
-      value: 28,
-      color: '#6486B4'
-    }, {
-      name: 'Python',
-      value: 66,
-      color: '#2A7BE4'
-    }, {
-      name: 'Adobe',
-      value: 66,
-      color: '#68A0E9'
-    }, {
-      name: 'C#',
-      value: 20,
-      color: '#385780'
-    }, {
-      name: 'Branding',
-      value: 88,
-      color: '#74A2DE'
-    }, {
-      name: 'Bitcoin',
-      value: 80,
-      color: '#4E7AB4'
-    }, {
-      name: 'AI',
-      value: 34,
-      color: '#71AFFF'
-    }];
-    var generateChart = function generateChart(data) {
-      var bubble = function bubble(bubbleData) {
-        return d3.pack().size([width, height]).padding(itemsSpacing)(d3.hierarchy({
-          children: bubbleData
-        }).sum(function (d) {
-          return d.value;
-        }));
-      };
-      tooltip.style('visibility', 'hidden');
-      svg.attr('width', '100%').attr('height', '100%').attr('viewBox', "-20 10 ".concat(width, " ").concat(height));
-      var root = bubble(data);
-      var node = svg.selectAll().data(root.children).enter().append('g').style('cursor', 'pointer').style('pointer-events', 'all').attr('text-anchor', 'middle').on('mousemove', function (e) {
-        return tooltip.style('top', "".concat(e.clientY - 40, "px")).style('left', "".concat(e.clientX - 40, "px"));
-      }).attr('transform', function (d) {
-        return "translate(".concat(d.x, ", ").concat(d.y, ")");
-      });
-      var circle = node.append('circle').style('fill', function (d) {
-        return d.data.color;
-      }).on('mouseover', function (e, d) {
-        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (diagram) {
-          return diagram.r * 1.1;
-        });
-        tooltip.style('visibility', 'visible').style('z-index', '100000').style('background-color', tooltipStyles.backgroundColor).style('border', "1px solid ".concat(d.data.color));
-        tooltipDot.style('background-color', d.data.color);
-        tooltipName.text(d.data.name).style('color', tooltipStyles.tooltipNameColor);
-        tooltipValue.text(d.data.value).style('color', tooltipStyles.tooltipValueColor);
-      }).on('mouseout', function (e) {
-        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (d) {
-          return d.r;
-        });
-        tooltip.style('visibility', 'hidden');
-      });
-      var label = node.append('text').style('fill', labelStyles.fill).style('font-size', labelStyles.fontSize).style('pointer-events', 'none').style('opacity', 0).attr('dy', '.35em').text(function (d) {
-        return d.data.name;
-      });
-      node.transition().ease(d3.easeExpInOut).duration(1000);
-      circle.transition().ease(d3.easeExpInOut).duration(1000).attr('r', function (d) {
-        return d.r;
-      });
-      label.transition().delay(400).ease(d3.easeExpInOut).duration(2000).style('opacity', 1);
-    };
-    generateChart(packedBubbleData);
-  }
-};
-
-/* -------------------------------------------------------------------------- */
-/*                           Trending Keywords                                */
-/* -------------------------------------------------------------------------- */
-
-var trendingKeywordsInit = function trendingKeywordsInit() {
-  var $d3TrendingKeywords = document.querySelector('.d3-trending-keywords');
-  if ($d3TrendingKeywords) {
-    var width = 960;
-    var height = 960;
-    var itemsSpacing = 30;
-    var svg = d3.select('.d3-trending-keywords-svg');
-    var tooltip = d3.select('.d3-trending-keywords-tooltip');
-    var tooltipDot = tooltip.select('.d3-tooltip-dot');
-    var tooltipName = tooltip.select('.d3-tooltip-name');
-    var tooltipValue = tooltip.select('.d3-tooltip-value');
-    var tooltipStyles = {
-      backgroundColor: utils.getColor('gray-100'),
-      tooltipNameColor: utils.getColor('gray-700'),
-      tooltipValueColor: utils.getColor('gray-700')
-    };
-    var labelStyles = {
-      fill: '#ffffff',
-      fontSize: '1.8rem'
-    };
-    var trendingKeywordsData = [{
-      name: 'Blockchain',
-      value: 160,
-      color: '#2A7BE4'
-    }, {
-      name: 'NFT',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'HTML',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: 'Crypto',
-      value: 57,
-      color: '#2A7BE4'
-    }, {
-      name: 'Photoshop',
-      value: 117,
-      color: '#2A7BE4'
-    }, {
-      name: 'UX',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'AWS',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: '3D',
-      value: 33,
-      color: '#9DBFEB'
-    }, {
-      name: 'Writing',
-      value: 117,
-      color: '#2A7BE4'
-    }, {
-      name: 'sql',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'Blender',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: 'UI/UX',
-      value: 33,
-      color: '#9DBFEB'
-    }, {
-      name: 'Blockchain',
-      value: 117,
-      color: '#2A7BE4'
-    }, {
-      name: 'css',
-      value: 20,
-      color: '#1956A6'
-    }, {
-      name: 'Marketing',
-      value: 90,
-      color: '#195099'
-    }, {
-      name: 'Meta',
-      value: 33,
-      color: '#9DBFEB'
-    }, {
-      name: 'js',
-      value: 12,
-      color: '#0F67D9'
-    }, {
-      name: 'FOREX',
-      value: 66,
-      color: '#7FA5D5'
-    }, {
-      name: 'UI',
-      value: 33,
-      color: '#8ABBFB'
-    }, {
-      name: 'Vector',
-      value: 56,
-      color: '#85B6F5'
-    }, {
-      name: 'CAD',
-      value: 28,
-      color: '#6486B4'
-    }, {
-      name: 'Python',
-      value: 66,
-      color: '#2A7BE4'
-    }, {
-      name: 'Adobe',
-      value: 66,
-      color: '#68A0E9'
-    }, {
-      name: 'C#',
-      value: 20,
-      color: '#385780'
-    }, {
-      name: 'Branding',
-      value: 88,
-      color: '#74A2DE'
-    }, {
-      name: 'Bitcoin',
-      value: 80,
-      color: '#4E7AB4'
-    }, {
-      name: 'AI',
-      value: 34,
-      color: '#71AFFF'
-    }];
-    var generateChart = function generateChart(data) {
-      var bubble = function bubble(bubbleData) {
-        return d3.pack().size([width, height]).padding(itemsSpacing)(d3.hierarchy({
-          children: bubbleData
-        }).sum(function (d) {
-          return d.value;
-        }));
-      };
-      tooltip.style('visibility', 'hidden');
-      svg.attr('width', '100%').attr('height', '100%').attr('viewBox', "-20 10 ".concat(width, " ").concat(height));
-      var root = bubble(data);
-      var node = svg.selectAll().data(root.children).enter().append('g').style('cursor', 'pointer').style('pointer-events', 'all').attr('text-anchor', 'middle').on('mousemove', function (e) {
-        return tooltip.style('top', "".concat(e.clientY - 40, "px")).style('left', "".concat(e.clientX - 40, "px"));
-      }).attr('transform', function (d) {
-        return "translate(".concat(d.x, ", ").concat(d.y, ")");
-      });
-      var circle = node.append('circle').style('fill', function (d) {
-        return d.data.color;
-      }).on('mouseover', function (e, d) {
-        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (diagram) {
-          return diagram.r * 1.1;
-        });
-        tooltip.style('visibility', 'visible').style('z-index', '100000').style('background-color', tooltipStyles.backgroundColor).style('border', "1px solid ".concat(d.data.color));
-        tooltipDot.style('background-color', d.data.color);
-        tooltipName.text(d.data.name).style('color', tooltipStyles.tooltipNameColor);
-        tooltipValue.text(d.data.value).style('color', tooltipStyles.tooltipValueColor);
-      }).on('mouseout', function (e) {
-        d3.select(e.target).transition().ease(d3.easeExpInOut).duration(200).attr('r', function (d) {
-          return d.r;
-        });
-        tooltip.style('visibility', 'hidden');
-      });
-      var label = node.append('text').style('fill', labelStyles.fill).style('font-size', labelStyles.fontSize).style('pointer-events', 'none').style('opacity', 0).attr('dy', '.35em').text(function (d) {
-        return d.data.name;
-      });
-      node.transition().ease(d3.easeExpInOut).duration(1000);
-      circle.transition().ease(d3.easeExpInOut).duration(1000).attr('r', function (d) {
-        return d.r;
-      });
-      label.transition().delay(400).ease(d3.easeExpInOut).duration(2000).style('opacity', 1);
-    };
-    generateChart(trendingKeywordsData);
-  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -7060,10 +7017,10 @@ var audienceChartInit = function audienceChartInit() {
 var avgEnrollmentRateInit = function avgEnrollmentRateInit() {
   var $echartsLineAvgEnrollmentLms = document.querySelector('.echart-avg-enrollment-rate');
   function getFormatter(params) {
-    return params.map(function (_ref17) {
-      var seriesName = _ref17.seriesName,
-        value = _ref17.value,
-        borderColor = _ref17.borderColor;
+    return params.map(function (_ref16) {
+      var seriesName = _ref16.seriesName,
+        value = _ref16.value,
+        borderColor = _ref16.borderColor;
       return "<span class= \"fas fa-circle fs-11\" style=\"color: ".concat(borderColor, "\"></span>\n            <span class='text-600'>\n              ").concat(seriesName, " : <strong>").concat(value, "</strong>\n            </span>");
     }).join('<br/>');
   }
@@ -7425,7 +7382,7 @@ var basicEchartsInit = function basicEchartsInit() {
 var bounceRateChartInit = function bounceRateChartInit() {
   var $echartsBounceRateChart = document.querySelector('.echart-bounce-rate');
   var tooltipFormatter = function tooltipFormatter(params) {
-    return "\n    <div>\n      <p class='mb-0 text-600'>".concat(window.dayjs(params[0].axisValue).format('DD, MMMM'), "</p>\n      <div class=\"d-flex align-items-center\">\n        <p class=\"mb-0 text-600\">\n          Rate : <span class='text-800'>").concat(params[0].value, "%</span>\n        </p>\n      </div>\n    </div>\n  ");
+    return "<div>\n          <p class='mb-0 text-600'>".concat(window.dayjs(params[0].axisValue).format('DD, MMMM'), "</p>\n          <div class=\"d-flex align-items-center\">\n            <p class=\"mb-0 text-600\">\n              Rate : <span class='text-800'>").concat(params[0].value, "%</span>\n            </p>\n          </div>\n        </div>");
   };
   var dataset = {
     week: [41, 45, 37, 44, 35, 39, 43],
@@ -7568,11 +7525,11 @@ var browsedCoursesInit = function browsedCoursesInit() {
   var $echartsBrowsedCourses = document.querySelector('.echart-browsed-courses');
   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var tooltipFormatter = function tooltipFormatter(params) {
-    return "\n    <div>\n      <p class='mb-2 text-600'>\n      ".concat(window.dayjs(params[0].axisValue).isValid() ? window.dayjs(params[0].axisValue).format('MMMM YYYY') : params[0].axisValue, "\n      </p>\n      ").concat(params.map(function (_ref18) {
-      var seriesName = _ref18.seriesName,
-        value = _ref18.value,
-        borderColor = _ref18.borderColor;
-      return "\n          <span class= \"fas fa-circle fs-11\" style=\"color: ".concat(borderColor, "\"></span>\n          <span class='text-600'>\n            ").concat(seriesName, " : <strong>").concat(value, "</strong>\n          </span>\n        ");
+    return "\n    <div>\n      <p class='mb-2 text-600'>\n      ".concat(window.dayjs(params[0].axisValue).isValid() ? window.dayjs(params[0].axisValue).format('MMMM YYYY') : params[0].axisValue, "\n      </p>\n      ").concat(params.map(function (_ref17) {
+      var seriesName = _ref17.seriesName,
+        value = _ref17.value,
+        borderColor = _ref17.borderColor;
+      return "<span class= \"fas fa-circle fs-11\" style=\"color: ".concat(borderColor, "\"></span>\n            <span class='text-600'>\n              ").concat(seriesName, " : <strong>").concat(value, "</strong>\n            </span>");
     }).join('<br />'), "\n    </div>");
   };
   if ($echartsBrowsedCourses) {
@@ -8286,7 +8243,7 @@ var revenueChartInit = function revenueChartInit() {
     }
   };
   var tooltipFormatter = function tooltipFormatter(params) {
-    return "\n    <div class=\"card\">\n      <div class=\"card-header bg-body-tertiary py-2\">\n        <h6 class=\"text-600 mb-0\">".concat(params[0].axisValue, "</h6>\n      </div>\n      <div class=\"card-body py-2\">\n        <h6 class=\"text-600 fw-normal\">\n          <span class=\"fas fa-circle text-primary me-2\"></span>Revenue: \n          <span class=\"fw-medium\">$").concat(params[0].data, "</span></h6>\n        <h6 class=\"text-600 mb-0 fw-normal\"> \n          <span class=\"fas fa-circle text-warning me-2\"></span>Revenue Goal: \n          <span class=\"fw-medium\">$").concat(params[1].data, "</span></h6>\n      </div>\n    </div>\n  ");
+    return "<div class=\"card\">\n                <div class=\"card-header bg-body-tertiary py-2\">\n                  <h6 class=\"text-600 mb-0\">".concat(params[0].axisValue, "</h6>\n                </div>\n              <div class=\"card-body py-2\">\n                <h6 class=\"text-600 fw-normal\">\n                  <span class=\"fas fa-circle text-primary me-2\"></span>Revenue: \n                  <span class=\"fw-medium\">$").concat(params[0].data, "</span></h6>\n                <h6 class=\"text-600 mb-0 fw-normal\"> \n                  <span class=\"fas fa-circle text-warning me-2\"></span>Revenue Goal: \n                  <span class=\"fw-medium\">$").concat(params[1].data, "</span></h6>\n              </div>\n            </div>");
   };
   var getDefaultOptions = function getDefaultOptions(data1, data2) {
     return function () {
@@ -8433,7 +8390,7 @@ var echartsCustomerSatisfactionInit = function echartsCustomerSatisfactionInit()
           center: ['50%', '45%'],
           itemStyle: {
             borderWidth: 2,
-            borderColor: utils.isDark() === 'dark' ? '#121E2D' : utils.getGrays()['100']
+            borderColor: localStorage.getItem('theme') === 'dark' ? '#121E2D' : utils.getGrays()['100']
           },
           data: [{
             value: 1100,
@@ -8587,7 +8544,7 @@ var echartsDistributionOfPerformanceInit = function echartsDistributionOfPerform
     };
     var getDefaultOptions = function getDefaultOptions() {
       return {
-        color: [utils.getColor('primary'), utils.isDark() === 'dark' ? '#236EA1' : '#7DD7FE'],
+        color: [utils.getColor('primary'), localStorage.getItem('theme') === 'dark' ? '#236EA1' : '#7DD7FE'],
         legend: {
           data: ['Agent Support', 'Group Support'],
           icon: 'circle',
@@ -8676,6 +8633,8 @@ var echartsDistributionOfPerformanceInit = function echartsDistributionOfPerform
     echartSetOption(chart, userOptions, getDefaultOptions);
   }
 };
+
+/* eslint-disable */
 var getPosition = function getPosition(pos, params, dom, rect, size) {
   return {
     top: pos[1] - size.contentSize[1] - 10,
@@ -8686,19 +8645,19 @@ var echartSetOption = function echartSetOption(chart, userOptions, getDefaultOpt
   var themeController = document.body;
   // Merge user options with lodash
   chart.setOption(window._.merge(getDefaultOptions(), userOptions));
-  themeController.addEventListener('clickControl', function (_ref19) {
-    var control = _ref19.detail.control;
+  themeController.addEventListener('clickControl', function (_ref18) {
+    var control = _ref18.detail.control;
     if (control === 'theme') {
       chart.setOption(window._.merge(getDefaultOptions(), userOptions));
     }
   });
 };
 var tooltipFormatter = function tooltipFormatter(params) {
-  var tooltipItem = '';
+  var tooltipItem = "";
   params.forEach(function (el) {
-    tooltipItem += "<div class='ms-1'>\n        <h6 class=\"text-700\">\n          <span class=\"fas fa-circle me-1 fs-11\" style=\"color:".concat(el.borderColor ? el.borderColor : el.color, "\"></span>\n          ").concat(el.seriesName, " : ").concat(_typeof(el.value) === 'object' ? el.value[1] : el.value, "\n        </h6>\n      </div>");
+    tooltipItem = tooltipItem + "<div class='ms-1'>\n        <h6 class=\"text-700\"><span class=\"fas fa-circle me-1 fs-11\" style=\"color:".concat(el.borderColor ? el.borderColor : el.color, "\"></span>\n          ").concat(el.seriesName, " : ").concat(_typeof(el.value) === 'object' ? el.value[1] : el.value, "\n        </h6>\n      </div>");
   });
-  return "\n    <div>\n      <p class='mb-2 text-600'>\n        ".concat(window.dayjs(params[0].axisValue).isValid() ? window.dayjs(params[0].axisValue).format('MMMM DD') : params[0].axisValue, "\n      </p>\n      ").concat(tooltipItem, "\n    </div>");
+  return "<div>\n            <p class='mb-2 text-600'>\n              ".concat(window.dayjs(params[0].axisValue).isValid() ? window.dayjs(params[0].axisValue).format('MMMM DD') : params[0].axisValue, "\n            </p>\n            ").concat(tooltipItem, "\n          </div>");
 };
 var resizeEcharts = function resizeEcharts() {
   var $echarts = document.querySelectorAll('[data-echart-responsive]');
@@ -9137,10 +9096,10 @@ var linePaymentChartInit = function linePaymentChartInit() {
           }),
           symbol: 'emptyCircle',
           itemStyle: {
-            color: utils.isDark() === 'light' ? utils.getColors().white : utils.getColors().primary
+            color: localStorage.getItem('theme') === 'light' ? utils.getColors().white : utils.getColors().primary
           },
           lineStyle: {
-            color: utils.isDark() === 'light' ? utils.rgbaColor(utils.getColors().white, 0.8) : utils.getColors().primary
+            color: localStorage.getItem('theme') === 'light' ? utils.rgbaColor(utils.getColors().white, 0.8) : utils.getColors().primary
           },
           areaStyle: {
             color: {
@@ -9151,10 +9110,10 @@ var linePaymentChartInit = function linePaymentChartInit() {
               y2: 1,
               colorStops: [{
                 offset: 0,
-                color: utils.isDark() === 'light' ? 'rgba(255, 255, 255, 0.5)' : utils.rgbaColor(utils.getColors().primary, 0.5)
+                color: localStorage.getItem('theme') === 'light' ? 'rgba(255, 255, 255, 0.5)' : utils.rgbaColor(utils.getColors().primary, 0.5)
               }, {
                 offset: 1,
-                color: utils.isDark() === 'light' ? 'rgba(255, 255, 255, 0)' : utils.rgbaColor(utils.getColors().primary, 0)
+                color: localStorage.getItem('theme') === 'light' ? 'rgba(255, 255, 255, 0)' : utils.rgbaColor(utils.getColors().primary, 0)
               }]
             }
           },
@@ -9761,8 +9720,8 @@ var locationBySessionInit = function locationBySessionInit() {
           borderWidth: 1,
           transitionDuration: 0,
           formatter: function formatter(params) {
-            var _params$data;
-            return "<strong>".concat((_params$data = params.data) === null || _params$data === void 0 ? void 0 : _params$data.name, " :</strong> ").concat(((params.data && params.data.value / total) * 100).toFixed(2), "%");
+            var _params$data, _params$data2;
+            return "<strong>".concat((_params$data = params.data) === null || _params$data === void 0 ? void 0 : _params$data.name, " :</strong> ").concat((((_params$data2 = params.data) === null || _params$data2 === void 0 ? void 0 : _params$data2.value) / total * 100).toFixed(2), "%");
           }
         },
         visualMap: {
@@ -9803,7 +9762,7 @@ var locationBySessionInit = function locationBySessionInit() {
     };
     echartSetOption(chart, userOptions, getDefaultOptions);
     var zoomLevel = 1;
-    (_document$querySelect2 = document.querySelector('.location-by-session-map-reset')) === null || _document$querySelect2 === void 0 || _document$querySelect2.addEventListener('click', function () {
+    (_document$querySelect2 = document.querySelector('.location-by-session-map-reset')) === null || _document$querySelect2 === void 0 ? void 0 : _document$querySelect2.addEventListener('click', function () {
       zoomLevel = 1;
       chart.dispatchAction({
         type: 'restore'
@@ -9814,7 +9773,7 @@ var locationBySessionInit = function locationBySessionInit() {
         }
       });
     });
-    (_document$querySelect3 = document.querySelector('.location-by-session-map-zoom')) === null || _document$querySelect3 === void 0 || _document$querySelect3.addEventListener('click', function () {
+    (_document$querySelect3 = document.querySelector('.location-by-session-map-zoom')) === null || _document$querySelect3 === void 0 ? void 0 : _document$querySelect3.addEventListener('click', function () {
       if (zoomLevel < maxZoomLevel) {
         zoomLevel += 1;
       }
@@ -9824,7 +9783,7 @@ var locationBySessionInit = function locationBySessionInit() {
         }
       });
     });
-    (_document$querySelect4 = document.querySelector('.location-by-session-map-zoomOut')) === null || _document$querySelect4 === void 0 || _document$querySelect4.addEventListener('click', function () {
+    (_document$querySelect4 = document.querySelector('.location-by-session-map-zoomOut')) === null || _document$querySelect4 === void 0 ? void 0 : _document$querySelect4.addEventListener('click', function () {
       if (zoomLevel > minZoomLevel) {
         zoomLevel -= 1;
       }
@@ -10236,7 +10195,7 @@ var echartsNumberOfTicketsInit = function echartsNumberOfTicketsInit() {
     };
     var getDefaultOptions = function getDefaultOptions() {
       return {
-        color: [utils.getColor('primary'), utils.isDark() === 'dark' ? '#1E4C88' : '#94BCF1', utils.isDark() === 'dark' ? '#1A3A64' : '#C0D8F7', utils.isDark() === 'dark' ? '#225FAE' : '#6AA3ED'],
+        color: [utils.getColor('primary'), localStorage.getItem('theme') === 'dark' ? '#1E4C88' : '#94BCF1', localStorage.getItem('theme') === 'dark' ? '#1A3A64' : '#C0D8F7', localStorage.getItem('theme') === 'dark' ? '#225FAE' : '#6AA3ED'],
         tooltip: {
           trigger: 'item',
           padding: [7, 10],
@@ -10904,6 +10863,8 @@ var returningCustomerRateInit = function returningCustomerRateInit() {
 
 var salesByPosLocationInit = function salesByPosLocationInit() {
   var ECHART_RADAR_SALES_BY_POS_LOCATION = '.echart-radar-sales-by-pos-location';
+
+  // eslint-disable-next-line
   var $echartsRadarSalesByPosLocation = document.querySelector(ECHART_RADAR_SALES_BY_POS_LOCATION);
   function getformatter(params) {
     //const indicators = ['Marketing','Sales', 'Dev', 'Support', 'Tech', 'Admin']
@@ -11797,8 +11758,8 @@ var sessionByCountryMapInit = function sessionByCountryMapInit() {
           borderWidth: 1,
           transitionDuration: 0,
           formatter: function formatter(params) {
-            var _params$data2;
-            return "<strong>".concat((_params$data2 = params.data) === null || _params$data2 === void 0 ? void 0 : _params$data2.name, " :</strong> ").concat(((params.data && params.data.value / total) * 100).toFixed(2), "%");
+            var _params$data3, _params$data4;
+            return "<strong>".concat((_params$data3 = params.data) === null || _params$data3 === void 0 ? void 0 : _params$data3.name, " :</strong> ").concat((((_params$data4 = params.data) === null || _params$data4 === void 0 ? void 0 : _params$data4.value) / total * 100).toFixed(2), "%");
           }
         },
         toolbox: {
@@ -11844,7 +11805,7 @@ var sessionByCountryMapInit = function sessionByCountryMapInit() {
       };
     };
     echartSetOption(chart, userOptions, getDefaultOptions);
-    (_document$querySelect5 = document.querySelector('.session-by-country-map-reset')) === null || _document$querySelect5 === void 0 || _document$querySelect5.addEventListener('click', function () {
+    (_document$querySelect5 = document.querySelector('.session-by-country-map-reset')) === null || _document$querySelect5 === void 0 ? void 0 : _document$querySelect5.addEventListener('click', function () {
       chart.dispatchAction({
         type: 'restore'
       });
@@ -11986,7 +11947,7 @@ var ticketVolumeChartInit = function ticketVolumeChartInit() {
     var ticketVolumeLegend = document.querySelectorAll('[data-ticket-volume]');
     var getDefaultOptions = function getDefaultOptions() {
       return {
-        color: [utils.getColors().primary, utils.isDark() === 'dark' ? '#235FAD' : '#6AA2EC', utils.isDark() === 'dark' ? '#1C4477' : '#AACAF4', utils.isDark() === 'dark' ? '#152C48' : '#DFEBFB'],
+        color: [utils.getColors().primary, localStorage.getItem('theme') === 'dark' ? '#235FAD' : '#6AA2EC', localStorage.getItem('theme') === 'dark' ? '#1C4477' : '#AACAF4', localStorage.getItem('theme') === 'dark' ? '#152C48' : '#DFEBFB'],
         legend: {
           data: ['On Hold Tickets', 'Open Tickets', 'Due Tickets', 'Unassigned Tickets'],
           show: false
@@ -12065,7 +12026,7 @@ var ticketVolumeChartInit = function ticketVolumeChartInit() {
           data: [15, 10, 7, 7, 5, 6, 15, 10, 7, 12],
           emphasis: {
             itemStyle: {
-              color: utils.isDark() === 'dark' ? '#2567BD' : '#5595E9'
+              color: localStorage.getItem('theme') === 'dark' ? '#2567BD' : '#5595E9'
             }
           }
         }, {
@@ -12075,7 +12036,7 @@ var ticketVolumeChartInit = function ticketVolumeChartInit() {
           data: [5, 4, 4, 6, 6, 8, 7, 4, 3, 5],
           emphasis: {
             itemStyle: {
-              color: utils.isDark() === 'dark' ? '#205396' : '#7FB0EF'
+              color: localStorage.getItem('theme') === 'dark' ? '#205396' : '#7FB0EF'
             }
           }
         }, {
@@ -12088,7 +12049,7 @@ var ticketVolumeChartInit = function ticketVolumeChartInit() {
           },
           emphasis: {
             itemStyle: {
-              color: utils.isDark() === 'dark' ? '#1A3F6F' : '#AACAF4'
+              color: localStorage.getItem('theme') === 'dark' ? '#1A3F6F' : '#AACAF4'
             }
           }
         }],
@@ -12505,11 +12466,11 @@ var totalSalesEcommerce = function totalSalesEcommerce() {
   var $echartsLineTotalSalesEcomm = document.querySelector(ECHART_LINE_TOTAL_SALES_ECOMM);
   var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   function getFormatter(params) {
-    return params.map(function (_ref20) {
-      var value = _ref20.value,
-        borderColor = _ref20.borderColor,
-        seriesName = _ref20.seriesName;
-      return "\n          <span class= \"fas fa-circle\" style=\"color: ".concat(borderColor, "\"></span>\n          <span class='text-600'>").concat(seriesName === 'lastMonth' ? 'Last Month' : 'Previous Year', ": ").concat(value, "</span>\n        ");
+    return params.map(function (_ref19) {
+      var value = _ref19.value,
+        borderColor = _ref19.borderColor,
+        seriesName = _ref19.seriesName;
+      return "<span class= \"fas fa-circle\" style=\"color: ".concat(borderColor, "\"></span>\n    <span class='text-600'>").concat(seriesName === 'lastMonth' ? 'Last Month' : 'Previous Year', ": ").concat(value, "</span>");
     }).join('<br/>');
   }
   if ($echartsLineTotalSalesEcomm) {
@@ -12577,6 +12538,7 @@ var totalSalesEcommerce = function totalSalesEcommerce() {
             // showMaxLabel: false
           }
         },
+
         yAxis: {
           type: 'value',
           axisPointer: {
@@ -12987,7 +12949,7 @@ var echartsUnresolvedTicketsInit = function echartsUnresolvedTicketsInit() {
     };
     var getDefaultOptions = function getDefaultOptions() {
       return {
-        color: [utils.getColor('primary'), utils.getColor('info'), utils.isDark() === 'dark' ? '#229BD2' : '#73D3FE', utils.isDark() === 'dark' ? '#195979' : '#A9E4FF'],
+        color: [utils.getColor('primary'), utils.getColor('info'), localStorage.getItem('theme') === 'dark' ? '#229BD2' : '#73D3FE', localStorage.getItem('theme') === 'dark' ? '#195979' : '#A9E4FF'],
         tooltip: {
           trigger: 'item',
           padding: [7, 10],
@@ -13650,8 +13612,8 @@ var userByLocationInit = function userByLocationInit() {
           borderWidth: 1,
           transitionDuration: 0,
           formatter: function formatter(params) {
-            var _params$data3, _params$data4;
-            return "<strong>".concat((_params$data3 = params.data) === null || _params$data3 === void 0 ? void 0 : _params$data3.name, " :</strong> ").concat((_params$data4 = params.data) === null || _params$data4 === void 0 ? void 0 : _params$data4.value);
+            var _params$data5, _params$data6;
+            return "<strong>".concat((_params$data5 = params.data) === null || _params$data5 === void 0 ? void 0 : _params$data5.name, " :</strong> ").concat((_params$data6 = params.data) === null || _params$data6 === void 0 ? void 0 : _params$data6.value);
           }
         },
         visualMap: {
@@ -13692,7 +13654,7 @@ var userByLocationInit = function userByLocationInit() {
     };
     echartSetOption(chart, userOptions, getDefaultOptions);
     var zoomLevel = 1;
-    (_document$querySelect6 = document.querySelector('.user-by-location-map-zoom')) === null || _document$querySelect6 === void 0 || _document$querySelect6.addEventListener('click', function () {
+    (_document$querySelect6 = document.querySelector('.user-by-location-map-zoom')) === null || _document$querySelect6 === void 0 ? void 0 : _document$querySelect6.addEventListener('click', function () {
       if (zoomLevel < maxZoomLevel) {
         zoomLevel += 1;
       }
@@ -13702,7 +13664,7 @@ var userByLocationInit = function userByLocationInit() {
         }
       });
     });
-    (_document$querySelect7 = document.querySelector('.user-by-location-map-zoomOut')) === null || _document$querySelect7 === void 0 || _document$querySelect7.addEventListener('click', function () {
+    (_document$querySelect7 = document.querySelector('.user-by-location-map-zoomOut')) === null || _document$querySelect7 === void 0 ? void 0 : _document$querySelect7.addEventListener('click', function () {
       if (zoomLevel > minZoomLevel) {
         zoomLevel -= 1;
       }
@@ -13729,7 +13691,7 @@ var usersByTimeChartInit = function usersByTimeChartInit() {
     }
   }
   var tooltipFormatter = function tooltipFormatter(params) {
-    return "\n      <div>\n        <p class='mb-0 text-600'>".concat(window.dayjs(params.name).format('MMM DD, YYYY'), "</p>\n        <div class=\"d-flex align-items-center\">\n          <p class=\"mb-0 text-600\">\n            ").concat(window.dayjs().hour(params.data[1]).format('hA'), " : <span class='text-800 fw-semi-bold'>").concat(params.data[2], "</span>\n          </p>\n        </div>\n      </div>\n  ");
+    return "<div>\n          <p class='mb-0 text-600'>".concat(window.dayjs(params.name).format('MMM DD, YYYY'), "</p>\n          <div class=\"d-flex align-items-center\">\n            <p class=\"mb-0 text-600\">\n              ").concat(window.dayjs().hour(params.data[1]).format('hA'), " : <span class='text-800 fw-semi-bold'>").concat(params.data[2], "</span>\n            </p>\n          </div>\n        </div>");
   };
   if ($echartUsersByTimeChart) {
     var userOptions = utils.getData($echartUsersByTimeChart, 'options');
@@ -13976,6 +13938,8 @@ var weeklyGoalsInit = function weeklyGoalsInit() {
   }
 };
 
+/* eslint-disable */
+
 /* -------------------------------------------------------------------------- */
 /*                                Weekly Sales                                */
 /* -------------------------------------------------------------------------- */
@@ -13989,7 +13953,7 @@ var weeklySalesInit = function weeklySalesInit() {
     var data = [120, 200, 150, 80, 70, 110, 120];
 
     // Max value of data
-    // const yMax = Math.max(...data);
+    var yMax = Math.max.apply(Math, data);
 
     // const dataBackground = data.map(() => yMax);
     var chart = window.echarts.init($echartBarWeeklySales);
@@ -14111,6 +14075,7 @@ docReady(quantityInit);
 docReady(navbarComboInit);
 docReady(swiperInit);
 docReady(ratingInit);
+docReady(draggableInit);
 docReady(kanbanInit);
 docReady(fullCalendarInit);
 docReady(appCalendarInit);
@@ -14186,9 +14151,8 @@ docReady(select2Init);
 docReady(hideOnCollapseInit);
 docReady(unresolvedTicketsTabInit);
 docReady(inputmaskInit);
-docReady(emojiMartInit);
+docReady(picmoInit);
 docReady(nouisliderInit);
 docReady(bulkSelectInit);
 docReady(advanceAjaxTableInit);
 docReady(listInit);
-docReady(sortableInit);
