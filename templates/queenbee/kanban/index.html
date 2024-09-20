@@ -11,7 +11,7 @@
 }
 
 .kanban-board__container {
-    background-color: #f4f6f8;
+    background-color: #ffffff;
     padding: 10px;
     border-radius: 8px;
     min-width: 250px;
@@ -55,35 +55,133 @@
 .kanban-board__container a:hover {
     color: #0056b3; /* Добавляем эффект при наведении */
 }
+
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 10180;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 40%; /* Устанавливаем ширину модального окна */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
 </style>
+
 <main class="main" id="top">
     <div class="container" data-layout="container">
         {% include 'queenbee/include/header.html' %}
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const openAddBoardModalButton = document.getElementById('openAddBoardModal');
+                const modal = document.getElementById('addBoardModal');
+                const closeModal = document.querySelector('.close');
+                const form = document.getElementById('addBoardForm');
+                const kanbanBoard = document.getElementById('kanbanBoard');
+            
+                // Открыть модальное окно
+                openAddBoardModalButton.addEventListener('click', function() {
+                    modal.style.display = 'flex';  // Открываем модальное окно с использованием flex для центрирования
+                });
+            
+                // Закрыть модальное окно
+                closeModal.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+            
+                // Закрытие модального окна при клике вне его
+                window.addEventListener('click', function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            
+                // Отправить данные формы через AJAX
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+            
+                    const formData = new FormData(form);
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+                    fetch("{% url 'crm_add_board' %}", {  // Используем отдельную функцию для добавления доски
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.title) {
+                            // Создаем новый HTML элемент для доски
+                            const newBoard = document.createElement('div');
+                            newBoard.classList.add('kanban-board__container');
+                            newBoard.id = `board-${data.board_id}`;
+                            newBoard.innerHTML = `
+                                <h2><a href="/kanban/${data.board_id}/">${data.title}</a></h2>
+                            `;
+            
+                            // Добавляем новую доску в конец списка
+                            kanbanBoard.appendChild(newBoard);
+            
+                            // Закрываем модальное окно и очищаем форму
+                            modal.style.display = 'none';
+                            form.reset();
+                        } else {
+                            alert('Ошибка при добавлении доски');
+                        }
+                    })
+                    .catch(error => console.error('Ошибка:', error));
+                });
+            });
+        </script>
+
+        <!-- Модальное окно -->
+        <div id="addBoardModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Добавить новую доску</h2>
+                <form id="addBoardForm">
+                    {% csrf_token %}
+                    {{ form.title }}
+                    <button type="submit" class="btn btn-danger">Добавить доску</button>
+                </form>
+            </div>
+        </div>
+
         <div class="row g-3 mb-3">
             <div class="col-12">
-                <!-- <h1>Kanban Доска</h1> -->
-                <div class="kanban-board">
+                <!-- Кнопка открытия модального окна -->
+                <button id="openAddBoardModal" class="btn btn-danger">Добавить доску</button>
+
+                <div class="kanban-board mt-4" id="kanbanBoard">
                     {% for board in boards %}
-                    <div class="kanban-board__container">
+                    <div class="kanban-board__container visible" id="board-{{ board.id }}">
                         <h2><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.title }}</a></h2>
-                        <div class="kanban-board__lists">
-                            {% for list in board.lists.all %}
-                            <div class="kanban-list">
-                                <h3>{{ list.title }}</h3>
-                                <div class="kanban-cards">
-                                    {% for card in list.card_lists.all %}
-                                    <div class="kanban-card">
-                                        <h4>{{ card.title }}</h4>
-                                        <p>{{ card.description }}</p>
-                                        <p>Due: {{ card.due_date|date:"d M Y" }}</p>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
                     </div>
-                {% endfor %}
+                    {% endfor %}
                 </div>
             </div>
         </div>

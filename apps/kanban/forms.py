@@ -12,3 +12,8 @@ class ListForm(forms.ModelForm):
                 'placeholder': 'Введите название списка'
             })
         }
+
+class BoardForm(forms.ModelForm):
+    class Meta:
+        model = models.Board
+        fields = ['title']

@@ -225,3 +225,27 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'hiveclient.User'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',  # Установите уровень INFO
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',  # Уровень логирования для django
+            'propagate': True,
+        },
+        # Логирование для вашего приложения
+        'apps.kanban': {
+            'handlers': ['console'],
+            'level': 'INFO',  # Уровень логирования для вашего приложения
+            'propagate': False,
+        },
+    },
+}
