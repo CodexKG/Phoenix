@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import logging, json
 
@@ -19,7 +20,9 @@ def crm_kanban_index(request):
 
 def crm_kanban_detail(request, id):
     board = get_object_or_404(models.Board, id=id)
-    lists = models.List.objects.filter(board=board).prefetch_related('card_lists')  # Prefetch карточки для каждого списка
+    lists = models.List.objects.filter(board=board).prefetch_related('card_lists')
+    for list in lists:
+        list.card_lists.all().order_by('position')  # Сортировка по позиции
     return render(request, 'queenbee/kanban/detail.html', {'board': board, 'lists': lists})
 
 def crm_add_list(request, board_id):
@@ -108,7 +111,7 @@ def crm_edit_board(request, board_id):
             return JsonResponse({'success': False, 'error': 'Доска не найдена'})
     return JsonResponse({'success': False, 'error': 'Неверный запрос'})
 
-#Список
+#Карточки
 def crm_add_card(request, list_id):
     if request.method == 'POST':
         list_obj = get_object_or_404(models.List, id=list_id)
@@ -122,3 +125,21 @@ def crm_add_card(request, list_id):
             form.save_m2m()  # Сохраняем Many-to-Many поля (участники)
             return JsonResponse({'success': True, 'card_title': card.title, 'card_id': card.id})
         return JsonResponse({'success': False, 'errors': form.errors})
+    
+@csrf_exempt
+def crm_update_card_positions(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        card_ids = data.get('cardIds', [])
+            
+        # Проходим по списку cardIds и обновляем позиции карточек
+        for index, card_id in enumerate(card_ids):
+            try:
+                card = models.Card.objects.get(id=card_id)
+                card.position = index  # Новая позиция
+                card.save()
+            except models.Card.DoesNotExist:
+                return JsonResponse({'success': False, 'error': f'Card with ID {card_id} not found'})
+            
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

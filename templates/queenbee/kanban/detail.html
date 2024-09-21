@@ -300,6 +300,50 @@
             </div>
         </div>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const kanbanLists = document.querySelectorAll('.kanban-cards');
+                kanbanLists.forEach(function (list) {
+                    new Sortable(list, {
+                        group: 'kanban',
+                        animation: 150,
+                        onEnd: function (evt) {
+                            const cardIds = [];
+                            const cards = evt.to.children;  // Получаем все карточки после перемещения
+                            for (let i = 0; i < cards.length; i++) {
+                                cardIds.push(cards[i].dataset.cardId);  // Собираем ID карточек
+                            }
+
+                            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                            // Отправляем запрос для обновления позиций карточек
+                            fetch('/admin/kanban/update_card_positions/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrfToken
+                                },
+                                body: JSON.stringify({
+                                    listId: evt.to.dataset.listId,  // ID списка, в котором были перемещены карточки
+                                    cardIds: cardIds  // Массив с ID карточек в новом порядке
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log('Позиции карточек обновлены');
+                                } else {
+                                    console.error('Ошибка при обновлении позиций карточек');
+                                }
+                            })
+                            .catch(error => console.error('Ошибка:', error));
+                        },
+                    });
+                });
+            });
+        </script>
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -450,7 +494,7 @@
                         <h3>{{ list.title }}</h3>
                         <div class="kanban-cards">
                             {% for card in list.card_lists.all %}
-                            <div class="kanban-card">
+                            <div class="kanban-card" data-card-id="{{ card.id }}">
                                 <h4>{{ card.title }}</h4>
                                 <p>{{ card.description }}</p>
                                 <p>Срок: {{ card.due_date|date:"d M Y" }}</p>

@@ -105,6 +105,7 @@ class Card(models.Model):
     class Meta:
         verbose_name = "Карточка"
         verbose_name_plural = "Карточки"
+        ordering = ('position', )  # Карточки будут упорядочены по полю position
 
 class Attachment(models.Model):
     card = models.ForeignKey(
