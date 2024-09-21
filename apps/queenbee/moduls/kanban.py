@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-import logging
+import logging, json
 
 from apps.kanban import models, forms
 
@@ -81,3 +81,29 @@ def crm_add_board(request):
     
     logger.error("Метод запроса не POST")
     return JsonResponse({'error': 'Метод запроса не POST'}, status=400)
+
+def crm_delete_board(request, board_id):
+    if request.method == 'POST':
+        try:
+            board = models.Board.objects.get(id=board_id)
+            board.delete()
+            return JsonResponse({'success': True})
+        except models.Board.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Доска не найдена'})
+    return JsonResponse({'success': False, 'error': 'Неверный запрос'})
+
+def crm_edit_board(request, board_id):
+    if request.method == 'POST':
+        try:
+            board = models.Board.objects.get(id=board_id)
+            data = json.loads(request.body)
+            new_title = data.get('title')
+            if new_title:
+                board.title = new_title
+                board.save()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'error': 'Название не может быть пустым'})
+        except models.Board.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Доска не найдена'})
+    return JsonResponse({'success': False, 'error': 'Неверный запрос'})

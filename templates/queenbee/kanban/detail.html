@@ -176,6 +176,21 @@
     background-color: #d63810;
 }
 
+.back-btn {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    font-size: 24px;
+    color: black;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Более глубокая тень при наведении */
+}
 </style>
 
 <main class="main" id="top">
@@ -271,7 +286,10 @@
         <div class="row g-3 mb-3">
             <div class="col-12">
                 <div class="kanban-board__header">
-                    <div class="kanban-board__title">{{ board.title }}</div>
+                    <div class="kanban-board__title">
+                        <a href="{% url 'crm_kanban_index' %}" class="back-btn">Назад</a>
+                        {{ board.title }}
+                    </div>
                     <button id="openAddListModal" class="add-list-btn">Добавить список</button>
                 </div>
                 <div class="kanban-board">

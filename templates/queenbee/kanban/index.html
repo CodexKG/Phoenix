@@ -4,8 +4,8 @@
 
 <style>
 .kanban-board {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
     gap: 20px;
     overflow-x: auto;
 }
@@ -86,6 +86,43 @@
     font-size: 24px;
     cursor: pointer;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 </style>
 
 <main class="main" id="top">
@@ -144,8 +181,8 @@
                             `;
             
                             // Добавляем новую доску в конец списка
-                            kanbanBoard.appendChild(newBoard);
-            
+                            kanbanBoard.insertBefore(newBoard, kanbanBoard.firstChild);
+
                             // Закрываем модальное окно и очищаем форму
                             modal.style.display = 'none';
                             form.reset();
@@ -171,6 +208,67 @@
             </div>
         </div>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Обработка удаления доски
+                document.querySelectorAll('.delete-board').forEach(function(deleteBtn) {
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const boardId = this.dataset.id;
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                        
+                        if (confirm("Вы уверены, что хотите удалить эту доску?")) {
+                            fetch(`/admin/kanban/delete_board/${boardId}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrfToken
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById(`board-${boardId}`).remove(); // Удалить доску из DOM
+                                } else {
+                                    alert('Ошибка при удалении доски');
+                                }
+                            })
+                            .catch(error => console.error('Ошибка:', error));
+                        }
+                    });
+                });
+
+                // Обработка изменения названия доски
+                document.querySelectorAll('.edit-board').forEach(function(editBtn) {
+                    editBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const boardId = this.dataset.id;
+                        const newTitle = prompt("Введите новое название доски:");
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                        if (newTitle) {
+                            fetch(`/admin/kanban/edit_board/${boardId}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrfToken,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ title: newTitle })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.querySelector(`#board-${boardId} h2 a`).textContent = newTitle; // Обновить название
+                                } else {
+                                    alert('Ошибка при изменении названия доски');
+                                }
+                            })
+                            .catch(error => console.error('Ошибка:', error));
+                        }
+                    });
+                });
+            });
+        </script>
+
         <div class="row g-3 mb-3">
             <div class="col-12">
                 <!-- Кнопка открытия модального окна -->
@@ -179,7 +277,16 @@
                 <div class="kanban-board mt-4" id="kanbanBoard">
                     {% for board in boards %}
                     <div class="kanban-board__container visible" id="board-{{ board.id }}">
-                        <h2><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.title }}</a></h2>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h2><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.title }}</a></h2>
+                            <div class="dropdown">
+                                <button class="dropdown-btn">⋮</button> <!-- Иконка с тремя точками -->
+                                <div class="dropdown-content">
+                                    <a href="#" class="edit-board" data-id="{{ board.id }}">Изменить название</a>
+                                    <a href="#" class="delete-board" data-id="{{ board.id }}">Удалить</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
