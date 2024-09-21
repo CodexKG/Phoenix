@@ -107,3 +107,18 @@ def crm_edit_board(request, board_id):
         except models.Board.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Доска не найдена'})
     return JsonResponse({'success': False, 'error': 'Неверный запрос'})
+
+#Список
+def crm_add_card(request, list_id):
+    if request.method == 'POST':
+        list_obj = get_object_or_404(models.List, id=list_id)
+        form = forms.CardForm(request.POST)
+        if form.is_valid():
+            card = form.save(commit=False)
+            card.user = request.user  # Присваиваем текущего пользователя
+            card.list = list_obj  # Присваиваем список
+            card.position = list_obj.card_lists.count() + 1  # Присваиваем позицию
+            card.save()
+            form.save_m2m()  # Сохраняем Many-to-Many поля (участники)
+            return JsonResponse({'success': True, 'card_title': card.title, 'card_id': card.id})
+        return JsonResponse({'success': False, 'errors': form.errors})

@@ -191,6 +191,71 @@
     background-color: #e0e0e0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Более глубокая тень при наведении */
 }
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 50%; /* Сделаем окно чуть больше */
+    max-width: 600px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Сделаем тень более насыщенной */
+    text-align: left; /* Выравнивание по левому краю для более профессионального вида */
+    position: relative;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.modal-content input[type="text"], 
+.modal-content textarea, 
+.modal-content input[type="datetime-local"], 
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.modal-content textarea {
+    resize: vertical; /* Позволим пользователям изменять высоту текстового поля */
+}
+
+.modal-content select {
+    height: 45px;
+}
+
+.modal-content button {
+    background-color: #F23F12;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%; /* Кнопка занимает всю ширину */
+    margin-top: 10px;
+}
+
+.modal-content button:hover {
+    background-color: #d63810; /* Сделаем темнее при наведении */
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+}
+
+.close:hover {
+    color: #000;
+}
 </style>
 
 <main class="main" id="top">
@@ -283,6 +348,68 @@
         });
         </script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('addCardModal');
+                const closeModal = document.querySelector('.close');
+                const addCardButtons = document.querySelectorAll('.add-card-btn');
+                const form = document.getElementById('addCardForm');
+
+                let currentListId = null;
+
+                // Открытие модального окна
+                addCardButtons.forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        currentListId = this.dataset.listId;
+                        modal.style.display = 'flex';
+                    });
+                });
+
+                // Закрытие модального окна
+                closeModal.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+
+                // Закрытие модального окна при клике вне его
+                window.addEventListener('click', function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+
+                // Отправка формы для добавления карточки
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
+                            const newCard = document.createElement('div');
+                            newCard.classList.add('kanban-card');
+                            newCard.innerHTML = `<h4>${data.card_title}</h4>`;
+                            listContainer.appendChild(newCard);
+                            modal.style.display = 'none';
+                            form.reset();
+                        } else {
+                            alert('Ошибка при добавлении карточки');
+                        }
+                    })
+                    .catch(error => console.error('Ошибка:', error));
+                });
+            });
+        </script>
+
         <div class="row g-3 mb-3">
             <div class="col-12">
                 <div class="kanban-board__header">
@@ -294,7 +421,7 @@
                 </div>
                 <div class="kanban-board">
                     {% for list in lists %}
-                    <div class="kanban-list">
+                    <div id="list-{{ list.id }}" class="kanban-list">
                         <h3>{{ list.title }}</h3>
                         <div class="kanban-cards">
                             {% for card in list.card_lists.all %}
@@ -307,7 +434,28 @@
                             <p>Нет задач в этом списке</p>
                             {% endfor %}
                         </div>
-                        <button class="add-card-btn">Добавить карточку</button>
+                        <!-- Модальное окно для добавления карточки -->
+                        <div id="addCardModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h2>Добавить новую карточку</h2>
+                                <form id="addCardForm">
+                                    {% csrf_token %}
+                                    <input type="text" name="title" placeholder="Название" required><br>
+                                    <textarea name="description" rows="4" placeholder="Описание"></textarea><br>
+                                    <input type="datetime-local" name="due_date" placeholder="Срок выполнения"><br>
+                                    <select name="members" multiple>
+                                        {% for user in users %}
+                                            <option value="{{ user.id }}">{{ user.username }}</option>
+                                        {% endfor %}
+                                    </select><br>
+                                    <button type="submit">Добавить карточку</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Кнопка для открытия модального окна -->
+                        <button class="add-card-btn" data-list-id="{{ list.id }}">Добавить карточку</button>
                     </div>
                     {% endfor %}
                 </div>

@@ -17,3 +17,10 @@ class BoardForm(forms.ModelForm):
     class Meta:
         model = models.Board
         fields = ['title']
+
+class CardForm(forms.ModelForm):
+    due_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}), required=False)
+
+    class Meta:
+        model = models.Card
+        fields = ['title', 'description', 'due_date', 'members']
