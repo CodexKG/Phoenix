@@ -9,6 +9,7 @@
         overflow-x: auto;
         padding-bottom: 15px;
         scrollbar-width: thin;
+        user-select: none;
     }
 
     .kanban-board::-webkit-scrollbar {
@@ -280,6 +281,19 @@
     .close:hover {
         color: #000;
     }
+
+    .sortable-ghost {
+    opacity: 0.5; /* Прозрачность для перетаскиваемого элемента */
+    transform: scale(0.98); /* Небольшое уменьшение размера для эффекта */
+}
+
+.sortable-chosen {
+    background-color: #f0f0f0; /* Подсветка выбранного элемента */
+}
+
+.sortable-drag {
+    cursor: grabbing; /* Меняет курсор на 'захват' при перетаскивании */
+}
 </style>
 
 <main class="main" id="top">
@@ -304,20 +318,32 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const kanbanLists = document.querySelectorAll('.kanban-cards');
+
                 kanbanLists.forEach(function (list) {
                     new Sortable(list, {
-                        group: 'kanban',
+                        group: 'kanban',  // Позволяет перемещать между списками
                         animation: 150,
+                        easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+                        forceFallback: true,
+                        ghostClass: "sortable-ghost",
+                        chosenClass: "sortable-chosen",
+                        dragClass: "sortable-drag",
                         onEnd: function (evt) {
                             const cardIds = [];
-                            const cards = evt.to.children;  // Получаем все карточки после перемещения
+                            const cards = evt.to.children;
+
+                            // Проверка на наличие задач в списке "откуда переместили"
+                            checkForEmptyList(evt.from);
+                            // Проверка на наличие задач в списке "куда переместили"
+                            checkForEmptyList(evt.to);
+
                             for (let i = 0; i < cards.length; i++) {
                                 cardIds.push(cards[i].dataset.cardId);  // Собираем ID карточек
                             }
 
                             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-                            // Отправляем запрос для обновления позиций карточек
+                            // Отправляем запрос на обновление списка и позиций карточек
                             fetch('/admin/kanban/update_card_positions/', {
                                 method: 'POST',
                                 headers: {
@@ -325,22 +351,41 @@
                                     'X-CSRFToken': csrfToken
                                 },
                                 body: JSON.stringify({
-                                    listId: evt.to.dataset.listId,  // ID списка, в котором были перемещены карточки
-                                    cardIds: cardIds  // Массив с ID карточек в новом порядке
+                                    listId: evt.to.dataset.listId,  // Новый список
+                                    oldListId: evt.from.dataset.listId,  // Старый список
+                                    cardIds: cardIds  // Массив ID карточек в новом порядке
                                 })
                             })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    console.log('Позиции карточек обновлены');
+                                    console.log('Позиции карточек и список обновлены');
                                 } else {
-                                    console.error('Ошибка при обновлении позиций карточек');
+                                    console.error('Ошибка при обновлении карточек:', data.error);
                                 }
                             })
                             .catch(error => console.error('Ошибка:', error));
                         },
                     });
                 });
+
+                function checkForEmptyList(listElement) {
+                    const cards = listElement.querySelectorAll('.kanban-card');
+                    const noTasksMessage = listElement.querySelector('.no-tasks-message');
+                    
+                    if (cards.length === 0) {
+                        if (!noTasksMessage) {
+                            const messageElement = document.createElement('p');
+                            messageElement.classList.add('no-tasks-message');
+                            messageElement.innerText = 'Нет задач в этом списке';
+                            listElement.appendChild(messageElement);
+                        }
+                    } else {
+                        if (noTasksMessage) {
+                            noTasksMessage.remove();
+                        }
+                    }
+                }
             });
         </script>
 
@@ -490,17 +535,17 @@
                 </div>
                 <div class="kanban-board">
                     {% for list in lists %}
-                    <div id="list-{{ list.id }}" class="kanban-list">
+                    <div id="list-{{ list.id }}" class="kanban-list" data-list-id="{{ list.id }}">
                         <h3>{{ list.title }}</h3>
-                        <div class="kanban-cards">
+                        <div class="kanban-cards" data-list-id="{{ list.id }}">
                             {% for card in list.card_lists.all %}
-                            <div class="kanban-card" data-card-id="{{ card.id }}">
-                                <h4>{{ card.title }}</h4>
-                                <p>{{ card.description }}</p>
-                                <p>Срок: {{ card.due_date|date:"d M Y" }}</p>
-                            </div>
+                                <div class="kanban-card" data-card-id="{{ card.id }}">
+                                    <h4>{{ card.title }}</h4>
+                                    <p>{{ card.description }}</p>
+                                    <p>Срок: {{ card.due_date|date:"d M Y" }}</p>
+                                </div>
                             {% empty %}
-                            <p>Нет задач в этом списке</p>
+                                <p class="no-tasks-message">Нет задач в этом списке</p>
                             {% endfor %}
                         </div>
 
@@ -539,6 +584,8 @@
                                 <p><strong>Участники:</strong></p>
                                 <ul id="cardMembers"></ul>
                                 <button id="closeCardModal" class="close-btn">Закрыть</button>
+                                <button id="closeCardModal" class="close-btn">Изменить</button>
+                                <button id="closeCardModal" class="close-btn">Удалить</button>
                             </div>
                         </div>
 

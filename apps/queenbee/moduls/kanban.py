@@ -131,15 +131,26 @@ def crm_update_card_positions(request):
     if request.method == "POST":
         data = json.loads(request.body)
         card_ids = data.get('cardIds', [])
-            
-        # Проходим по списку cardIds и обновляем позиции карточек
+        new_list_id = data.get('listId', None)
+        
+        if not new_list_id:
+            return JsonResponse({'success': False, 'error': 'New list ID is required'})
+
+        try:
+            new_list = models.List.objects.get(id=new_list_id)
+        except models.List.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'List not found'})
+
+        # Обновляем позиции и список для каждой карточки
         for index, card_id in enumerate(card_ids):
             try:
                 card = models.Card.objects.get(id=card_id)
                 card.position = index  # Новая позиция
+                card.list = new_list  # Обновляем список
                 card.save()
             except models.Card.DoesNotExist:
                 return JsonResponse({'success': False, 'error': f'Card with ID {card_id} not found'})
             
         return JsonResponse({'success': True})
+    
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
