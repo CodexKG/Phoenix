@@ -188,6 +188,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Используйте дру�
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+BROKER_URL = 'amqp://guest:guest@rabbitmq_phoenix:5672//'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
