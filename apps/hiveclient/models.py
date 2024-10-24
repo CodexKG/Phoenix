@@ -5,12 +5,16 @@ class User(AbstractUser):
     phone = models.CharField(
         max_length=100,
         verbose_name="Номер телефона",
+        help_text="+996"
     )
     address = models.CharField(
         max_length=255,
         verbose_name='Адрес',
-        null=True, blank=True
+        null=True, blank=True,
+        help_text="Адрес пользователя"
     )
+
+
     def __str__(self):
         return self.username 
     
