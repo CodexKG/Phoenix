@@ -1,32 +1,6 @@
-<!doctype html>
-<html class="no-js" lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Phoenix - Все услуги</title>
-    <meta name="description" content="Phoenix - О нас">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-    <!-- Place favicon.ico in the root directory -->
-
-    <!-- CSS here -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/animate.min.css">
-    <link rel="stylesheet" href="assets/css/magnific-popup.css">
-    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/css/flaticon.css">
-    <link rel="stylesheet" href="assets/css/odometer.css">
-    <link rel="stylesheet" href="assets/css/swiper-bundle.css">
-    <link rel="stylesheet" href="assets/css/jquery-ui.css">
-    <link rel="stylesheet" href="assets/css/aos.css">
-    <link rel="stylesheet" href="assets/css/default.css">
-    <link rel="stylesheet" href="assets/css/default-icons.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-</head>
-
-<body class="theme-red">
+{% extends 'include/homepage.html' %}
+{% load static %}
+{% block content %}
 
     <!--Preloader-->
     <div id="preloader">
@@ -48,65 +22,7 @@
     <!-- Scroll-top-end-->
 
     <!-- header-area -->
-    <header class="transparent-header">
-        <div class="tg-header__area tg-header__area-three">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="tgmenu__wrap">
-                            <div class="logo">
-                                <a href="index.html"><img src="assets/img/logo/logo02.svg" alt="Logo"></a>
-                            </div>
-                            <div class="logo d-none">
-                                <a href="index.html"><img src="assets/img/logo/logo02.svg" alt="Logo"></a>
-                            </div>
-                            <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-xl-flex">
-                                <ul class="navigation">
-                                    <li><a href="index.html">Главная</a></li>
-                                    <li class="active"><a href="about.html">о компании</a></li>
-                                    <li><a href="about.html">Справочная информация</a></li>
-                                    <li><a href="about.html">контакты</a></li>
-                                </ul>
-                            </div>
-                            <div class="tgmenu__action tgmenu__action-three d-none d-md-flex">
-                                <ul class="list-wrap">
-                                    <li class="header-btn">
-                                        <a href="contact.html" class="btn btn-three">отслеживание посылок</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="mobile-nav-toggler mobile-nav-toggler-two">
-                                <i class="tg-flaticon-menu-1"></i>
-                            </div>
-                        </div>
-
-                        <!-- Mobile Menu  -->
-                        <div class="tgmobile__menu">
-                            <nav class="tgmobile__menu-box">
-                                <div class="close-btn"><i class="tg-flaticon-close-1"></i></div>
-                                <div class="nav-logo">
-                                    <a href="index.html"><img src="assets/img/logo/logo02.svg" alt="Logo"></a>
-                                </div>
-                                <div class="tgmobile__menu-outer">
-                                    <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
-                                </div>
-                                <div class="social-links">
-                                    <ul class="list-wrap">
-                                        <li><a href="#"><i class="fab fa-telegram"></i></a></li>
-                                        <li><a href="#"><i class="fab fa-whatsapp"></i></a></li>
-                                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                    </ul>
-                                </div>
-                            </nav>
-                        </div>
-                        <div class="tgmobile__menu-backdrop"></div>
-                        <!-- End Mobile Menu -->
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    {% include 'include/header.html' %}
     <!-- header-area-end -->
 
     <!-- main-area -->
@@ -184,90 +100,7 @@
     <!-- main-area-end -->
 
     <!-- footer-area -->
-    <footer class="footer__area-two fix">
-        <div class="container">
-            <div class="footer__top">
-                <div class="row">
-                    <div class="col-xl-4 col-lg-5 col-md-6">
-                        <div class="footer__widget">
-                            <div class="footer__logo">
-                                <a href="index.html"><img src="assets/img/logo/logo-white.svg" alt="logo"></a>
-                            </div>
-                            <div class="copyright-text copyright-text-two">
-                                <p>© 2024 <a href="index.html">ООО «Pxoenixlogistic».</a> Все права защищены.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6">
-                        <div class="footer__widget">
-                            <h4 class="footer__widget-title footer__widget-title-two">Phoenix</h4>
-                            <div class="footer__link footer__link-two">
-                                <ul class="list-wrap">
-                                    <li><a href="#">О Phoenix</a></li>
-                                    <li><a href="#">FAQ</a></li>
-                                    <li><a href="#">Контакты</a></li>
-                                    <li><a href="#">Галерея</a></li>
-                                    <li><a href="#">Партнеры</a></li>
-                                    <li><a href="#">Наши услуги</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
-                        <div class="footer__widget">
-                            <h4 class="footer__widget-title footer__widget-title-two">Контакты</h4>
-                            <div class="footer__link footer__link-two">
-                                <ul class="list-wrap">
-                                    <li><a href="#">Наш адрес</a></li>
-                                    <li><a href="#">Наш email</a></li>
-                                    <li><a href="#">Наши контакты</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="footer__widget">
-                            <h4 class="footer__widget-title footer__widget-title-two">Мы в сети</h4>
-                            <div class="footer__social footer__social-two">
-                                <ul class="list-wrap">
-                                    <li><a href="https://www.telegram.com/" target="_blank"><i class="fab fa-telegram"></i></a></li>
-                                    <li><a href="https://www.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
-                                    <li><a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="footer__link footer__link-two">
-                                <ul class="list-wrap">
-                                    <li><a href="#">Terms of Service</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    {% include 'include/footer.html' %}
     <!-- footer-area-end -->
 
-
-
-    <!-- JS here -->
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="assets/js/jquery.counterup.min.js"></script>
-    <script src="assets/js/jquery.appear.js"></script>
-    <script src="assets/js/swiper-bundle.min.js"></script>
-    <script src="assets/js/svg-inject.min.js"></script>
-    <script src="assets/js/ajax-form.js"></script>
-    <script src="assets/js/jquery.marquee.min.js"></script>
-    <script src="assets/js/jquery-ui.min.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/aos.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script>
-        SVGInject(document.querySelectorAll("img.injectable"));
-    </script>
-</body>
-
-</html>
+{% endblock %}

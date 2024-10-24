@@ -14,15 +14,15 @@
                         <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-xl-flex">
                             <ul class="navigation">
                                 <li class="active"><a href="index.html">Главная</a></li>
-                                <li><a href="about.html">о компании</a></li>
-                                <li><a href="faq.html">Справочная информация</a></li>
-                                <li><a href="contact.html">контакты</a></li>
+                                <li><a href="{% url 'about' %}">о компании</a></li>
+                                <li><a href="{% url 'faq' %}">Справочная информация</a></li>
+                                <li><a href="{% url 'contact' %}">контакты</a></li>
                             </ul>
                         </div>
                         <div class="tgmenu__action tgmenu__action-three d-none d-md-flex">
                             <ul class="list-wrap">
                                 <li class="header-btn">
-                                    <a href="contact.html" class="btn btn-three">отслеживание посылок</a>
+                                    <a href="{% url 'contact' %}" class="btn btn-three">отслеживание посылок</a>
                                 </li>
                             </ul>
                         </div>
