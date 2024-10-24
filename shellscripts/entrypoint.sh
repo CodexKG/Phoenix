@@ -10,10 +10,10 @@ do
   sleep 5
 done
 
-# Подождите, пока RabbitMQ будет доступен
-until nc -z -v -w30 localhost 5672
+# Подождите, пока RabbitMQ будет доступен на порту 12000
+until nc -z -v -w30 localhost 12000
 do
-  echo "Waiting for RabbitMQ connection..."
+  echo "Waiting for RabbitMQ connection on port 12000..."
   sleep 5
 done
 

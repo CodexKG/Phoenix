@@ -11,14 +11,14 @@ services:
   rabbitmq_phoenix:
     image: rabbitmq:3-management
     ports:
-      - "5674:5672"   # Измените порты здесь
-      - "15674:15672" # Измените порты здесь
+      - "12000:5672"   # Поменяли порт для RabbitMQ AMQP на 12000
+      - "12001:15672"  # Поменяли порт для RabbitMQ management на 12001
 
   web_phoenix:
     build:
       context: ..
       dockerfile: Dockerfile.server
-    command: gunicorn core.wsgi:application --bind 0.0.0.0:8001
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:12002 # Поменяли порт на 12002
     volumes:
       - ../:/app
       - ../static:/app/static
@@ -29,19 +29,19 @@ services:
       - db_phoenix
       - rabbitmq_phoenix
     expose:
-      - "8001"
+      - "12002"  # Поменяли порт на 12002
 
   nginx_phoenix:
     image: nginx:latest
     ports:
-      - "8081:80"
-      - "8444:443"
+      - "12003:80"    # Поменяли порт для HTTP на 12003
+      - "12004:443"   # Поменяли порт для HTTPS на 12004
     volumes:
       - ../nginx/nginx.server.conf:/etc/nginx/nginx.conf:ro
       - ../static:/app/static
       - ../media:/app/media
-      - /etc/letsencrypt/live/luxort.kg/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro
-      - /etc/letsencrypt/live/luxort.kg/privkey.pem:/etc/nginx/certs/privkey.pem:ro
+      - /etc/letsencrypt/live/phoenix.webtm.ru/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro
+      - /etc/letsencrypt/live/phoenix.webtm.ru/privkey.pem:/etc/nginx/certs/privkey.pem:ro
     depends_on:
       - web_phoenix
 
