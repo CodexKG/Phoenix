@@ -35,7 +35,6 @@ services:
     image: nginx:latest
     ports:
       - "12003:80"    # Поменяли порт для HTTP на 12003
-      - "12004:443"   # Поменяли порт для HTTPS на 12004
     volumes:
       - ../nginx/nginx.server.conf:/etc/nginx/nginx.conf:ro
       - ../static:/app/static
