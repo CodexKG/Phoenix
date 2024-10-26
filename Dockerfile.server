@@ -44,4 +44,4 @@ RUN chmod +x /docker-entrypoint-initdb.d/init_db.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Запускаем сервер Django с gunicorn
-CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8001"]
+CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:12002"]
