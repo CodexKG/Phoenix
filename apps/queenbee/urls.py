@@ -16,6 +16,7 @@ urlpatterns = [
     path('kanban/edit_board/<int:board_id>/', kanban.crm_edit_board, name='crm_edit_board'),
     path('kanban/list/<int:list_id>/add_card/', kanban.crm_add_card, name='crm_add_card'),
     path('kanban/update_card_positions/', kanban.crm_update_card_positions, name='update_card_positions'),
+    path('kanban/card/<int:card_id>/delete/', kanban.crm_delete_card, name='crm_delete_card'),
 
     #users
     path('login/', users.crm_login, name="crm_login"),

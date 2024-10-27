@@ -1368,7 +1368,7 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item-custom" href="" role="menuitem">Настройки профиля</a>
                   <a class="dropdown-item-custom" href="" role="menuitem">Сменить пароль</a>
-                  <form action="" method="post" style="margin: 0;">
+                  <form action="{% url 'logout' %}" method="post" style="margin: 0;">
                       {% csrf_token %}
                       <button type="submit" class="dropdown-item-custom" role="menuitem">Выйти</button>
                   </form>

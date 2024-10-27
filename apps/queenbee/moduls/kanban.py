@@ -154,3 +154,14 @@ def crm_update_card_positions(request):
         return JsonResponse({'success': True})
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required
+def crm_delete_card(request, card_id):
+    try:
+        card = models.Card.objects.get(id=card_id)
+        card.delete()
+        return JsonResponse({'success': True})
+    except models.Card.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Карточка не найдена'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})

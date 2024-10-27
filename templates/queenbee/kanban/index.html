@@ -177,7 +177,7 @@
                             newBoard.classList.add('kanban-board__container');
                             newBoard.id = `board-${data.board_id}`;
                             newBoard.innerHTML = `
-                                <h2><a href="/kanban/${data.board_id}/">${data.title}</a></h2>
+                                <h2><a href="/admin/kanban/${data.board_id}/">${data.title}</a></h2>
                             `;
             
                             // Добавляем новую доску в конец списка
@@ -287,6 +287,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.updated_at }}</a></p>
                     </div>
                     {% endfor %}
                 </div>

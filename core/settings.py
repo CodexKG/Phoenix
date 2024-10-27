@@ -228,6 +228,8 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'hiveclient.User'
 
+LOGIN_URL = '/admin/login/'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

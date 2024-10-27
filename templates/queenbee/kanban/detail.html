@@ -541,8 +541,9 @@
                             {% for card in list.card_lists.all %}
                                 <div class="kanban-card" data-card-id="{{ card.id }}">
                                     <h4>{{ card.title }}</h4>
+                                    <p>ID: {{ card.id }}</p>
                                     <p>{{ card.description }}</p>
-                                    <p>Срок: {{ card.due_date|date:"d M Y" }}</p>
+                                    <button class="delete-card-btn">Удалить</button>
                                 </div>
                             {% empty %}
                                 <p class="no-tasks-message">Нет задач в этом списке</p>
@@ -585,7 +586,7 @@
                                 <ul id="cardMembers"></ul>
                                 <button id="closeCardModal" class="close-btn">Закрыть</button>
                                 <button id="closeCardModal" class="close-btn">Изменить</button>
-                                <button id="closeCardModal" class="close-btn">Удалить</button>
+                                <button class="delete-card-btn" data-card-id="{{ card.id }}">Удалить</button>
                             </div>
                         </div>
 
@@ -654,6 +655,51 @@
 
                                         // Открываем модальное окно
                                         modal.style.display = 'flex';
+                                    });
+                                });
+                            });
+                        </script>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const deleteButtons = document.querySelectorAll('.delete-card-btn');
+
+                                deleteButtons.forEach(function (button) {
+                                    button.addEventListener('click', function (e) {
+                                        e.stopPropagation();
+                                        const kanbanCard = this.closest('.kanban-card');
+
+                                        if (!kanbanCard) {
+                                            console.error('kanban-card not found');
+                                            return;
+                                        }
+
+                                        const cardId = kanbanCard.getAttribute('data-card-id');
+                                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                                        if (!cardId) {
+                                            console.error('Card ID not found');
+                                            return;
+                                        }
+
+                                        if (confirm('Вы уверены, что хотите удалить эту карточку?')) {
+                                            fetch(`/admin/kanban/card/${cardId}/delete/`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'X-CSRFToken': csrfToken,
+                                                },
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    kanbanCard.remove();
+                                                    alert('Карточка удалена');
+                                                } else {
+                                                    alert('Ошибка удаления карточки: ' + data.error);
+                                                }
+                                            })
+                                            .catch(error => console.error('Ошибка:', error));
+                                        }
                                     });
                                 });
                             });
