@@ -55,10 +55,13 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         color: black;
         transition: box-shadow 0.3s ease;
+        border-top: 5px solid #ca340e;
+        /* border-bottom: 5px solid #ca340e; */
     }
 
     .kanban-card:hover {
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        /* border: 2px solid #ca340e; */
         /* Более глубокая тень при наведении */
     }
 
@@ -66,6 +69,69 @@
         color: black;
         margin: 0 0 10px 0;
     }
+/* Hide the original checkbox */
+.mz-switch,
+.mz-switch-rounded {
+  display: none;
+}
+
+/* Style for the label that represents the checkbox */
+.mz-switch + label,
+.mz-switch-rounded + label {
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+  background-color: #adb5bd; /* Primary color */
+  box-sizing: border-box;
+  position: relative;
+  transition: background-color 0.4s; /* Transition effect */
+}
+
+/* Style for the custom checkbox thumb */
+.mz-switch + label:after,
+.mz-switch-rounded + label:after {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff; /* Thumb color */
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  -webkit-transition: 0.4s;
+  -moz-transition: 0.4s; /* For better browser support */
+  transition: 0.4s;
+}
+
+/* Transform the thumb when checked */
+.mz-switch:checked + label::after,
+.mz-switch-rounded:checked + label:after {
+  -webkit-transform: translateX(16px);
+  -moz-transform: translateX(16px); /* For better browser support */
+  transform: translateX(16px);
+}
+
+/* Change background color when checked */
+.mz-switch:checked + label,
+.mz-switch-rounded:checked + label {
+  background-color: #F23F12; /* Checked color */
+}
+
+/* Style for rounded checkboxes */
+.mz-switch-rounded + label,
+.mz-switch-rounded + label::after {
+  border-radius: 50px;
+}
+
+/* Ensure cursor changes for better UX */
+.mz-switch + label,
+.mz-switch:checked + label,
+.mz-switch:not(:checked) + label,
+.mz-switch-rounded + label,
+.mz-switch-rounded:checked + label,
+.mz-switch-rounded:not(:checked) + label {
+  cursor: pointer;
+}
 
     .kanban-card p {
         margin: 0;
@@ -106,8 +172,8 @@
     }
 
     .add-card-btn {
-        background-color: #f1f1f1;
-        color: black;
+        background-color: #F23F12;
+        color: rgb(255, 255, 255);
         border: none;
         padding: 10px 15px;
         border-radius: 8px;
@@ -118,7 +184,7 @@
     }
 
     .add-card-btn:hover {
-        background-color: #e0e0e0;
+        background-color: #ca340e;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         /* Более глубокая тень при наведении */
     }
@@ -305,12 +371,14 @@
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Добавить новый список</h2>
+              
                 <form id="addListForm">
                     {% csrf_token %}
                     <input type="text" name="title" id="listTitle" class="form-control addListForCanban"
                         placeholder="Название списка" required>
                     <button type="submit" class="add-list-btn">Добавить список</button>
                 </form>
+              
             </div>
         </div>
 
@@ -531,7 +599,14 @@
                         <a href="{% url 'crm_kanban_index' %}" class="back-btn">Назад</a>
                         {{ board.title }}
                     </div>
+                 <div style="display: flex; align-items: center; gap: 1rem ;">
+
+                    <div>
+                        <input class="mz-switch-rounded" type="checkbox" name="" id="mz-switch-rounded">
+                        <label for="mz-switch-rounded" style="margin-bottom: -7px;"></label>
+                      </div>
                     <button id="openAddListModal" class="add-list-btn">Добавить список</button>
+                 </div>
                 </div>
                 <div class="kanban-board">
                     {% for list in lists %}
@@ -541,9 +616,9 @@
                             {% for card in list.card_lists.all %}
                                 <div class="kanban-card" data-card-id="{{ card.id }}">
                                     <h4>{{ card.title }}</h4>
-                                    <p>ID: {{ card.id }}</p>
-                                    <p>{{ card.description }}</p>
-                                    <button class="delete-card-btn">Удалить</button>
+                                    <!-- <p>ID: {{ card.id }}</p> -->
+                                    <p>{{ card.description|truncatewords:4 }}</p>
+                                    <!-- <button class="delete-card-btn">Удалить</button> -->
                                 </div>
                             {% empty %}
                                 <p class="no-tasks-message">Нет задач в этом списке</p>
