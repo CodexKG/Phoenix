@@ -69,69 +69,76 @@
         color: black;
         margin: 0 0 10px 0;
     }
-/* Hide the original checkbox */
-.mz-switch,
-.mz-switch-rounded {
-  display: none;
-}
 
-/* Style for the label that represents the checkbox */
-.mz-switch + label,
-.mz-switch-rounded + label {
-  display: inline-block;
-  width: 40px;
-  height: 24px;
-  background-color: #adb5bd; /* Primary color */
-  box-sizing: border-box;
-  position: relative;
-  transition: background-color 0.4s; /* Transition effect */
-}
+    /* Hide the original checkbox */
+    .mz-switch,
+    .mz-switch-rounded {
+        display: none;
+    }
 
-/* Style for the custom checkbox thumb */
-.mz-switch + label:after,
-.mz-switch-rounded + label:after {
-  content: "";
-  display: block;
-  width: 20px;
-  height: 20px;
-  background-color: #ffffff; /* Thumb color */
-  position: absolute;
-  left: 2px;
-  bottom: 2px;
-  -webkit-transition: 0.4s;
-  -moz-transition: 0.4s; /* For better browser support */
-  transition: 0.4s;
-}
+    /* Style for the label that represents the checkbox */
+    .mz-switch+label,
+    .mz-switch-rounded+label {
+        display: inline-block;
+        width: 40px;
+        height: 24px;
+        background-color: #adb5bd;
+        /* Primary color */
+        box-sizing: border-box;
+        position: relative;
+        transition: background-color 0.4s;
+        /* Transition effect */
+    }
 
-/* Transform the thumb when checked */
-.mz-switch:checked + label::after,
-.mz-switch-rounded:checked + label:after {
-  -webkit-transform: translateX(16px);
-  -moz-transform: translateX(16px); /* For better browser support */
-  transform: translateX(16px);
-}
+    /* Style for the custom checkbox thumb */
+    .mz-switch+label:after,
+    .mz-switch-rounded+label:after {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: #ffffff;
+        /* Thumb color */
+        position: absolute;
+        left: 2px;
+        bottom: 2px;
+        -webkit-transition: 0.4s;
+        -moz-transition: 0.4s;
+        /* For better browser support */
+        transition: 0.4s;
+    }
 
-/* Change background color when checked */
-.mz-switch:checked + label,
-.mz-switch-rounded:checked + label {
-  background-color: #F23F12; /* Checked color */
-}
+    /* Transform the thumb when checked */
+    .mz-switch:checked+label::after,
+    .mz-switch-rounded:checked+label:after {
+        -webkit-transform: translateX(16px);
+        -moz-transform: translateX(16px);
+        /* For better browser support */
+        transform: translateX(16px);
+    }
 
-/* Style for rounded checkboxes */
-.mz-switch-rounded + label,
-.mz-switch-rounded + label::after {
-  border-radius: 50px;
-}
+    /* Change background color when checked */
+    .mz-switch:checked+label,
+    .mz-switch-rounded:checked+label {
+        background-color: #F23F12;
+        /* Checked color */
+    }
 
-/* Ensure cursor changes for better UX */
-.mz-switch + label,
-.mz-switch:checked + label,
-.mz-switch:not(:checked) + label,
-.mz-switch-rounded + label,
-.mz-switch-rounded:checked + label,
-.mz-switch-rounded:not(:checked) + label {
-  cursor: pointer;
-}
+    /* Style for rounded checkboxes */
+    .mz-switch-rounded+label,
+    .mz-switch-rounded+label::after {
+        border-radius: 50px;
+    }
+
+    /* Ensure cursor changes for better UX */
+    .mz-switch+label,
+    .mz-switch:checked+label,
+    .mz-switch:not(:checked)+label,
+    .mz-switch-rounded+label,
+    .mz-switch-rounded:checked+label,
+    .mz-switch-rounded:not(:checked)+label {
+        cursor: pointer;
+    }
 
     .kanban-card p {
         margin: 0;
@@ -175,11 +182,11 @@
         background-color: #F23F12;
         color: rgb(255, 255, 255);
         border: none;
-        padding: 10px 15px;
+        padding: 3px 15px;
         border-radius: 8px;
         cursor: pointer;
-        margin-top: auto;
-        width: 100%;
+
+        font-size: 14px;
         transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -269,7 +276,6 @@
         color: rgb(255, 255, 255);
         margin-right: 20px;
         text-decoration: none;
-       
     }
 
     .back-btn:hover {
@@ -352,18 +358,49 @@
     }
 
     .sortable-ghost {
-    opacity: 0.5; /* Прозрачность для перетаскиваемого элемента */
-    transform: scale(0.98); /* Небольшое уменьшение размера для эффекта */
-}
+        opacity: 0.5;
+        /* Прозрачность для перетаскиваемого элемента */
+        transform: scale(0.98);
+        /* Небольшое уменьшение размера для эффекта */
+    }
 
-.sortable-chosen {
-    background-color: #f0f0f0; /* Подсветка выбранного элемента */
-}
+    .sortable-chosen {
+        background-color: #f0f0f0;
+        /* Подсветка выбранного элемента */
+    }
 
-.sortable-drag {
-    cursor: grabbing; /* Меняет курсор на 'захват' при перетаскивании */
-}
+    .sortable-drag {
+        cursor: grabbing;
+        /* Меняет курсор на 'захват' при перетаскивании */
+    }
+
+    .kanban-board-kanban {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        scrollbar-width: thin;
+        user-select: none;
+    }
+
+    /* Стили для представления в виде таблицы */
+    .kanban-board-table {
+        display: none;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    /* Стили для переключателя */
+    .hidden {
+        display: none;
+    }
+
+    .visible {
+        display: flex;
+    }
 </style>
+
+
 
 <main class="main" id="top">
     <div class="container" data-layout="container">
@@ -374,18 +411,19 @@
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Добавить новый список</h2>
-              
+
                 <form id="addListForm">
                     {% csrf_token %}
                     <input type="text" name="title" id="listTitle" class="form-control addListForCanban"
                         placeholder="Название списка" required>
                     <button type="submit" class="add-list-btn">Добавить список</button>
                 </form>
-              
+
             </div>
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const kanbanLists = document.querySelectorAll('.kanban-cards');
@@ -427,15 +465,15 @@
                                     cardIds: cardIds  // Массив ID карточек в новом порядке
                                 })
                             })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    console.log('Позиции карточек и список обновлены');
-                                } else {
-                                    console.error('Ошибка при обновлении карточек:', data.error);
-                                }
-                            })
-                            .catch(error => console.error('Ошибка:', error));
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        console.log('Позиции карточек и список обновлены');
+                                    } else {
+                                        console.error('Ошибка при обновлении карточек:', data.error);
+                                    }
+                                })
+                                .catch(error => console.error('Ошибка:', error));
                         },
                     });
                 });
@@ -443,7 +481,7 @@
                 function checkForEmptyList(listElement) {
                     const cards = listElement.querySelectorAll('.kanban-card');
                     const noTasksMessage = listElement.querySelector('.no-tasks-message');
-                    
+
                     if (cards.length === 0) {
                         if (!noTasksMessage) {
                             const messageElement = document.createElement('p');
@@ -602,29 +640,29 @@
                         <a href="{% url 'crm_kanban_index' %}" class="back-btn">Назад</a>
                         {{ board.title }}
                     </div>
-                 <div style="display: flex; align-items: center; gap: 1rem ;">
+                    <div style="display: flex; align-items: center; gap: 1rem ;">
 
-                    <div>
-                        <input class="mz-switch-rounded" type="checkbox" name="" id="mz-switch-rounded">
-                        <label for="mz-switch-rounded" style="margin-bottom: -7px;"></label>
-                      </div>
-                    <button id="openAddListModal" class="add-list-btn">Добавить список</button>
-                 </div>
+                        <div>
+                            <input class="mz-switch-rounded" type="checkbox" name="" id="mz-switch-rounded">
+                            <label for="mz-switch-rounded" style="margin-bottom: -7px;"></label>
+                        </div>
+                        <button id="openAddListModal" class="add-list-btn">Добавить список</button>
+                    </div>
                 </div>
-                <div class="kanban-board">
+                <div id="kanban-board-kanban" class="kanban-board">
                     {% for list in lists %}
                     <div id="list-{{ list.id }}" class="kanban-list" data-list-id="{{ list.id }}">
                         <h3>{{ list.title }}</h3>
                         <div class="kanban-cards" data-list-id="{{ list.id }}">
                             {% for card in list.card_lists.all %}
-                                <div class="kanban-card" data-card-id="{{ card.id }}">
-                                    <h4>{{ card.title }}</h4>
-                                    <!-- <p>ID: {{ card.id }}</p> -->
-                                    <p>{{ card.description|truncatewords:4 }}</p>
-                                    <!-- <button class="delete-card-btn">Удалить</button> -->
-                                </div>
+                            <div class="kanban-card" data-card-id="{{ card.id }}">
+                                <h4>{{ card.title }}</h4>
+                                <!-- <p>ID: {{ card.id }}</p> -->
+                                <p>{{ card.description|truncatewords:4 }}</p>
+                                <!-- <button class="delete-card-btn">Удалить</button> -->
+                            </div>
                             {% empty %}
-                                <p class="no-tasks-message">Нет задач в этом списке</p>
+                            <p class="no-tasks-message">Нет задач в этом списке</p>
                             {% endfor %}
                         </div>
 
@@ -767,16 +805,16 @@
                                                     'X-CSRFToken': csrfToken,
                                                 },
                                             })
-                                            .then(response => response.json())
-                                            .then(data => {
-                                                if (data.success) {
-                                                    kanbanCard.remove();
-                                                    alert('Карточка удалена');
-                                                } else {
-                                                    alert('Ошибка удаления карточки: ' + data.error);
-                                                }
-                                            })
-                                            .catch(error => console.error('Ошибка:', error));
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.success) {
+                                                        kanbanCard.remove();
+                                                        alert('Карточка удалена');
+                                                    } else {
+                                                        alert('Ошибка удаления карточки: ' + data.error);
+                                                    }
+                                                })
+                                                .catch(error => console.error('Ошибка:', error));
                                         }
                                     });
                                 });
@@ -788,8 +826,371 @@
                     </div>
                     {% endfor %}
                 </div>
+                <div id="kanban-board-table" class="kanban-board-table">
+                    <style>
+                        thead,
+                        tbody,
+                        tfoot,
+                        tr,
+                        td,
+                        th {
+                            border: none !important;
+                        }
+
+                        tr {
+                            background-color: white;
+                            padding: 15px;
+                            border-radius: 8px !important;
+                            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+                            transition: box-shadow 0.3s ease;
+                            margin-bottom: 10px;
+                            border-bottom: 5px solid #dddddd00 !important;
+                        }
+                    </style>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Название списка</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in lists %}
+                            <tr data-list-id="{{ list.id }}">
+                                <td>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <b>{{ list.title }}</b>
+                                        <button class="add-card-btn" data-list-id="{{ list.id }}">
+                                            Добавить карточку
+                                        </button>
+
+                                        <!-- Модальное окно для добавления карточки -->
+                                        <div id="addCardModal-{{ list.id }}" class="modal">
+                                            <div class="modal-content">
+                                                <span class="close" data-list-id="{{ list.id }}">&times;</span>
+                                                <h2>Добавить новую карточку</h2>
+                                                <form class="addCardForm" data-list-id="{{ list.id }}">
+                                                    {% csrf_token %}
+                                                    <input type="text" name="title" placeholder="Название" required><br>
+                                                    <textarea name="description" rows="4"
+                                                        placeholder="Описание"></textarea><br>
+                                                    <input type="datetime-local" name="due_date"
+                                                        placeholder="Срок выполнения"><br>
+                                                    <select name="members" multiple>
+                                                        {% for user in users %}
+                                                        <option value="{{ user.id }}">{{ user.username }}</option>
+                                                        {% endfor %}
+                                                    </select><br>
+                                                    <button type="submit">Добавить карточку</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="table-cards sortable" data-list-id="{{ list.id }}">
+                                        {% for card in list.card_lists.all %}
+                                        <div class="table-card" data-card-id="{{ card.id }}">
+                                            <img width="20"
+                                                src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-4.png"
+                                                alt="">
+                                            <b>✅ {{ card.title }}</b>
+                                            <p>{{ card.description|truncatewords:4 }}</p>
+                                        </div>
+                                        {% empty %}
+                                        <p class="no-tasks-message">Нет задач в этом списке</p>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Открытие модального окна при клике на "Добавить карточку"
+                            document.querySelectorAll('.add-card-btn').forEach(button => {
+                                button.addEventListener('click', function () {
+                                    const listId = this.getAttribute('data-list-id');
+                                    document.getElementById(`addCardModal-${listId}`).style.display = 'flex';
+                                });
+                            });
+
+                            // Закрытие модального окна при клике на крестик
+                            document.querySelectorAll('.close').forEach(closeBtn => {
+                                closeBtn.addEventListener('click', function () {
+                                    const listId = this.getAttribute('data-list-id');
+                                    document.getElementById(`addCardModal-${listId}`).style.display = 'none';
+                                });
+                            });
+
+                            // Закрытие модального окна при клике вне его
+                            window.addEventListener('click', function (event) {
+                                document.querySelectorAll('.modal').forEach(modal => {
+                                    if (event.target === modal) {
+                                        modal.style.display = 'none';
+                                    }
+                                });
+                            });
+
+                            // Обработка формы добавления карточки
+                            document.querySelectorAll('.addCardForm').forEach(form => {
+                                form.addEventListener('submit', function (e) {
+                                    e.preventDefault();
+
+                                    const listId = this.getAttribute('data-list-id');
+                                    const formData = new FormData(this);
+                                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                                    fetch(`/admin/kanban/list/${listId}/add_card/`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRFToken': csrfToken
+                                        },
+                                        body: formData
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                const cardContainer = document.querySelector(`.table-cards[data-list-id="${listId}"]`);
+
+                                                // Создаем новый элемент карточки с нужной структурой
+                                                const newCard = document.createElement('div');
+                                                newCard.classList.add('table-card');
+                                                newCard.setAttribute('data-card-id', data.card_id);
+                                                newCard.innerHTML = `
+    <img width="20" src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-4.png" alt="">
+    <b>✅ ${data.card_title}</b>
+    <p>${data.card_description}</p>
+`;
+
+                                                // Добавляем новую карточку в контейнер
+                                                cardContainer.appendChild(newCard);
+
+                                                // Закрываем модальное окно и очищаем форму
+                                                document.getElementById(`addCardModal-${listId}`).style.display = 'none';
+                                                this.reset();
+                                            } else {
+                                                alert('Ошибка при добавлении карточки');
+                                            }
+                                        })
+                                        .catch(error => console.error('Ошибка:', error));
+                                });
+                            });
+                        });
+                    </script>
+
+                    <style>
+                        /* Стили для модального окна */
+                        .modal {
+                            display: none;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.5);
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .modal-content {
+                            background-color: #fff;
+                            padding: 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                            width: 90%;
+                            max-width: 400px;
+                            text-align: center;
+                            position: relative;
+                        }
+
+                        .close {
+                            position: absolute;
+                            right: 15px;
+                            top: 10px;
+                            font-size: 20px;
+                            cursor: pointer;
+                            color: #888;
+                        }
+
+                        .close:hover {
+                            color: #000;
+                        }
+
+                        .table-card {
+                            border-top: 2px solid #ca340e58;
+                            cursor: grab;
+                            padding: 10px;
+                            margin: 5px 0;
+                            background-color: #fff;
+                            border-radius: 5px;
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            gap: 2rem;
+                            align-items: center;
+                            transition: 0.2s;
+                        }
+
+                        .table-card:hover {
+                            border-top: 2px solid #ca340e00;
+                            background-color: #ca340e58;
+                        }
+
+                        .table-card p {
+                            margin: 0;
+                        }
+                    </style>
+
+                    <!-- JavaScript для открытия модальных окон и отправки формы -->
+
+                </div>
+
+
+                <!-- JS для работы таблицы с перетаскиванием -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // Активируем Sortable на всех контейнерах с карточками
+                        const listContainers = document.querySelectorAll('.sortable');
+
+                        listContainers.forEach(function (container) {
+                            new Sortable(container, {
+                                group: 'shared',  // Позволяет перемещение между списками
+                                animation: 150,
+                                ghostClass: 'sortable-ghost',
+                                onEnd: function (evt) {
+                                    const cardIds = Array.from(evt.to.children).map(card => card.dataset.cardId);
+                                    const listId = evt.to.getAttribute('data-list-id');
+                                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                                    // Отправляем запрос на сервер для обновления позиции карточек
+                                    fetch('/admin/kanban/update_card_positions/', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRFToken': csrfToken
+                                        },
+                                        body: JSON.stringify({
+                                            listId: listId,
+                                            cardIds: cardIds
+                                        })
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                console.log('Позиции карточек обновлены');
+                                            } else {
+                                                console.error('Ошибка при обновлении карточек:', data.error);
+                                            }
+                                        })
+                                        .catch(error => console.error('Ошибка:', error));
+                                },
+                            });
+                        });
+
+                        // Модальные окна для добавления и редактирования карточек
+                        const modal = document.getElementById('addCardModal');
+                        const closeModal = document.querySelector('.close');
+                        const addCardButtons = document.querySelectorAll('.add-card-btn');
+                        const form = document.getElementById('addCardForm');
+                        let currentListId = null;
+
+                        // Открытие модального окна
+                        addCardButtons.forEach(function (button) {
+                            button.addEventListener('click', function () {
+                                currentListId = this.dataset.listId;
+                                modal.style.display = 'flex';
+                            });
+                        });
+
+                        // Закрытие модального окна
+                        closeModal.addEventListener('click', function () {
+                            modal.style.display = 'none';
+                        });
+
+                        // Закрытие модального окна при клике вне его
+                        window.addEventListener('click', function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = 'none';
+                            }
+                        });
+
+                        // Отправка формы для добавления карточки
+                        form.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            const formData = new FormData(form);
+                            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                            fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrfToken
+                                },
+                                body: formData
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        const listContainer = document.querySelector(`.sortable[data-list-id="${currentListId}"]`);
+                                        const newCard = document.createElement('div');
+                                        newCard.classList.add('table-card');
+                                        newCard.setAttribute('data-card-id', data.card_id);
+                                        newCard.innerHTML = `<h4>${data.card_title}</h4><p>${data.card_description}</p>`;
+                                        listContainer.appendChild(newCard);
+                                        modal.style.display = 'none';
+                                        form.reset();
+                                    } else {
+                                        alert('Ошибка при добавлении карточки');
+                                    }
+                                })
+                                .catch(error => console.error('Ошибка:', error));
+                        });
+                    });
+                </script>
+
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const switchToggle = document.getElementById('mz-switch-rounded');
+            const kanbanBoard = document.getElementById('kanban-board-kanban');
+            const tableBoard = document.getElementById('kanban-board-table');
+
+            // Проверка состояния переключателя в localStorage
+            const savedState = localStorage.getItem('boardView');
+            if (savedState === 'table') {
+                switchToggle.checked = true;
+                kanbanBoard.classList.add('hidden');
+                kanbanBoard.classList.remove('visible');
+                tableBoard.classList.add('visible');
+                tableBoard.classList.remove('hidden');
+            } else {
+                switchToggle.checked = false;
+                kanbanBoard.classList.add('visible');
+                kanbanBoard.classList.remove('hidden');
+                tableBoard.classList.add('hidden');
+                tableBoard.classList.remove('visible');
+            }
+
+            // Обработчик для переключателя
+            switchToggle.addEventListener('change', function () {
+                if (switchToggle.checked) {
+                    kanbanBoard.classList.add('hidden');
+                    kanbanBoard.classList.remove('visible');
+                    tableBoard.classList.add('visible');
+                    tableBoard.classList.remove('hidden');
+                    localStorage.setItem('boardView', 'table'); // Сохраняем состояние как таблица
+                } else {
+                    kanbanBoard.classList.add('visible');
+                    kanbanBoard.classList.remove('hidden');
+                    tableBoard.classList.add('hidden');
+                    tableBoard.classList.remove('visible');
+                    localStorage.setItem('boardView', 'kanban'); // Сохраняем состояние как канбан
+                }
+            });
+        });
+    </script>
+
 </main>
 {% endblock %}
