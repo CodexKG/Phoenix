@@ -425,77 +425,82 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const kanbanLists = document.querySelectorAll('.kanban-cards');
+         document.addEventListener('DOMContentLoaded', function () {
+    const kanbanLists = document.querySelectorAll('.kanban-cards');
 
-                kanbanLists.forEach(function (list) {
-                    new Sortable(list, {
-                        group: 'kanban',  // Позволяет перемещать между списками
-                        animation: 150,
-                        easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-                        forceFallback: true,
-                        ghostClass: "sortable-ghost",
-                        chosenClass: "sortable-chosen",
-                        dragClass: "sortable-drag",
-                        onEnd: function (evt) {
-                            const cardIds = [];
-                            const cards = evt.to.children;
+    kanbanLists.forEach(function (list) {
+        new Sortable(list, {
+            group: 'kanban',  // Позволяет перемещать между списками
+            animation: 150,
+            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+            forceFallback: true,
+            ghostClass: "sortable-ghost",
+            chosenClass: "sortable-chosen",
+            dragClass: "sortable-drag",
+            onEnd: function (evt) {
+                const cardIds = [];
+                const cards = evt.to.children;
 
-                            // Проверка на наличие задач в списке "откуда переместили"
-                            checkForEmptyList(evt.from);
-                            // Проверка на наличие задач в списке "куда переместили"
-                            checkForEmptyList(evt.to);
+                // Проверка на наличие задач в списке "откуда переместили"
+                checkForEmptyList(evt.from);
+                // Проверка на наличие задач в списке "куда переместили"
+                checkForEmptyList(evt.to);
 
-                            for (let i = 0; i < cards.length; i++) {
-                                cardIds.push(cards[i].dataset.cardId);  // Собираем ID карточек
-                            }
-
-                            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                            // Отправляем запрос на обновление списка и позиций карточек
-                            fetch('/admin/kanban/update_card_positions/', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRFToken': csrfToken
-                                },
-                                body: JSON.stringify({
-                                    listId: evt.to.dataset.listId,  // Новый список
-                                    oldListId: evt.from.dataset.listId,  // Старый список
-                                    cardIds: cardIds  // Массив ID карточек в новом порядке
-                                })
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        console.log('Позиции карточек и список обновлены');
-                                    } else {
-                                        console.error('Ошибка при обновлении карточек:', data.error);
-                                    }
-                                })
-                                .catch(error => console.error('Ошибка:', error));
-                        },
-                    });
-                });
-
-                function checkForEmptyList(listElement) {
-                    const cards = listElement.querySelectorAll('.kanban-card');
-                    const noTasksMessage = listElement.querySelector('.no-tasks-message');
-
-                    if (cards.length === 0) {
-                        if (!noTasksMessage) {
-                            const messageElement = document.createElement('p');
-                            messageElement.classList.add('no-tasks-message');
-                            messageElement.innerText = 'Нет задач в этом списке';
-                            listElement.appendChild(messageElement);
-                        }
-                    } else {
-                        if (noTasksMessage) {
-                            noTasksMessage.remove();
-                        }
+                // Собираем ID карточек и исключаем null значения
+                for (let i = 0; i < cards.length; i++) {
+                    const cardId = cards[i].dataset.cardId;
+                    if (cardId) {  // Проверяем, что cardId не null
+                        cardIds.push(cardId);
                     }
                 }
-            });
+
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                // Отправляем запрос на обновление списка и позиций карточек
+                fetch('/admin/kanban/update_card_positions/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        listId: evt.to.dataset.listId,  // Новый список
+                        oldListId: evt.from.dataset.listId,  // Старый список
+                        cardIds: cardIds  // Массив ID карточек в новом порядке
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Позиции карточек и список обновлены');
+                    } else {
+                        console.error('Ошибка при обновлении карточек:', data.error);
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+            },
+        });
+    });
+
+    function checkForEmptyList(listElement) {
+        const cards = listElement.querySelectorAll('.kanban-card');
+        const noTasksMessage = listElement.querySelector('.no-tasks-message');
+
+        if (cards.length === 0) {
+            if (!noTasksMessage) {
+                const messageElement = document.createElement('p');
+                messageElement.classList.add('no-tasks-message');
+                messageElement.innerText = 'Нет задач в этом списке';
+                listElement.appendChild(messageElement);
+            }
+        } else {
+            if (noTasksMessage) {
+                noTasksMessage.remove();
+            }
+        }
+    }
+});
+
         </script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -654,6 +659,7 @@
                     <div id="list-{{ list.id }}" class="kanban-list" data-list-id="{{ list.id }}">
                         <h3>{{ list.title }}</h3>
                         <div class="kanban-cards" data-list-id="{{ list.id }}">
+                         
                             {% for card in list.card_lists.all %}
                             <div class="kanban-card" data-card-id="{{ card.id }}">
                                 <h4>{{ card.title }}</h4>
@@ -707,73 +713,77 @@
                         </div>
 
                         <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const modal = document.getElementById('viewCardModal');
-                                const closeModal = document.querySelector('.close');
-                                const cards = document.querySelectorAll('.kanban-card');
+                        document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('viewCardModal');
+    const closeModal = document.getElementById('closeCardModal');
+    const closeIcon = document.getElementById('closeIcon');
+    const cards = document.querySelectorAll('.kanban-card');
 
-                                // Закрытие модального окна
-                                document.getElementById('closeCardModal').addEventListener('click', () => {
-                                    modal.style.display = 'none';
-                                });
+    // Закрытие модального окна
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
 
-                                document.getElementById('closeIcon').addEventListener('click', () => {
-                                    modal.style.display = 'none';
-                                });
+    closeIcon.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
 
-                                window.addEventListener('click', function (event) {
-                                    if (event.target == modal) {
-                                        modal.style.display = 'none';
-                                    }
-                                });
+    window.addEventListener('click', function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    });
 
-                                // Добавляем обработчики для каждой карточки
-                                cards.forEach(function (card) {
-                                    card.addEventListener('click', function () {
-                                        const cardTitle = this.querySelector('h4').innerText;
-                                        const cardDescription = this.querySelector('p').innerText;
-                                        const cardDueDate = this.querySelector('p + p').innerText;
-                                        const cardUser = this.dataset.user; // Получаем пользователя из data-атрибутов
-                                        const cardCreatedAt = this.dataset.createdAt; // Получаем дату создания
-                                        const cardUpdatedAt = this.dataset.updatedAt; // Получаем дату обновления
-                                        const cardAttachments = this.dataset.attachments; // Получаем вложения
+    // Добавляем обработчики для каждой карточки
+    cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            // Извлекаем значения, если элементы существуют, или оставляем пустым
+            const cardTitle = this.querySelector('h4') ? this.querySelector('h4').innerText : "Нет названия";
+            const cardDescription = this.querySelector('p') ? this.querySelector('p').innerText : "Нет описания";
+            const cardDueDate = this.querySelector('p + p') ? this.querySelector('p + p').innerText : "Нет даты";
 
-                                        // Заполняем модальное окно
-                                        document.getElementById('cardTitle').innerText = cardTitle;
-                                        document.getElementById('cardDescription').innerText = cardDescription;
-                                        document.getElementById('cardDueDate').innerText = cardDueDate;
-                                        document.getElementById('cardUser').innerText = cardUser;
-                                        document.getElementById('cardCreatedAt').innerText = cardCreatedAt;
-                                        document.getElementById('cardUpdatedAt').innerText = cardUpdatedAt;
+            const cardUser = this.dataset.user || "Нет пользователя";
+            const cardCreatedAt = this.dataset.createdAt || "Не указана";
+            const cardUpdatedAt = this.dataset.updatedAt || "Не указана";
+            const cardAttachments = this.dataset.attachments || "";
+            const cardMembers = this.dataset.members || "";
 
-                                        // Заполняем вложения
-                                        const attachmentsList = document.getElementById('cardAttachments');
-                                        attachmentsList.innerHTML = ''; // Очищаем список
-                                        if (cardAttachments) {
-                                            cardAttachments.split(',').forEach(attachment => {
-                                                const li = document.createElement('li');
-                                                li.textContent = attachment;
-                                                attachmentsList.appendChild(li);
-                                            });
-                                        }
+            // Заполняем модальное окно
+            document.getElementById('cardTitle').innerText = cardTitle;
+            document.getElementById('cardDescription').innerText = cardDescription;
+            document.getElementById('cardDueDate').innerText = cardDueDate;
+            document.getElementById('cardUser').innerText = cardUser;
+            document.getElementById('cardCreatedAt').innerText = cardCreatedAt;
+            document.getElementById('cardUpdatedAt').innerText = cardUpdatedAt;
 
-                                        // Пример добавления участников (если есть)
-                                        const cardMembers = document.getElementById('cardMembers');
-                                        cardMembers.innerHTML = ''; // Очищаем список
-                                        const members = this.dataset.members;
-                                        if (members) {
-                                            members.split(',').forEach(member => {
-                                                const li = document.createElement('li');
-                                                li.textContent = member;
-                                                cardMembers.appendChild(li);
-                                            });
-                                        }
+            // Заполняем вложения
+            const attachmentsList = document.getElementById('cardAttachments');
+            attachmentsList.innerHTML = '';
+            if (cardAttachments) {
+                cardAttachments.split(',').forEach(attachment => {
+                    const li = document.createElement('li');
+                    li.textContent = attachment;
+                    attachmentsList.appendChild(li);
+                });
+            }
 
-                                        // Открываем модальное окно
-                                        modal.style.display = 'flex';
-                                    });
-                                });
-                            });
+            // Заполняем участников
+            const membersList = document.getElementById('cardMembers');
+            membersList.innerHTML = '';
+            if (cardMembers) {
+                cardMembers.split(',').forEach(member => {
+                    const li = document.createElement('li');
+                    li.textContent = member;
+                    membersList.appendChild(li);
+                });
+            }
+
+            // Открываем модальное окно
+            modal.style.display = 'flex';
+        });
+    });
+});
+
                         </script>
 
                         <script>
@@ -1048,9 +1058,8 @@
 
                 <!-- JS для работы таблицы с перетаскиванием -->
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-                <!-- <script>
+                <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                        // Активируем Sortable на всех контейнерах с карточками
                         const listContainers = document.querySelectorAll('.sortable');
 
                         listContainers.forEach(function (container) {
@@ -1059,7 +1068,11 @@
                                 animation: 150,
                                 ghostClass: 'sortable-ghost',
                                 onEnd: function (evt) {
-                                    const cardIds = Array.from(evt.to.children).map(card => card.dataset.cardId);
+                                    // Получаем ID всех карточек и убираем возможные null значения
+                                    const cardIds = Array.from(evt.to.children)
+                                        .map(card => card.dataset.cardId)
+                                        .filter(id => id !== null && id !== undefined);
+
                                     const listId = evt.to.getAttribute('data-list-id');
                                     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
@@ -1121,32 +1134,11 @@
                             const formData = new FormData(form);
                             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-                            fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRFToken': csrfToken
-                                },
-                                body: formData
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        const listContainer = document.querySelector(`.sortable[data-list-id="${currentListId}"]`);
-                                        const newCard = document.createElement('div');
-                                        newCard.classList.add('table-card');
-                                        newCard.setAttribute('data-card-id', data.card_id);
-                                        newCard.innerHTML = `<h4>${data.card_title}</h4><p>${data.card_description}</p>`;
-                                        listContainer.appendChild(newCard);
-                                        modal.style.display = 'none';
-                                        form.reset();
-                                    } else {
-                                        alert('Ошибка при добавлении карточки');
-                                    }
-                                })
-                                .catch(error => console.error('Ошибка:', error));
+                            // Добавьте сюда код для отправки формы
                         });
                     });
-                </script> -->
+
+                </script>
 
             </div>
         </div>
