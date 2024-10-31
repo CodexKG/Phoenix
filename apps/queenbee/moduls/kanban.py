@@ -8,7 +8,7 @@ from apps.kanban import models, forms
 
 logger = logging.getLogger(__name__)
 
-@login_required
+@login_required(login_url='/admin/login/')
 def crm_kanban_index(request):
     boards = models.Board.objects.all().order_by('-created_at')
     form = forms.BoardForm()
@@ -18,6 +18,7 @@ def crm_kanban_index(request):
         'form': form
     })
 
+@login_required(login_url='/admin/login/')
 def crm_kanban_detail(request, id):
     board = get_object_or_404(models.Board, id=id)
     lists = models.List.objects.filter(board=board).prefetch_related('card_lists')
@@ -60,7 +61,7 @@ def crm_add_list(request, board_id):
     logger.error("Ошибка создания списка")
     return JsonResponse({'error': 'Ошибка создания списка'}, status=400)
 
-@login_required
+@login_required(login_url='/admin/login/')
 def crm_add_board(request):
     logger.info("Получен запрос на добавление новой доски")  # Логируем начало запроса
     
@@ -155,7 +156,7 @@ def crm_update_card_positions(request):
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
-@login_required
+@login_required(login_url='/admin/login/')
 def crm_delete_card(request, card_id):
     try:
         card = models.Card.objects.get(id=card_id)

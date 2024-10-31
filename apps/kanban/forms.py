@@ -19,7 +19,17 @@ class BoardForm(forms.ModelForm):
         fields = ['title']
 
 class CardForm(forms.ModelForm):
-    due_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}), required=False)
+    due_date = forms.DateTimeField(
+        label="Срок выполнения",  # Это verbose_name для поля
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        required=False
+    )
+    members = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Участники',  # Placeholder для поля участников
+        }),
+        required=False
+    )
 
     class Meta:
         model = models.Card

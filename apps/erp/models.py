@@ -78,7 +78,7 @@ class Employee(models.Model):
 
     city = models.ManyToManyField(
         'City', related_name='city_employees',
-        verbose_name="Город"
+        verbose_name="Город", blank=True
     )
     user = models.OneToOneField(
         User, on_delete=models.SET_NULL,
@@ -98,8 +98,7 @@ class Employee(models.Model):
         blank=True, null=True
     )
     selery = models.PositiveBigIntegerField(
-        verbose_name='Зарплата', 
-        default=0,
+        verbose_name='Зарплата', default=0,
         blank=True, null=True
     )
     email = models.EmailField(
@@ -122,7 +121,8 @@ class Employee(models.Model):
     employee_position = models.CharField(
         max_length=100, verbose_name="Должность", 
         choices=EmployeePostionChoice.choices,
-        default=EmployeePostionChoice.OTHER
+        default=EmployeePostionChoice.OTHER,
+        blank=True, null=True
     )
     bio = models.TextField(
         verbose_name="Биография",

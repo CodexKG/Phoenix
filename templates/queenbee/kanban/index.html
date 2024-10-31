@@ -123,6 +123,21 @@
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+.add-list-btn {
+    padding: 10px 20px;
+    background-color: #F23F12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-list-btn:hover {
+    background-color: #d63810;
+    color: white;
+}
 </style>
 
 <main class="main" id="top">
@@ -203,7 +218,7 @@
                 <form id="addBoardForm">
                     {% csrf_token %}
                     {{ form.title }}
-                    <button type="submit" class="btn btn-danger">Добавить доску</button>
+                    <button type="submit" class="btn add-list-btn">Добавить доску</button>
                 </form>
             </div>
         </div>
@@ -272,7 +287,7 @@
         <div class="row g-3 mb-3">
             <div class="col-12">
                 <!-- Кнопка открытия модального окна -->
-                <button id="openAddBoardModal" class="btn btn-danger">Добавить доску</button>
+                <button id="openAddBoardModal" class="btn add-list-btn">Добавить доску</button>
 
                 <div class="kanban-board mt-4" id="kanbanBoard">
                     {% for board in boards %}

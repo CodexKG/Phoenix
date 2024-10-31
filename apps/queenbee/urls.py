@@ -3,6 +3,7 @@ from django.urls import path
 from apps.queenbee.moduls.index import crm_index
 from apps.queenbee.moduls import kanban
 from apps.queenbee.moduls import users
+from apps.queenbee.moduls import employees
 
 urlpatterns = [
     path('', crm_index, name="crm_index"),
@@ -20,4 +21,12 @@ urlpatterns = [
 
     #users
     path('login/', users.crm_login, name="crm_login"),
+
+    #employee
+    path('employee/', employees.crm_employee_index, name="crm_employee_index"),
+    path('employee/add/', employees.crm_employee_detail, name="crm_employee_add"),
+    path('employee/<int:id>/', employees.crm_employee_detail, name="crm_employee_detail"),
+    path('get_employee_data/', employees.get_report_employee_data, name='get_report_employee_data'),
+    path('upload_employee_data/', employees.upload_employee_data, name="upload_employee_data"),
+    path('export_employees_to_excel/', employees.export_employees_to_excel, name='export_employees_to_excel'),
 ]
