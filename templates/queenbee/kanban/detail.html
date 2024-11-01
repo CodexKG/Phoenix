@@ -2,6 +2,9 @@
 {% load static %}
 {% block content %}
 
+<!-- Kanban -->
+<link rel="stylesheet" href="{% static 'crm/assets/css/kanban.css' %}">
+
 <script>
     const csrfToken = '{{ csrf_token }}';
     const addListUrl = "{% url 'crm_add_list' board.id %}";
@@ -164,5 +167,9 @@
         </div>
     </div>
 </main>
+
+<script src="{% static 'crm/assets/js/kanban.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
 {% endblock %}

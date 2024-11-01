@@ -37,9 +37,6 @@
     <link href="{% static 'crm/assets/css/user-rtl.min.css' %}" rel="stylesheet" id="user-style-rtl">
     <link href="{% static 'crm/assets/css/user.min.css' %}" rel="stylesheet" id="user-style-default">
 
-    <!-- Kanban -->
-    <link rel="stylesheet" href="{% static 'crm/assets/css/kanban.css' %}">
-
     <script>
       var isRTL = JSON.parse(localStorage.getItem('isRTL'));
       if (isRTL) {
@@ -81,11 +78,8 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
     <script src="{% static 'crm/vendors/list.js/list.min.js' %}"></script>
     <script src="{% static 'crm/assets/js/theme.js' %}"></script>
-    <script src="{% static 'crm/assets/js/kanban.js' %}"></script>
-    <script src="{% static 'crm/assets/js/echarts-example.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
+    <script src="{% static 'crm/assets/js/echarts-example.js' %}"></script>
   </body>
 
 </html>
