@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const kanbanBoard = document.getElementById('kanban-board-kanban');
     const tableBoard = document.getElementById('kanban-board-table');
 
+    const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+    const csrfToken = csrfTokenElement ? csrfTokenElement.value : '';
+    if (!csrfToken) {
+        console.error('CSRF-токен не найден');
+    }
+
     // Проверяем сохраненное состояние переключателя из localStorage и применяем нужное представление
     const savedState = localStorage.getItem('boardView');
     if (savedState === 'table') {
@@ -93,35 +99,43 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.target === modal) modal.style.display = 'none';
     });
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-        fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
-                const newCard = document.createElement('div');
-                newCard.classList.add('kanban-card');
-                newCard.dataset.cardId = data.card_id;
-                newCard.innerHTML = `<h4>${data.card_title}</h4>`;
-                listContainer.appendChild(newCard);
-                modal.style.display = 'none';
-                form.reset();
-            } else {
-                alert('Ошибка при добавлении карточки');
-            }
-        })
-        .catch(error => console.error('Ошибка:', error));
-    });
+            fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
+                    if (listContainer && data.card_id && data.card_title) {
+                        const newCard = document.createElement('div');
+                        newCard.classList.add('kanban-card');
+                        newCard.dataset.cardId = data.card_id;
+                        newCard.innerHTML = `<h3>${data.card_title}</h3>`;
+                        listContainer.appendChild(newCard);
+                    } else {
+                        console.error('Не удалось создать карточку. Проверьте данные.');
+                    }
+                    modal.style.display = 'none';
+                    form.reset();
+                } else {
+                    alert('Ошибка при добавлении карточки');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    } else {
+        console.error('Элемент формы не найден');
+    }
 
     // Управление модальным окном для добавления списка
     const addListModal = document.getElementById('addListModal');
