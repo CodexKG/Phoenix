@@ -12,32 +12,33 @@
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
           <script>
-              $(document).ready(function () {
-                  // Функция для получения данных сотрудников с применением фильтров
-                  function fetchEmployeeData(filters = {}) {
-                      const queryParams = new URLSearchParams(filters);
-                      $.ajax({
-                          url: `/admin/get_employee_data/?${queryParams.toString()}`,
-                          type: 'GET',
-                          success: function (data) {
-                              const fieldNames = data.field_names;
-                              const employees = data.employees;
-                              const thead = $('.table thead tr');
-                              const tbody = $('.table tbody');
+          $(document).ready(function () {
+              // Функция для получения данных сотрудников с применением фильтров
+              function fetchEmployeeData(filters = {}) {
+                  const queryParams = new URLSearchParams(filters);
+                  $.ajax({
+                      url: `/admin/get_employee_data/?${queryParams.toString()}`,
+                      type: 'GET',
+                      success: function (data) {
+                          const fieldNames = data.field_names;
+                          const employees = data.employees;
+                          const thead = $('.table thead tr');
+                          const tbody = $('.table tbody');
 
-                              // Display column headers
-                              thead.empty();
-                              Object.keys(fieldNames).forEach(field => {
-                                  thead.append(`<th>${fieldNames[field]}</th>`);
-                              });
+                          // Очистка и добавление заголовков столбцов
+                          thead.empty();
+                          Object.keys(fieldNames).forEach(field => {
+                              thead.append(`<th>${fieldNames[field]}</th>`);
+                          });
 
-                              // Display data
-                              tbody.empty();
+                          // Очистка и отображение данных сотрудников
+                          tbody.empty();
+                          if (employees.length > 0) {
                               employees.forEach(employee => {
                                   const tr = $('<tr></tr>');
                                   Object.keys(employee).forEach((field, index) => {
                                       const td = $('<td></td>');
-                                      if (index === 0) { // If it's the first element (like ID), create a link
+                                      if (index === 0) { // Создаем ссылку для первого элемента (например, ID)
                                           const a = $('<a></a>').attr('href', `/admin/employee/${employee[field]}/`).text(employee[field]);
                                           td.append(a);
                                       } else {
@@ -47,28 +48,33 @@
                                   });
                                   tbody.append(tr);
                               });
-                          },
-                          error: function (error) {
-                              console.error('Error fetching employee data:', error);
-                              $('.table tbody').html('<tr><td colspan="6" class="text-center py-3">Произошла ошибка при загрузке данных.</td></tr>');
+                          } else {
+                              // Если сотрудников нет, показать сообщение
+                              tbody.html('<tr><td colspan="6" class="text-center py-3">Нет сотрудников</td></tr>');
                           }
-                      });
-                  }
-
-                  // Initial data fetch
-                  fetchEmployeeData();
-
-                  // Event listener for filter form submission
-                  $('#filters').on('submit', function (event) {
-                      event.preventDefault();
-                      const filters = $(this).serializeArray().reduce((obj, item) => {
-                          if (item.value) obj[item.name] = item.value;
-                          return obj;
-                      }, {});
-                      $('#filterModal').modal('hide'); // Закрытие модального окна после отправки формы
-                      fetchEmployeeData(filters);
+                      },
+                      error: function (error) {
+                          console.error('Ошибка при получении данных сотрудников:', error);
+                          // Сообщение об ошибке при сбое загрузки данных
+                          $('.table tbody').html('<tr><td colspan="6" class="text-center py-3">Произошла ошибка при загрузке данных.</td></tr>');
+                      }
                   });
+              }
+
+              // Первоначальная загрузка данных
+              fetchEmployeeData();
+
+              // Обработчик события для формы фильтрации
+              $('#filters').on('submit', function (event) {
+                  event.preventDefault();
+                  const filters = $(this).serializeArray().reduce((obj, item) => {
+                      if (item.value) obj[item.name] = item.value;
+                      return obj;
+                  }, {});
+                  $('#filterModal').modal('hide'); // Закрытие модального окна после отправки формы
+                  fetchEmployeeData(filters);
               });
+          });
           </script>
 
           <style>
