@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.admin.utils import label_for_field
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -9,11 +10,11 @@ import traceback, logging, json
 from apps.erp.models import Employee
 from apps.erp.forms import EmployeeForm
 
-@login_required(login_url='/admin/login/')
+@staff_member_required(login_url='/admin/login')
 def crm_employee_index(request):
     return render(request, 'queenbee/employee/index.html')
 
-@login_required(login_url='/admin/login/')
+@staff_member_required(login_url='/admin/login')
 def crm_employee_detail(request, id=None):
     employee = get_object_or_404(Employee, id=id) if id else None
 

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -8,7 +9,7 @@ from apps.kanban import models, forms
 
 logger = logging.getLogger(__name__)
 
-@login_required(login_url='/admin/login/')
+@staff_member_required(login_url='/admin/login')
 def crm_kanban_index(request):
     boards = models.Board.objects.all().order_by('-created_at')
     form = forms.BoardForm()
