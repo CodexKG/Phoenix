@@ -42,10 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     listContainers.forEach(function (container) {
         new Sortable(container, {
-            group: 'shared',
+            group: 'kanban',
             animation: 150,
             ghostClass: 'sortable-ghost',
             onEnd: function (evt) {
+                console.log("Карточка перемещена в новый список", evt.to);
+                console.log("Старый список", evt.from);
+                console.log("Позиции карточек в новом списке", Array.from(evt.to.children).map(card => card.dataset.cardId));
                 const cardIds = Array.from(evt.to.children)
                     .map(card => card.dataset.cardId)
                     .filter(id => id !== null && id !== undefined);

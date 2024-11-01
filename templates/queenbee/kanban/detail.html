@@ -46,7 +46,7 @@
                     {% for list in lists %}
                     <div id="list-{{ list.id }}" class="kanban-list" data-list-id="{{ list.id }}">
                         <h3>{{ list.title }}</h3>
-                        <div class="kanban-cards" data-list-id="{{ list.id }}">
+                        <div class="kanban-cards sortable" data-list-id="{{ list.id }}">
                             {% for card in list.card_lists.all %}
                             <div class="kanban-card" data-card-id="{{ card.id }}">
                                 <h4>{{ card.title }}</h4>

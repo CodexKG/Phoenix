@@ -354,9 +354,7 @@
 
 .sortable-ghost {
     opacity: 0.5;
-    /* Прозрачность для перетаскиваемого элемента */
-    transform: scale(0.98);
-    /* Небольшое уменьшение размера для эффекта */
+    background-color: #f1f1f1;
 }
 
 .sortable-chosen {
