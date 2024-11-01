@@ -54,7 +54,8 @@ def crm_add_list(request, board_id):
             return JsonResponse({
                 'title': new_list.title,
                 'position': new_list.position,
-                'list_id': new_list.id
+                'list_id': new_list.id,
+                'success': True
             })
         else:
             logger.error("Ошибка в форме: %s", form.errors)

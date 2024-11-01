@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const addListModal = document.getElementById('addListModal');
     const openAddListModalButton = document.getElementById('openAddListModal');
     const closeAddListModalButton = addListModal.querySelector('.close');
+    const addListForm = document.getElementById('addListForm');
 
     openAddListModalButton.addEventListener('click', function () {
         addListModal.style.display = 'flex';
@@ -140,6 +141,33 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.target === addListModal) {
             addListModal.style.display = 'none';
         }
+    });
+
+    // Отправка формы для добавления списка
+    addListForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(addListForm);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+        fetch(addListUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {  // Убедитесь, что проверка success соответствует вашему ответу сервера
+                addListModal.style.display = 'none';
+                addListForm.reset();
+                location.reload(); // Перезагрузка страницы после успешного добавления
+            } else {
+                console.error('Ошибка данных сервера:', data);
+                alert('Ошибка при добавлении списка');
+            }
+        })
+        .catch(error => console.error('Ошибка:', error));
     });
 
     // Управление модальным окном для просмотра карточки
