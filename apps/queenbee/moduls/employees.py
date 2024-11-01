@@ -39,21 +39,16 @@ def crm_employee_detail(request, id=None):
         'form': form,
         'employee': employee
     }
-    return render(request, 'crm/employee/detail.html', context)
+    return render(request, 'queenbee/employee/detail.html', context)
 
 def get_report_employee_data(request):
     fields = request.GET.get('fields')
     list_display = fields.split(',') if fields else ['id', 'first_name', 'last_name', 'employee_position', 'phone', 'created']
 
-    city_id = request.GET.get('city')
     employee_position = request.GET.get('employee_position')
 
     try:
         filters = {}
-        if city_id:
-            filters['city__id'] = city_id
-        if employee_position:
-            filters['employee_position'] = employee_position
 
         employees = Employee.objects.filter(**filters).values_list(*list_display, named=True).order_by('-created')
 
