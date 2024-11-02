@@ -25,9 +25,7 @@
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: box-shadow 0.3s ease;
-    /* Убираем анимацию увеличения, оставляем только тень */
+    align-items: stretch;
 }
 
 .kanban-list:hover {
@@ -35,11 +33,17 @@
     /* Только изменение тени при наведении */
 }
 
+.add-card-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
 .kanban-cards {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* Отступы между карточками */
+    flex-grow: 1; /* Основное изменение, чтобы занять оставшееся место */
     margin-bottom: 15px;
 }
 
@@ -177,18 +181,33 @@
     background-color: #F23F12;
     color: rgb(255, 255, 255);
     border: none;
-    padding: 3px 15px;
+    padding: 8px 15px;
     border-radius: 8px;
     cursor: pointer;
-
     font-size: 14px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%; /* Занимает всю ширину */
 }
 
 .add-card-btn:hover {
     background-color: #ca340e;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    /* Более глубокая тень при наведении */
+}
+
+.no-tasks-message {
+    pointer-events: none; /* Отключает взаимодействие */
+    user-select: none; /* Запрещает выделение текста */
+    color: #888;
+    text-align: center;
+    padding: 15px 0;
+    margin-right: 25px; /* Добавляет отступ слева */
+}
+
+.kanban-board-table .add-card-btn {
+    padding: 4px 10px; /* Уменьшаем внутренние отступы */
+    font-size: 12px; /* Уменьшаем размер шрифта */
+    border-radius: 5px; /* Делаем углы более округлыми */
+    width: auto; /* Убираем ширину на всю строку */
 }
 
 /* Стили для модального окна */
@@ -378,9 +397,12 @@
 
 /* Стили для представления в виде таблицы */
 .kanban-board-table {
-    display: none;
+    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    user-select: none;
 }
 
 /* Стили для переключателя */
@@ -448,22 +470,20 @@ tr {
 }
 
 .table-card {
-    border-top: 2px solid #ca340e58;
-    cursor: grab;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 10px;
     margin: 5px 0;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    transition: 0.2s;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    cursor: grab;
+    transition: box-shadow 0.3s ease;
 }
 
 .table-card:hover {
-    border-top: 2px solid #ca340e00;
-    background-color: #ca340e58;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .table-card p {

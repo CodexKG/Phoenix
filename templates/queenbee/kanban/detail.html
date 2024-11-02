@@ -41,7 +41,7 @@
                             <input class="mz-switch-rounded" type="checkbox" id="mz-switch-rounded">
                             <label for="mz-switch-rounded" style="margin-bottom: -7px;"></label>
                         </div>
-                        <button id="openAddListModal" class="add-list-btn">Добавить список Test</button>
+                        <button id="openAddListModal" class="add-list-btn">Добавить список</button>
                     </div>
                 </div>
 
@@ -53,14 +53,12 @@
                             {% for card in list.card_lists.all %}
                             <div class="kanban-card" data-card-id="{{ card.id }}">
                                 <h4>{{ card.title }}</h4>
-                                <!-- <p>ID: {{ card.id }}</p> -->
                                 <p>{{ card.description|truncatewords:4 }}</p>
-                                <!-- <button class="delete-card-btn">Удалить</button> -->
                             </div>
                             {% empty %}
                             <p class="no-tasks-message">Нет задач в этом списке</p>
                             {% endfor %}
-                        </div>
+                        </div>                        
 
                         <!-- Модальное окно для добавления карточки -->
                         <div id="addCardModal" class="modal">

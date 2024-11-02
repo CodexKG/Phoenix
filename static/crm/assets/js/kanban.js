@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const kanbanBoard = document.getElementById('kanban-board-kanban');
     const tableBoard = document.getElementById('kanban-board-table');
 
+    // Получаем CSRF-токен для отправки запросов на сервер
     const csrfTokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
     const csrfToken = csrfTokenElement ? csrfTokenElement.value : '';
     if (!csrfToken) {
@@ -41,43 +42,67 @@ document.addEventListener('DOMContentLoaded', function () {
             tableBoard.classList.remove('visible');
             localStorage.setItem('boardView', 'kanban');
         }
+        initializeSortable(); // Переинициализация Sortable.js при переключении режима
     });
 
-    // Инициализация Sortable.js для перемещения карточек в канбан-доске
-    const listContainers = document.querySelectorAll('.sortable');
-    listContainers.forEach(function (container) {
-        new Sortable(container, {
-            group: 'kanban',
-            animation: 150,
-            ghostClass: 'sortable-ghost',
-            onEnd: function (evt) {
-                const cardIds = Array.from(evt.to.children)
-                    .map(card => card.dataset.cardId)
-                    .filter(id => id !== null && id !== undefined);
+    // Функция для обновления сообщения "Нет задач в этом списке"
+    function updateEmptyMessage(listElement) {
+        const noTasksMessage = listElement.querySelector('.no-tasks-message');
+        const hasCards = listElement.querySelectorAll('.kanban-card, .table-card').length > 0;
+        
+        if (noTasksMessage) {
+            noTasksMessage.style.display = hasCards ? 'none' : 'block';
+        }
+    }
 
-                const listId = evt.to.getAttribute('data-list-id');
-                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // Функция для инициализации Sortable.js для перемещения карточек в канбан-доске и таблице
+    function initializeSortable() {
+        const listContainers = document.querySelectorAll('.sortable');
+        listContainers.forEach(function (container) {
+            new Sortable(container, {
+                group: 'kanban',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function (evt) {
+                    // Обновляем пустые сообщения в обоих списках: отправителе и получателе
+                    updateEmptyMessage(evt.from.closest('.kanban-list, tr'));
+                    updateEmptyMessage(evt.to.closest('.kanban-list, tr'));
 
-                fetch('/admin/kanban/update_card_positions/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: JSON.stringify({
-                        listId: listId,
-                        cardIds: cardIds
+                    // Обновление позиций карточек на сервере
+                    const cardIds = Array.from(evt.to.children)
+                        .map(card => card.dataset.cardId)
+                        .filter(id => id !== null && id !== undefined);
+
+                    const listId = evt.to.getAttribute('data-list-id');
+                    fetch('/admin/kanban/update_card_positions/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({
+                            listId: listId,
+                            cardIds: cardIds
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.success) {
-                        console.error('Ошибка при обновлении позиций карточек:', data.error);
-                    }
-                })
-                .catch(error => console.error('Ошибка:', error));
-            }
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            console.error('Ошибка при обновлении позиций карточек:', data.error);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка:', error));
+                }
+            });
         });
+    }
+
+    // Первоначальная инициализация Sortable.js для всех списков
+    initializeSortable();
+
+    // Обновляем сообщение для каждого списка при загрузке страницы
+    document.querySelectorAll('.kanban-list').forEach(function (listElement) {
+        updateEmptyMessage(listElement);
     });
 
     // Управление модальным окном для добавления карточек
@@ -122,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         newCard.dataset.cardId = data.card_id;
                         newCard.innerHTML = `<h3>${data.card_title}</h3>`;
                         listContainer.appendChild(newCard);
+                        updateEmptyMessage(listContainer.closest('.kanban-list'));
                     } else {
                         console.error('Не удалось создать карточку. Проверьте данные.');
                     }
@@ -172,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {  // Убедитесь, что проверка success соответствует вашему ответу сервера
+            if (data.success) {  // Проверка успешности ответа
                 addListModal.style.display = 'none';
                 addListForm.reset();
                 location.reload(); // Перезагрузка страницы после успешного добавления
@@ -201,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (event.target === viewModal) viewModal.style.display = 'none';
     });
 
+    // Добавление событий для нажатия на карточки
     function addCardClickListeners() {
         document.querySelectorAll('.kanban-card').forEach(card => {
             card.addEventListener('click', () => showModalWithCardData(card));
@@ -213,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addCardClickListeners();
 
+    // Добавление событий для кнопок удаления карточек
     document.querySelectorAll('.delete-card-btn').forEach(button => {
         button.addEventListener('click', function (e) {
             e.stopPropagation();
@@ -229,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     if (data.success) {
                         kanbanCard.remove();
+                        updateEmptyMessage(kanbanCard.closest('.kanban-list'));
                         alert('Карточка удалена');
                     } else {
                         alert('Ошибка удаления карточки: ' + data.error);
@@ -239,4 +268,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-// Testing Work
