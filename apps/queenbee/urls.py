@@ -4,6 +4,7 @@ from apps.queenbee.moduls.index import crm_index
 from apps.queenbee.moduls import kanban
 from apps.queenbee.moduls import users
 from apps.queenbee.moduls import employees
+from apps.queenbee.moduls import billing
 
 urlpatterns = [
     path('', crm_index, name="crm_index"),
@@ -29,4 +30,8 @@ urlpatterns = [
     path('get_employee_data/', employees.get_report_employee_data, name='get_report_employee_data'),
     path('upload_employee_data/', employees.upload_employee_data, name="upload_employee_data"),
     path('export_employees_to_excel/', employees.export_employees_to_excel, name='export_employees_to_excel'),
+
+    #crm
+    path('calculate_delivery/', billing.calculate_delivery, name='calculate_delivery'),
+    path('create_billing/', billing.create_billing, name='create_billing'),
 ]

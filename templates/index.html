@@ -149,6 +149,7 @@
         </section>
         <!-- services-area-end -->
 
+        <!-- HTML Структура формы и модального окна -->
         <!-- request-area -->
         <div class="request__area-two">
             <div class="container">
@@ -163,57 +164,50 @@
                             <div class="request__tab-wrap">
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane show active" id="request-tab-pane" role="tabpanel" aria-labelledby="request-tab" tabindex="0">
-                                        <form action="#" class="request__form request__form-two">
+                                        <form class="request__form request__form-two">
                                             <div class="row gutter-20">
                                                 <div class="col-lg-3">
                                                     <span class="title">Откуда:</span>
-                                                    <div class="form-grp">
-                                                        <div class="form-grp select-grp">
-                                                            <select name="from_city" class="orderby">
-                                                                <option value="Урумчи">Урумчи</option>
-                                                                <option value="Гуанджоу">Гуанджоу</option>
-                                                                <option value="Москва">Иву</option>
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-grp select-grp">
+                                                        <select name="from_city" class="orderby" required>
+                                                            <option value="" disabled selected>Выберите город</option>
+                                                            <option value="Урумчи">Урумчи</option>
+                                                            <option value="Гуанджоу">Гуанджоу</option>
+                                                            <option value="Москва">Иву</option>
+                                                        </select>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <span class="title">Куда:</span>
-                                                    <div class="form-grp">
-                                                        <div class="form-grp select-grp">
-                                                            <select name="to_city" class="orderby">
-                                                                <option value="Бишкек">Бишкек</option>
-                                                                <option value="Ош">Ош</option>
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-grp select-grp">
+                                                        <select name="to_city" class="orderby" required>
+                                                            <option value="" disabled selected>Выберите город</option>
+                                                            <option value="Бишкек">Бишкек</option>
+                                                            <option value="Ош">Ош</option>
+                                                        </select>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <span class="title">Вид:</span>
                                                     <div class="form-grp select-grp">
-                                                        <select name="appearance" class="orderby">
+                                                        <select name="appearance" class="orderby" required>
+                                                            <option value="" disabled selected>Выберите вид</option>
                                                             <option value="Автозапчасти и аксессуары">Автозапчасти и аксессуары</option>
                                                             <option value="Головные уборы">Головные уборы</option>
                                                             <option value="Игрушки и канцелярские принадлежности">Игрушки и канцелярские принадлежности</option>
                                                             <option value="Освещение">Освещение</option>
                                                             <option value="Мебель и фурнитура">Мебель и фурнитура</option>
-                                                            <option value="Текстиль и постельные принадлежности">Текстиль и постельные принадлежности</option>
-                                                            <option value="Посуда">Посуда</option>
-                                                            <option value="Садовый инвентарь">Садовый инвентарь</option>
-                                                            <option value="Строительные материалы и крепеж">Строительные материалы и крепеж</option>
-                                                            <option value="Ткани и швейная фурнитура">Ткани и швейная фурнитура</option>
-                                                            <option value="Навесы и палатки">Навесы и палатки</option>
-                                                            <option value="Детские товары">Детские товары</option>
-                                                            <option value="Части для обуви и зонты">Части для обуви и зонты</option>
-                                                            <option value="Чулочно-носочные изделия">Чулочно-носочные изделия</option>
-                                                            <option value="Электрические транспортные средства">Электрические транспортные средства</option>
                                                         </select>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <span class="title">Вес:</span>
+                                                    <span class="title">Телефон:</span>
                                                     <div class="form-grp">
-                                                        <input type="text" name="weight" placeholder="10кг">
+                                                        <input type="text" name="phone" placeholder="Ваш номер телефона" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -222,35 +216,47 @@
                                                 <div class="col-lg-3">
                                                     <span class="title">Длина:</span>
                                                     <div class="form-grp">
-                                                        <input type="text" name="dimensions" placeholder="Длина">
+                                                        <input type="text" name="length" placeholder="Длина груза" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <span class="title">Ширина:</span>
                                                     <div class="form-grp">
-                                                        <input type="text" name="dimensions" placeholder="Ширина">
+                                                        <input type="text" name="width" placeholder="Ширина груза" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <span class="title">Высота:</span>
                                                     <div class="form-grp">
-                                                        <input type="phone" name="phone" placeholder="Высота">
+                                                        <input type="text" name="height" placeholder="Высота груза" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <span class="title">Email:</span>
+                                                    <span class="title">Вес:</span>
                                                     <div class="form-grp">
-                                                        <input type="email" name="email" placeholder="example@mail.com">
+                                                        <input type="text" name="weight" placeholder="Вес груза" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <button type="submit" class="btn" style="margin-top: 31px;">Рассчитать</button>
+                                                    <span class="title">Почта:</span>
+                                                    <div class="form-grp">
+                                                        <input type="email" name="email" placeholder="example@mail.com" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <button type="button" class="btn calculate-btn" style="margin-top: 31px;">Рассчитать</button>
                                                     <div class="form-check" style="margin-top: 10px;">
-                                                        <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                                                        <input class="form-check-input" type="checkbox" name="consent" id="flexRadioDefault2" required>
                                                         <label class="form-check-label" for="flexRadioDefault2">
                                                             Даю согласие на обработку моих <br>
                                                             <a href="#">Персональных данных</a>
                                                         </label>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -264,7 +270,125 @@
                 </div>
             </div>
         </div>
-        <!-- request-area-end -->
+
+        <!-- Модальное окно для отображения стоимости доставки -->
+        <div id="deliveryModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('deliveryModal').style.display='none'">&times;</span>
+                <div class="modal-body">
+                    <!-- Здесь будет отображена стоимость доставки -->
+                </div>
+                <button class="confirm-order">Подтвердить заявку</button>
+            </div>
+        </div>
+        <!-- Стилизация модального окна -->
+        <style>
+            /* Стили для модального окна */
+            .modal {
+                display: none; /* Скрыто по умолчанию */
+                position: fixed; /* Фиксированное положение */
+                z-index: 1000; /* Увеличиваем z-index, чтобы окно было поверх других элементов */
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto; /* Разрешаем прокрутку, если контент превышает высоту окна */
+                background-color: rgba(0,0,0,0.5); /* Полупрозрачный черный фон */
+            }
+        
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto; /* Центровка по вертикали */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%; /* Можно изменить ширину по необходимости */
+                position: relative;
+                z-index: 1001; /* Устанавливаем уровень поверх фона модального окна */
+                border-radius: 8px; /* Закругленные углы */
+            }
+        
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+            }
+        
+            .modal-body {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+        
+            .confirm-order {
+                background-color: #ff4500;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+        
+            .confirm-order:hover {
+                background-color: #e03d00;
+            }
+        </style>
+
+        <!-- JavaScript для обработки формы и модального окна -->
+        <script>
+            document.querySelector('.calculate-btn').addEventListener('click', function(event) {
+                event.preventDefault(); // Остановка стандартного поведения
+        
+                // Убираем сообщения об ошибках
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+        
+                let isValid = true;
+                const formData = new FormData(document.querySelector('.request__form'));
+        
+                formData.forEach((value, key) => {
+                    const field = document.querySelector(`[name="${key}"]`);
+                    if (!value) {
+                        field.nextElementSibling.style.display = 'inline';
+                        field.style.border = '1px solid red';
+                        isValid = false;
+                    } else {
+                        field.style.border = '1px solid #ced4da';
+                    }
+                });
+                
+                if (!isValid) {
+                    return; // Останавливаем процесс, если форма не прошла проверку
+                }
+        
+                // Выполняем расчет стоимости и показываем модальное окно, если все поля заполнены
+                const length = parseFloat(formData.get('length'));
+                const width = parseFloat(formData.get('width'));
+                const height = parseFloat(formData.get('height'));
+                const weight = parseFloat(formData.get('weight'));
+        
+                const volume = length * width * height;
+                const deliveryPrice = volume > 0 ? (weight / volume) * 0.35 : 0;
+        
+                const modal = document.getElementById('deliveryModal');
+                modal.querySelector('.modal-body').innerHTML = `Стоимость доставки: ${deliveryPrice.toFixed(2)} USD`;
+                modal.style.display = 'block';
+            });
+        
+            // Закрытие модального окна
+            document.querySelector('.close').addEventListener('click', function() {
+                document.getElementById('deliveryModal').style.display = 'none';
+            });
+        </script>
 
         <!-- area-bg -->
         <div class="area__bg section-pt-130" data-background="{% static 'assets/img/bg/vector_bg03.svg' %}">
