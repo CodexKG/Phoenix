@@ -19,3 +19,11 @@ class EmployeeEducationTabularInline(admin.TabularInline):
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'employee_position', 'created')
     inlines = (EmployeePhotosTabularInline, EmployeeExperienceTabularInline, EmployeeEducationTabularInline)
+
+@admin.register(models.GroupPermission)
+class GroupPermissionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created')
+
+@admin.register(models.Permission)
+class PermissionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'codename', 'created')

@@ -1,12 +1,19 @@
 from django import forms 
 
-from apps.erp.models import Employee
+from apps.erp.models import Employee, GroupPermission
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = "__all__"
+        fields = ('user', 'first_name', 'last_name', 'phone', 'selery',
+                  'email', 'address', 'date_of_birth', 'image', 'employee_position',
+                  'bio', 'groups', 'user_permissions')
     
+class GroupPermissionForm(forms.ModelForm):
+    class Meta:
+        model = GroupPermission
+        fields = "__all__"
+
     # def __init__(self, *args, **kwargs):
     #     request = kwargs.pop('request', None)
     #     super().__init__(*args, **kwargs)

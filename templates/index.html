@@ -375,6 +375,13 @@
 
                 formData.forEach((value, key) => {
                     const field = document.querySelector(`[name="${key}"]`);
+
+                    // Заменяем запятые на точки для корректного восприятия чисел
+                    if (value.includes(',')) {
+                        value = value.replace(',', '.');
+                        formData.set(key, value); // Обновляем значение в formData
+                    }
+
                     if (!value) {
                         field.nextElementSibling.style.display = 'inline';
                         field.style.border = '1px solid red';

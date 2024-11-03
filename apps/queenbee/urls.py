@@ -1,10 +1,7 @@
 from django.urls import path 
 
 from apps.queenbee.moduls.index import crm_index
-from apps.queenbee.moduls import kanban
-from apps.queenbee.moduls import users
-from apps.queenbee.moduls import employees
-from apps.queenbee.moduls import billing
+from apps.queenbee.moduls import kanban, users, employees, billing, group_permissions
 
 urlpatterns = [
     path('', crm_index, name="crm_index"),
@@ -38,4 +35,10 @@ urlpatterns = [
     path('get_billing_data/', billing.get_billing_data, name='get_billing_data'),
     path('calculate_delivery/', billing.calculate_delivery, name='calculate_delivery'),
     path('create_billing/', billing.create_billing, name='create_billing'),
+
+    #groups
+    path('group/', group_permissions.crm_group_index, name="crm_group_index"),
+    path('group/add/', group_permissions.crm_group_detail, name="crm_group_add"),
+    path('group/<int:id>/', group_permissions.crm_group_detail, name="crm_group_detail"),
+    path('get_group_data/', group_permissions.get_group_data, name='get_group_data'),
 ]

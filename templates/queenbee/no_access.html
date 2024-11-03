@@ -1,0 +1,34 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+    <main class="main" id="top">
+      <div class="container" data-layout="container">
+        <script>
+          var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+          if (isFluid) {
+            var container = document.querySelector('[data-layout]');
+            container.classList.remove('container');
+            container.classList.add('container-fluid');
+          }
+        </script>
+        <div class="row flex-center min-vh-100 py-6 text-center">
+          <div class="col-sm-10 col-md-8 col-lg-6 col-xxl-5"><a class="d-flex flex-center mb-4" href="{% url 'crm_index' %}"><img class="me-2" src="{{ setting.crm_logo.url }}" alt="" width="58" /><span class="font-sans-serif text-primary fw-bolder fs-4 d-inline-block">BigBee CRM</span></a>
+            <div class="card">
+              <div class="card-body p-4 p-sm-5">
+                <div class="fw-black lh-1 text-300 fs-error">403</div>
+                <p class="lead mt-4 text-800 font-sans-serif fw-semi-bold w-md-75 w-xl-100 mx-auto">Нет доступа</p>
+                <hr />
+                <p>Вам не предоставлен доступ к этому разделу. Пожалуйста, обратитесь к администрации для получения соответствующих прав доступа. В случае возникновения каких-либо трудностей связанных с доступом, не стесняйтесь связаться с нами.<a href="https://t.me/Toktorov2">Telegram</a>.</p>
+                <a class="btn btn-primary btn-sm mt-3" href="{% url 'index' %}"><span class="fas fa-home me-2"></span>Главная</a>
+                <a class="btn btn-primary btn-sm mt-3" href="{% url 'crm_index' %}"><span class="fas fa-house-user me-2"></span>Назад в CRM</a>
+                <form action="{% url 'logout' %}" method="post">
+                  {% csrf_token %}
+                  <button class="btn btn-primary btn-sm mt-3" type="submit"><span class="fas fa-user-alt-slash me-2"></span>Выйти с аккаунта</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+{% endblock %}

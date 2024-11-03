@@ -19,6 +19,7 @@ import uuid, json, logging, traceback, asyncio
 
 from apps.crm.models import Billing
 from apps.crm.forms import BillingForm
+from apps.queenbee.permissions import permission_required
 
 @require_POST
 def calculate_delivery(request):
@@ -76,13 +77,16 @@ def create_billing(request):
             first_name = name_parts[0]
             last_name = ' '.join(name_parts[1:])  # Объединяем все оставшиеся части в last_name
 
-        # Преобразуем числовые данные
-        weight = float(request.POST.get('weight'))
-        length = float(request.POST.get('length'))
-        width = float(request.POST.get('width'))
-        height = float(request.POST.get('height'))
-        volume_product = length * width * height
-        delivery_price = float(request.POST.get('delivery_price'))
+        # Преобразуем числовые данные с заменой запятых на точки
+        try:
+            weight = float(request.POST.get('weight', '0').replace(',', '.'))
+            length = float(request.POST.get('length', '0').replace(',', '.'))
+            width = float(request.POST.get('width', '0').replace(',', '.'))
+            height = float(request.POST.get('height', '0').replace(',', '.'))
+            volume_product = length * width * height
+            delivery_price = float(request.POST.get('delivery_price', '0').replace(',', '.'))
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Некорректные числовые данные. Убедитесь, что все числовые значения введены правильно.'})
 
         # Собираем данные для создания записи в модели Billing
         billing_data = {
@@ -99,6 +103,7 @@ def create_billing(request):
             "height_product": height,
             "volume_product": volume_product,
             "delivery_price": delivery_price,
+            "total_price": delivery_price,
             "billing_status": Billing.BillingStatusChoices.ISSUED
         }
 
@@ -111,8 +116,6 @@ def create_billing(request):
         billing.save()
 
         return JsonResponse({'success': True, 'message': 'Заявка успешно создана'})
-    except ValueError:
-        return JsonResponse({'success': False, 'error': 'Неверные данные. Проверьте, что все числовые поля заполнены корректными значениями.'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
     
@@ -138,7 +141,7 @@ def parse_short_date(date_str):
         return None
 
 @staff_member_required(login_url='/admin/login/')
-# @permission_required('crm_index_billings', 'Просмотр раздела лидогенерация')
+@permission_required('crm_index_lead', 'Просмотр раздела лидогенерация')
 def crm_index_billings(request):
     today = datetime.today().date()
     end_date = today
@@ -158,7 +161,7 @@ def crm_index_billings(request):
 
 
 @staff_member_required(login_url='/admin/login/')
-# @permission_required('crm_detail_billings', 'Просмотр биллингов')
+@permission_required('crm_detail_billings', 'Просмотр биллингов')
 def crm_detail_billings(request, id):
     billing = get_object_or_404(Billing, id=id)
     # products = Product.objects.all()
@@ -220,7 +223,7 @@ def crm_detail_billings(request, id):
 
 
 @staff_member_required(login_url='/admin/login/')
-# @permission_required('crm_detail_billings', 'Добавление биллингов')
+@permission_required('crm_detail_billings', 'Добавление биллингов')
 def crm_add_billings(request):
     # products = Product.objects.all()
     if request.method == "POST":
@@ -303,7 +306,7 @@ def crm_add_billings(request):
 
 
 @staff_member_required(login_url='/admin/login/')
-# @permission_required('crm_detail_billings', 'Обновление биллингов')
+@permission_required('crm_detail_billings', 'Обновление биллингов')
 def crm_update_billings(request, id):
     billing = get_object_or_404(Billing, id=id)
     if request.method == "POST":

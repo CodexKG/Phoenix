@@ -43,6 +43,12 @@ class Billing(models.Model):
         LEADGENERATION = 'Лидогенерация', _('Лидогенерация')
         BILLING = 'Биллинг', _('Биллинг')
 
+    class BillingSource(models.TextChoices):
+        SITE = 'Сайт', _('Сайт')
+        INSTAGRAM = 'Инстаграм', _('Инстаграм')
+        WHATSAPP = 'Ватсапп', _('Ватсапп')
+        TELEGRAM = 'Телеграм', _('Телеграм')
+
     billing_type = models.CharField(
         max_length=100, choices=BillingTypeChoices.choices,
         default=BillingTypeChoices.LEADGENERATION,
@@ -62,6 +68,11 @@ class Billing(models.Model):
         max_length=100, choices=BillingPaymentStatusChoices.choices,
         default=BillingPaymentStatusChoices.PERFORMED,
         verbose_name=_('Статус оплаты')
+    )
+    billing_source = models.CharField(
+        max_length=100, choices=BillingSource.choices,
+        default=BillingSource.SITE,
+        verbose_name=_('Источник')
     )
     billing_payment = models.CharField(
         max_length=100, choices=BillingPaymentChoices.choices,
@@ -166,7 +177,8 @@ class Billing(models.Model):
         verbose_name="Скидка",
         default=0, blank=True, null=True
     )
-    total_price = models.PositiveIntegerField(
+    total_price = models.DecimalField(
+        max_digits=30, decimal_places=2,
         verbose_name="Итоговая сумма",
         default=0, blank=True, null=True
     )
@@ -187,20 +199,20 @@ class Billing(models.Model):
             self.payment_code = self.generate_unique_payment_code()
 
         # Расчет объема товара
-        if self.length_product and self.width_product and self.height_product:
-            self.volume_product = self.length_product * self.width_product * self.height_product
+        # if self.length_product and self.width_product and self.height_product:
+        #     self.volume_product = self.length_product * self.width_product * self.height_product
 
-        # Расчет стоимости доставки на основе веса и объема
-        if self.weight_product and self.volume_product and self.volume_product > 0:
-            rate_per_kg_m3 = 0.35
-            self.delivery_price = round(self.weight_product / self.volume_product * rate_per_kg_m3, 2)
-        else:
-            self.delivery_price = 0
+        # # Расчет стоимости доставки на основе веса и объема
+        # if self.weight_product and self.volume_product and self.volume_product > 0:
+        #     rate_per_kg_m3 = 0.35
+        #     self.delivery_price = round(self.weight_product / self.volume_product * rate_per_kg_m3, 2)
+        # else:
+        #     self.delivery_price = 0
 
-        # Учет скидок и сдачи
-        self.total_price = max(0, self.delivery_price - self.discount_price)
-        if self.client_gave_money:
-            self.change_price = max(0, self.client_gave_money - self.total_price)
+        # # Учет скидок и сдачи
+        # self.total_price = max(0, self.delivery_price - self.discount_price)
+        # if self.client_gave_money:
+        #     self.change_price = max(0, self.client_gave_money - self.total_price)
 
         super().save(*args, **kwargs)
 
