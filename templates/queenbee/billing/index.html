@@ -1,0 +1,472 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+          
+          {% include 'queenbee/include/header.html' %}
+          <style>
+            .modal-content {
+                border-radius: 10px;
+            }
+
+            .modal-header {
+                background-color: #f8f9fa;
+                border-bottom: 1px solid #dee2e6;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+
+            .modal-title {
+                font-weight: bold;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .form-label {
+                font-weight: bold;
+            }
+
+            .form-select {
+                margin-bottom: 10px;
+            }
+          </style>
+
+          <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filterModalLabel">Фильтры</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="filters">
+                            <div class="mb-3">
+                                <label for="billing_receipt_type" class="form-label">Вид получения товара:</label>
+                                <select id="billing_receipt_type" name="billing_receipt_type" class="form-select">
+                                    <option value="">Все</option>
+                                    <option value="Самовывоз">Самовывоз</option>
+                                    <option value="Доставка">Доставка</option>
+                                    <option value="Неизвестно">Неизвестно</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="billing_status" class="form-label">Статус заказа:</label>
+                                <select id="billing_status" name="billing_status" class="form-select">
+                                    <option value="">Все</option>
+                                    <option value="В корзине">В корзине</option>
+                                    <option value="Оформлен">Оформлен</option>
+                                    <option value="Оплачен">Оплачен</option>
+                                    <option value="Доставлен">Доставлен</option>
+                                    <option value="Возврат">Возврат</option>
+                                    <option value="Неизвестно">Неизвестно</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="billing_payment_status" class="form-label">Статус оплаты:</label>
+                                <select id="billing_payment_status" name="billing_payment_status" class="form-select">
+                                    <option value="">Все</option>
+                                    <option value="Оплачен">Оплачен</option>
+                                    <option value="Не оплачен">Не оплачен</option>
+                                    <option value="Ошибка">Ошибка</option>
+                                    <option value="В исполнении">В исполнении</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="billing_payment" class="form-label">Способы оплаты:</label>
+                                <select id="billing_payment" name="billing_payment" class="form-select">
+                                    <option value="">Все</option>
+                                    <option value="Наличными в магазине">Наличными в магазине</option>
+                                    <option value="Наличными курьеру">Наличными курьеру</option>
+                                    <option value="Оплата картой курьеру">Оплата картой курьеру</option>
+                                    <option value="Оплата начислением">Оплата начисление</option>
+                                    <option value="Оплата в рассрочку">Оплата в рассрочку</option>
+                                    <option value="Картой Visa">Картой Visa</option>
+                                    <option value="Мбанк">Мбанк</option>
+                                    <option value="Optima 24">Optima 24</option>
+                                    <option value="О! Деньги">О! Деньги</option>
+                                    <option value="Bakai 24">Bakai 24</option>
+                                    <option value="Ошибка">Ошибка</option>
+                                    <option value="Неизвестно">Неизвестно</option>
+                                </select>
+                            </div>
+                            <!-- Поля для фильтрации по датам -->
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Начальная дата:</label>
+                                <input type="date" id="start_date" name="start_date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">Конечная дата:</label>
+                                <input type="date" id="end_date" name="end_date" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Применить фильтры</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+          <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+          <script>
+            $(document).ready(function () {
+                function fetchBillingData(start_date, end_date, filters = {}) {
+                    const queryParams = new URLSearchParams(filters);
+                    if (start_date && end_date) {
+                        queryParams.append('start_date', start_date);
+                        queryParams.append('end_date', end_date);
+                    }
+                    $.ajax({
+                        url: `/admin/get_billing_data/?${queryParams.toString()}`,
+                        type: 'GET',
+                        success: function (data) {
+                            const fieldNames = data.field_names;
+                            const billings = data.billings;
+                            const thead = $('.table thead tr');
+                            const tbody = $('.table tbody');
+            
+                            thead.empty();
+                            Object.keys(fieldNames).forEach(field => {
+                                thead.append(`<th>${fieldNames[field]}</th>`);
+                            });
+            
+                            thead.append('<th>Действия</th>');
+            
+                            tbody.empty();
+                            if (billings.length === 0) {
+                                tbody.append('<tr><td colspan="8" class="text-center py-3">Нет лидогенераций</td></tr>');
+                            } else {
+                                billings.forEach(billing => {
+                                    const tr = $('<tr></tr>');
+                                    Object.keys(billing).forEach((field, index) => {
+                                        const td = $('<td></td>');
+                                        if (index === 0) {
+                                            const a = $('<a></a>').attr('href', `/admin/billing/detail/${billing[field]}/`).text(billing[field]);
+                                            td.append(a);
+                                        } else if (field === 'billing_status') {
+                                            td.text(billing[field]).attr('id', `status-${billing['id']}`);
+                                        } else if (field === 'created') {
+                                            td.text(moment(billing[field]).format('YYYY-MM-DD HH:mm'));
+                                        } else {
+                                            td.text(billing[field]);
+                                        }
+                                        tr.append(td);
+                                    });
+            
+                                    if (billing['billing_status'] !== 'Оформлен') {
+                                        const td = $('<td></td>');
+                                        const button = $('<button></button>').addClass('btn btn-success btn-sm').text('Оформить');
+            
+                                        button.on('click', function () {
+                                            const billingId = billing['id'];
+                                            Promise.all([
+                                                fetch('/admin/get_active_shifts/').then(response => response.json()),
+                                                fetch('/admin/get_available_cash_registers/').then(response => response.json()),
+                                            ]).then(([shiftsResponse, cashResponse]) => {
+                                                const shifts = JSON.parse(shiftsResponse.shifts);
+                                                const cash_registers = JSON.parse(cashResponse.cash_registers);
+            
+                                                const shiftsOptions = shifts.map(shift =>
+                                                    `<option value="${shift.pk}">${new Date(shift.fields.start_time).toLocaleString()}</option>`
+                                                ).join('');
+                                                const cashOptions = cash_registers.map(cash =>
+                                                    `<option value="${cash.pk}">${cash.fields.title} ${cash.fields.total_amount} ${cash.fields.cities}</option>`
+                                                ).join('');
+            
+                                                Swal.fire({
+                                                    title: 'Подтверждение',
+                                                    html: `
+                                                        <select id="shiftSelect" class="swal2-input">
+                                                            ${shiftsOptions}
+                                                        </select>
+                                                        <select id="cashSelect" class="swal2-input">
+                                                            ${cashOptions}
+                                                        </select>
+                                                    `,
+                                                    preConfirm: () => {
+                                                        const shiftId = $('#shiftSelect').val();
+                                                        const cashId = $('#cashSelect').val();
+                                                        return {
+                                                            shift_id: shiftId,
+                                                            cash_id: cashId
+                                                        };
+                                                    }
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        fetch(`/admin/update_billing_status/${billingId}/`, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json',
+                                                                'X-CSRFToken': getCookie('csrftoken')
+                                                            },
+                                                            body: JSON.stringify({
+                                                                shift_id: result.value.shift_id,
+                                                                cash_id: result.value.cash_id
+                                                            })
+                                                        })
+                                                        .then(response => response.json())
+                                                        .then(data => {
+                                                            if (data.status === 'success') {
+                                                                Swal.fire('Успех', 'Статус выставления счетов обновлен.', 'success');
+                                                                fetchBillingData(start_date, end_date, filters);
+                                                            } else {
+                                                                Swal.fire('Ошибка', data.message, 'error');
+                                                            }
+                                                        })
+                                                        .catch(error => {
+                                                            console.error('Error:', error);
+                                                            Swal.fire('Ошибка', 'Произошла ошибка при отправке данных', 'error');
+                                                        });
+                                                    }
+                                                });
+                                            }).catch(error => {
+                                                console.error('Error fetching shift/cash data:', error);
+                                                Swal.fire('Ошибка', 'Не удалось загрузить данные смен и касс', 'error');
+                                            });
+                                        });
+            
+                                        td.append(button);
+                                        tr.append(td);
+                                    } else {
+                                        const td = $('<td></td>').text('');
+                                        tr.append(td);
+                                    }
+            
+                                    tbody.append(tr);
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error fetching billings data:', error);
+                            $('.table tbody').html('<tr><td colspan="7" class="text-center py-3">An error occurred while loading data.</td></tr>');
+                        }
+                    });
+                }
+            
+                const initialDateRange = $('#CRMDateRange').val().split(' to ');
+                fetchBillingData(initialDateRange[0], initialDateRange[1]);
+            
+                $('#CRMDateRange').on('change', function () {
+                    const [start_date, end_date] = $(this).val().split(' to ');
+                    const filters = $('#filters').serializeArray().reduce((obj, item) => {
+                        if (item.value) obj[item.name] = item.value;
+                        return obj;
+                    }, {});
+                    fetchBillingData(start_date, end_date, filters);
+                });
+            
+                $('#filters').on('submit', function (event) {
+                    event.preventDefault();
+                    const [start_date, end_date] = $('#CRMDateRange').val().split(' to ');
+                    const filters = $(this).serializeArray().reduce((obj, item) => {
+                        if (item.value) obj[item.name] = item.value;
+                        return obj;
+                    }, {});
+                    $('#filterModal').modal('hide');
+                    fetchBillingData(start_date, end_date, filters);
+                });
+            
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        const cookies = document.cookie.split(';');
+                        for (let i = 0; i < cookies.length; i++) {
+                            const cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+            
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        }
+                    }
+                });
+            });
+            </script>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="card bg-100 shadow-none border">
+                  <div class="row gx-0 flex-between-center">
+                    <div class="col-sm-auto d-flex align-items-center"><img class="ms-n2" src="{% static 'crm/assets/img/illustrations/crm-bar-chart.png' %}" alt="" width="90" />
+                      <div>
+                        <h6 class="text-primary fs-10 mb-0">Добро пожаловать </h6>
+                        <h4 class="text-primary fw-bold mb-0">Phoenix <span class="text-info fw-medium">CRM</span></h4>
+                      </div><img class="ms-n4 d-md-none d-lg-block" src="{% static 'crm/assets/img/illustrations/crm-line-chart.png' %}" alt="" width="150" />
+                    </div>
+                    <div class="col-md-auto p-3">
+                      <form class="row align-items-center g-3" method="get">
+                          <div class="col-auto">
+                              <h6 class="text-700 mb-0">Показаны данные для: </h6>
+                          </div>
+                          <div class="col-md-auto position-relative">
+                              <input class="form-control form-control-sm datetimepicker ps-4" id="CRMDateRange" type="text" name="CRMDateRange" data-options="{&quot;locale&quot;: &quot;ru&quot;, &quot;mode&quot;:&quot;range&quot;,&quot;dateFormat&quot;:&quot;M d&quot;,&quot;disableMobile&quot;:true, &quot;defaultDate&quot;: [&quot;{{ default_start_date }}&quot;, &quot;{{ default_end_date }}&quot;] }"/>
+                              <span class="fas fa-calendar-alt text-primary position-absolute top-50 translate-middle-y ms-2"></span>
+                          </div>
+                          <button type="submit" class="btn btn-primary btn-sm">Показать</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mb-3" id="ordersTable" data-list='{"valueNames":["order","date","address","status","amount"],"page":10,"pagination":true}'>
+              <div class="card-header">
+                <div class="row flex-between-center">
+                  <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                    {% if selected_city %}
+                    <h5 class="fs-9 mb-0 text-nowrap py-2 py-xl-0">Лидогенерация (заявки на сайте) ({{ selected_city.title }})</h5>
+                    {% else %}
+                    <h5 class="fs-9 mb-0 text-nowrap py-2 py-xl-0">Лидогенерация (заявки на сайте)</h5>
+                    {% endif %}
+                  </div>
+                  <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                    <div id="orders-actions">
+                      {% if not request.user.user_employee.employee_position == 'Курьер' %}
+                      <button class="btn btn-falcon-default btn-sm" type="button" onclick="window.location.href = '{% url 'crm_add_billings' %}'">
+                          <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                          <span class="d-none d-sm-inline-block ms-1">Добавить</span>
+                      </button>
+                      {% endif %}
+
+
+                      <button id="toggleFilters" class="btn btn-falcon-default btn-sm mx-2" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ms-1">Фильтры</span>
+                      </button>
+                      {% if not request.user.user_employee.employee_position == 'Курьер' %}
+                      <button class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                        <span class="fas fa-folder-plus" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ms-1">Загрузить</span>
+                      </button>
+                      <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="uploadModalLabel">Загрузка файла биллингов</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <form id="fileUploadForm" enctype="multipart/form-data">
+                                <input type="file" name="employee_file" accept=".xlsx" required>
+                                <button type="submit" class="btn btn-primary">Загрузить файл</button>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endif %}
+                      <style>
+                        @media (max-width: 576px) {
+                            .card-header .row {
+                                flex-direction: column;
+                                align-items: flex-start;
+                            }
+                            
+                            .card-header .col-12 {
+                                width: 100%;
+                            }
+                            
+                            #orders-actions {
+                                justify-content: flex-start;
+                                margin-top: 10px;
+                            }
+                        }
+                        
+                        </style>
+                      <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                          document.getElementById('fileUploadForm').addEventListener('submit', function(e) {
+                            console.log("Обработчик событий работает");
+                            e.preventDefault();
+                            var formData = new FormData(this);
+                            console.log('URL для запроса:', '{% url "upload_employee_data" %}');
+                            fetch('{% url "upload_employee_data" %}', {
+                              method: 'POST',
+                              body: formData
+                            }).then(response => response.json())
+                              .then(data => {
+                                if (data.success) {
+                                  alert('Загрузка завершена');
+                                  window.location.reload();
+                                } else {
+                                  alert('Произошла ошибка при загрузке данных');
+                                }
+                              })
+                              .catch(error => {
+                                console.error('Ошибка загрузки:', error);
+                                alert('Ошибка загрузки');
+                              });
+                          });
+                        });
+                      </script>
+                      {% if not request.user.user_employee.employee_position == 'Курьер' %}
+                      <button class="btn btn-falcon-default btn-sm" type="button">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ms-1">Выгрузить</span>
+                      </button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-sm table-striped fs-10 mb-0">
+                      <thead class="bg-200">
+                          <tr>
+                              <th>ID</th>
+                              <th>Итоговая сумма</th>
+                              <th>Телефонный номер</th>
+                              <th>Стоимость доставки</th>
+                              <th>Вид получения товара</th>
+                              <th>Код оплаты биллинга</th>
+                              <th>Статус заказа</th>
+                              <th>Статус оплаты</th>
+                              <th>Способы оплаты</th>
+                              <th>Дата создания биллинга</th>
+                              <th>Действия</th>
+                          </tr>
+                      </thead>
+                      <tbody class="list" id="table-orders-body">
+                          {% for billing in billings %}
+                          <tr class="btn-reveal-trigger">
+                              <td data-label="ID">{{ billing.id }}</td>
+                              <td data-label="Итоговая сумма">{{ billing.total_sum }}</td>
+                              <td data-label="Телефонный номер">{{ billing.phone_number }}</td>
+                              <td data-label="Стоимость доставки">{{ billing.delivery_cost }}</td>
+                              <td data-label="Вид получения товара">{{ billing.product_type }}</td>
+                              <td data-label="Код оплаты биллинга">{{ billing.payment_code }}</td>
+                              <td data-label="Статус заказа">{{ billing.order_status }}</td>
+                              <td data-label="Статус оплаты">{{ billing.payment_status }}</td>
+                              <td data-label="Способы оплаты">{{ billing.payment_method }}</td>
+                              <td data-label="Дата создания биллинга">{{ billing.created|date:"Y-m-d H:i" }}</td>
+                              <td>
+                                  <button class="btn btn-success btn-sm">Оформить</button>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+              </div>
+              <div class="card-footer">
+                <div class="d-flex align-items-center justify-content-center"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                  <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
+                </div>
+              </div>
+            </div>
+            {% include 'queenbee/include/footer.html' %}
+          </div>
+        </div>
+      </main>
+{% endblock %}

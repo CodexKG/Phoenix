@@ -289,6 +289,16 @@
             </div>
         </div>
 
+        <!-- Модальное окно для подтверждения отправки заявки -->
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('confirmationModal').style.display='none'">&times;</span>
+                <div class="modal-body">
+                    Заявка успешно отправлена!
+                </div>
+            </div>
+        </div>
+
         <!-- Стилизация модального окна -->
         <style>
             /* Стили для модального окна */
@@ -384,9 +394,6 @@
                 const height = parseFloat(formData.get('height')) || 0;
                 const weight = parseFloat(formData.get('weight')) || 0;
 
-                // Проверяем, что все значения корректны
-                console.log(`Length: ${length}, Width: ${width}, Height: ${height}, Weight: ${weight}`);
-
                 // Вычисляем объем и стоимость доставки
                 const volume = length * width * height;
                 let deliveryPrice = 0;
@@ -394,11 +401,7 @@
                 if (volume > 0 && weight > 0) {
                     deliveryPrice = (weight / volume) * 0.35;
                     deliveryPrice = deliveryPrice.toFixed(2); // Округление до 2 знаков после запятой
-                } else {
-                    console.warn("Volume or weight is zero, unable to calculate delivery price.");
                 }
-
-                console.log(`Volume: ${volume}, Delivery Price: ${deliveryPrice}`); // Логируем для отладки
 
                 // Отображаем результат
                 const modal = document.getElementById('deliveryModal');
@@ -427,14 +430,34 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Заявка успешно отправлена!');
+                        // Скрываем окно с расчетом доставки
                         document.getElementById('deliveryModal').style.display = 'none';
+                        
+                        // Показываем модальное окно подтверждения заявки
+                        const confirmationModal = document.getElementById('confirmationModal');
+                        confirmationModal.style.display = 'block';
+
+                        // Очищаем форму после успешной отправки
+                        clearForm();
                     } else {
                         alert('Ошибка: ' + data.error);
                     }
                 })
                 .catch(error => console.error('Ошибка:', error));
             });
+
+            // Функция для очистки формы
+            function clearForm() {
+                const formElements = document.querySelectorAll('.request__form input, .request__form select');
+                formElements.forEach(element => {
+                    if (element.type === 'checkbox') {
+                        element.checked = false;
+                    } else {
+                        element.value = '';
+                    }
+                    element.style.border = '1px solid #ced4da'; // Сбрасываем стили границы
+                });
+            }
 
             // Функция для получения CSRF-токена
             function getCookie(name) {
@@ -453,8 +476,10 @@
             }
 
             // Закрытие модального окна
-            document.querySelector('.close').addEventListener('click', function() {
-                document.getElementById('deliveryModal').style.display = 'none';
+            document.querySelectorAll('.close').forEach(closeButton => {
+                closeButton.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
             });
         </script>
 

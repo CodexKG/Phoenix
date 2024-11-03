@@ -32,6 +32,10 @@ urlpatterns = [
     path('export_employees_to_excel/', employees.export_employees_to_excel, name='export_employees_to_excel'),
 
     #billing
+    path('billing/', billing.crm_index_billings, name='crm_index_billings'),
+    path('billing/detail/<int:id>/', billing.crm_detail_billings, name='crm_detail_billings'),
+    path('billing/add/', billing.crm_add_billings, name='crm_add_billings'),
+    path('get_billing_data/', billing.get_billing_data, name='get_billing_data'),
     path('calculate_delivery/', billing.calculate_delivery, name='calculate_delivery'),
     path('create_billing/', billing.create_billing, name='create_billing'),
 ]

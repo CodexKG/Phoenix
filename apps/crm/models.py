@@ -210,6 +210,9 @@ class Billing(models.Model):
             if not Billing.objects.filter(payment_code=payment_code).exists():
                 return payment_code
 
+    def __str__(self):
+        return f"{self.billing_type} {self.delivery_price}"
+
     class Meta:
         verbose_name = "Биллинг"
         verbose_name_plural = "Биллинги"
