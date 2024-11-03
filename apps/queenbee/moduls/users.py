@@ -14,16 +14,16 @@ import traceback
 from apps.hiveclient.models import User
 from apps.erp.models import Employee, PhotosProfile, EmployeeExperience, EmployeeEducation
 from apps.hiveclient.forms import UsersForm, CustomPasswordChangeForm, CRMEmployeeForm
-# from apps.hiveclient.permissions import permission_required
+from apps.queenbee.permissions import permission_required
 # from apps.hiveclient.tasks import log_change
 
 @staff_member_required(login_url='/admin/login')
-# @permission_required('crm_index_users', 'Просмотр раздела Пользователи')
+@permission_required('crm_index_users', 'Просмотр раздела Пользователи')
 def crm_index_users(request):
-    return render(request, 'crm/user/index.html', locals())
+    return render(request, 'queenbee/hiveclient/index.html', locals())
 
 @staff_member_required(login_url='/admin/login/')
-# @permission_required('crm_detail_users', 'Добавление или детальный просмотр раздела Пользователи')
+@permission_required('crm_detail_users', 'Добавление или детальный просмотр раздела Пользователи')
 def crm_detail_users(request, id=None):
     user = None  # Определяем переменную user
 
@@ -73,7 +73,7 @@ def crm_detail_users(request, id=None):
             # )
             return redirect('crm_index_user')
 
-    return render(request, 'crm/user/detail.html', {'form': form, 'user': user})
+    return render(request, 'queenbee/hiveclient/detail.html', {'form': form, 'user': user})
 
 @staff_member_required(login_url='/admin/login/')
 def get_user_data(request):
@@ -109,7 +109,7 @@ def crm_user_profile(request, id):
     photos = PhotosProfile.objects.filter(user=employee)
     experiences = EmployeeExperience.objects.filter(user=employee)
     educations = EmployeeEducation.objects.filter(user=employee)
-    return render(request, 'crm/user/profile.html', locals())
+    return render(request, 'queenbee/hiveclient/profile.html', locals())
 
 @staff_member_required(login_url='/admin/login/')
 def crm_user_setting(request, id):
@@ -122,7 +122,7 @@ def crm_user_setting(request, id):
             return redirect('crm_user_setting', user.id)  # Redirect to a success page or the same page after saving
     else:
         form = CRMEmployeeForm(instance=employee)
-    return render(request, 'crm/user/setting.html', {'form': form})
+    return render(request, 'queenbee/hiveclient/setting.html', {'form': form})
 
 @staff_member_required(login_url='/admin/login/')
 def change_password(request):
@@ -139,7 +139,7 @@ def change_password(request):
             messages.error(request, 'Пожалуйста, исправьте ошибки.')
     else:
         form = CustomPasswordChangeForm(request.user)
-    return render(request, 'crm/user/change_password.html', {'form': form})
+    return render(request, 'crm/hiveclient/change_password.html', {'form': form})
 
 """Страница авторизации пользователя"""
 def crm_login(request):

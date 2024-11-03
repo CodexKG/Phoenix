@@ -19,6 +19,13 @@ urlpatterns = [
 
     #users
     path('login/', users.crm_login, name="crm_login"),
+    path('user/', users.crm_index_users, name='crm_index_user'),
+    path('user/add/', users.crm_detail_users, name='crm_add_user'),
+    path('user/<int:id>/', users.crm_detail_users, name="crm_detail_user"),
+    path('get_user_data/', users.get_user_data, name='get_user_data'),
+    path('profile/user/<int:id>', users.crm_user_profile, name="crm_user_profile"),
+    path('change-password/', users.change_password, name='change_password'),
+    path('profile/setting/<int:id>/', users.crm_user_setting, name="crm_user_setting"),
 
     #employee
     path('employee/', employees.crm_employee_index, name="crm_employee_index"),

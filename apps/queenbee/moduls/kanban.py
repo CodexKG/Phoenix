@@ -6,10 +6,12 @@ from django.http import JsonResponse
 import logging, json
 
 from apps.kanban import models, forms
+from apps.queenbee.permissions import permission_required
 
 logger = logging.getLogger(__name__)
 
 @staff_member_required(login_url='/admin/login')
+@permission_required('crm_kanban_index', 'Просмотр раздела Задачник')
 def crm_kanban_index(request):
     boards = models.Board.objects.all().order_by('-created_at')
     form = forms.BoardForm()
@@ -19,7 +21,8 @@ def crm_kanban_index(request):
         'form': form
     })
 
-@login_required(login_url='/admin/login/')
+@staff_member_required(login_url='/admin/login/')
+@permission_required('crm_kanban_detail', 'Детальный просмотр раздела Задачник')
 def crm_kanban_detail(request, id):
     board = get_object_or_404(models.Board, id=id)
     lists = models.List.objects.filter(board=board).prefetch_related('card_lists')
@@ -63,7 +66,7 @@ def crm_add_list(request, board_id):
     logger.error("Ошибка создания списка")
     return JsonResponse({'error': 'Ошибка создания списка'}, status=400)
 
-@login_required(login_url='/admin/login/')
+@staff_member_required(login_url='/admin/login/')
 def crm_add_board(request):
     logger.info("Получен запрос на добавление новой доски")  # Логируем начало запроса
     
