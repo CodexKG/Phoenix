@@ -31,7 +31,7 @@ urlpatterns = [
     path('upload_employee_data/', employees.upload_employee_data, name="upload_employee_data"),
     path('export_employees_to_excel/', employees.export_employees_to_excel, name='export_employees_to_excel'),
 
-    #crm
+    #billing
     path('calculate_delivery/', billing.calculate_delivery, name='calculate_delivery'),
     path('create_billing/', billing.create_billing, name='create_billing'),
 ]

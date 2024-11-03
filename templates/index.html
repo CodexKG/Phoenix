@@ -249,6 +249,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-3">
+                                                    <span class="title">ФИО:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="fullname" placeholder="ФИО" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
                                                     <button type="button" class="btn calculate-btn" style="margin-top: 31px;">Рассчитать</button>
                                                     <div class="form-check" style="margin-top: 10px;">
                                                         <input class="form-check-input" type="checkbox" name="consent" id="flexRadioDefault2" required>
@@ -281,6 +288,7 @@
                 <button class="confirm-order">Подтвердить заявку</button>
             </div>
         </div>
+
         <!-- Стилизация модального окна -->
         <style>
             /* Стили для модального окна */
@@ -348,13 +356,13 @@
         <script>
             document.querySelector('.calculate-btn').addEventListener('click', function(event) {
                 event.preventDefault(); // Остановка стандартного поведения
-        
+
                 // Убираем сообщения об ошибках
                 document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-        
+
                 let isValid = true;
                 const formData = new FormData(document.querySelector('.request__form'));
-        
+
                 formData.forEach((value, key) => {
                     const field = document.querySelector(`[name="${key}"]`);
                     if (!value) {
@@ -369,21 +377,81 @@
                 if (!isValid) {
                     return; // Останавливаем процесс, если форма не прошла проверку
                 }
-        
-                // Выполняем расчет стоимости и показываем модальное окно, если все поля заполнены
-                const length = parseFloat(formData.get('length'));
-                const width = parseFloat(formData.get('width'));
-                const height = parseFloat(formData.get('height'));
-                const weight = parseFloat(formData.get('weight'));
-        
+
+                // Преобразуем значения в числа
+                const length = parseFloat(formData.get('length')) || 0;
+                const width = parseFloat(formData.get('width')) || 0;
+                const height = parseFloat(formData.get('height')) || 0;
+                const weight = parseFloat(formData.get('weight')) || 0;
+
+                // Проверяем, что все значения корректны
+                console.log(`Length: ${length}, Width: ${width}, Height: ${height}, Weight: ${weight}`);
+
+                // Вычисляем объем и стоимость доставки
                 const volume = length * width * height;
-                const deliveryPrice = volume > 0 ? (weight / volume) * 0.35 : 0;
-        
+                let deliveryPrice = 0;
+
+                if (volume > 0 && weight > 0) {
+                    deliveryPrice = (weight / volume) * 0.35;
+                    deliveryPrice = deliveryPrice.toFixed(2); // Округление до 2 знаков после запятой
+                } else {
+                    console.warn("Volume or weight is zero, unable to calculate delivery price.");
+                }
+
+                console.log(`Volume: ${volume}, Delivery Price: ${deliveryPrice}`); // Логируем для отладки
+
+                // Отображаем результат
                 const modal = document.getElementById('deliveryModal');
-                modal.querySelector('.modal-body').innerHTML = `Стоимость доставки: ${deliveryPrice.toFixed(2)} USD`;
+                modal.querySelector('.modal-body').innerHTML = `Стоимость доставки: ${deliveryPrice} USD`;
                 modal.style.display = 'block';
+
+                // Сохраняем рассчитанную стоимость для последующего использования
+                document.querySelector('.confirm-order').dataset.deliveryPrice = deliveryPrice;
             });
-        
+
+            // Обработчик для подтверждения заявки
+            document.querySelector('.confirm-order').addEventListener('click', function() {
+                const formData = new FormData(document.querySelector('.request__form'));
+                const deliveryPrice = this.dataset.deliveryPrice;
+
+                formData.append('delivery_price', deliveryPrice); // Добавляем цену доставки к данным формы
+
+                // Отправляем данные на сервер для записи в модель Billing
+                fetch('/admin/create_billing/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Заявка успешно отправлена!');
+                        document.getElementById('deliveryModal').style.display = 'none';
+                    } else {
+                        alert('Ошибка: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+            });
+
+            // Функция для получения CSRF-токена
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
             // Закрытие модального окна
             document.querySelector('.close').addEventListener('click', function() {
                 document.getElementById('deliveryModal').style.display = 'none';
@@ -391,7 +459,7 @@
         </script>
 
         <!-- area-bg -->
-        <div class="area__bg section-pt-130" data-background="{% static 'assets/img/bg/vector_bg03.svg' %}">
+        <div class="area__bg section-pt-130" data-background="{% static 'assets/img/bg-footer.png' %}">
 
             <!-- project-area -->
             <section class="project__area-two section-pb-100">
@@ -579,7 +647,7 @@
         </section>
         <!-- about-area-end -->
         <!-- counter-area -->
-        <section class="counter__area counter__bg section-pt-90 section-pb-90" data-background="{% static 'assets/img/bg/vector_bg05.svg' %}">
+        <section class="counter__area counter__bg section-pt-90 section-pb-90" data-background="{% static 'assets/img/kr.png' %}">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-md-8">
