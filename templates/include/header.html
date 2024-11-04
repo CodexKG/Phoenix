@@ -13,7 +13,7 @@
                         </div>
                         <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-xl-flex">
                             <ul class="navigation">
-                                <li class="active"><a href="index.html">Главная</a></li>
+                                <li class="active"><a href="{% url 'index' %}">Главная</a></li>
                                 <li><a href="{% url 'about' %}">о компании</a></li>
                                 <li><a href="{% url 'faq' %}">Справочная информация</a></li>
                                 <li><a href="{% url 'contact' %}">контакты</a></li>
@@ -43,9 +43,9 @@
                             </div>
                             <div class="social-links">
                                 <ul class="list-wrap">
-                                    <li><a href="#"><i class="fab fa-telegram"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-whatsapp"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                    <li><a href="{% url 'index' %}"><i class="fab fa-telegram"></i></a></li>
+                                    <li><a href="{% url 'index' %}"><i class="fab fa-whatsapp"></i></a></li>
+                                    <li><a href="{% url 'index' %}"><i class="fab fa-instagram"></i></a></li>
                                 </ul>
                             </div>
                         </nav>

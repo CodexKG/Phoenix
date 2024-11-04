@@ -336,7 +336,7 @@ def crm_update_billings(request, id):
 @staff_member_required(login_url='/admin/login/')
 def get_billing_data(request):
     fields = request.GET.get('fields')
-    list_display = fields.split(',') if fields else ['id', 'total_price', 'phone', 'delivery_price', 'billing_receipt_type', 'payment_code', 'billing_status', 'billing_payment_status', 'billing_payment', 'created']
+    list_display = fields.split(',') if fields else ['id', 'billing_source', 'total_price', 'phone', 'delivery_price', 'billing_receipt_type', 'payment_code', 'billing_status', 'billing_payment_status', 'billing_payment', 'created']
 
     # Получаем значения начальной и конечной дат из GET-запроса
     start_date_str = request.GET.get('start_date')

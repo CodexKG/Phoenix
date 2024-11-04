@@ -1,7 +1,7 @@
 from django.urls import path 
 
 from apps.queenbee.moduls.index import crm_index
-from apps.queenbee.moduls import kanban, users, employees, billing, group_permissions
+from apps.queenbee.moduls import kanban, users, employees, billing, group_permissions, visit
 
 urlpatterns = [
     path('', crm_index, name="crm_index"),
@@ -48,4 +48,7 @@ urlpatterns = [
     path('group/add/', group_permissions.crm_group_detail, name="crm_group_add"),
     path('group/<int:id>/', group_permissions.crm_group_detail, name="crm_group_detail"),
     path('get_group_data/', group_permissions.get_group_data, name='get_group_data'),
+
+    #visit
+    path('visit/', visit.visit_statistics, name="visit_statistics"),
 ]

@@ -83,20 +83,25 @@
                           <thead class="bg-body-tertiary">
                             <tr class="font-sans-serif">
                               <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="title">Услуга</th>
-                              <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="name">Город (Склад)</th>
-                              <th class="text-900 fw-medium sort pe-1 align-middle text-end" data-sort="published">Дата</th>
+                              <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="billing_source">Источник</th>
+                              <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="delivery_from">Откуда</th>
+                              <th class="text-900 fw-medium sort pe-1 align-middle" data-sort="delivery_to">Куда</th>
+                              <th class="text-900 fw-medium sort pe-1 align-middle text-end" data-sort="published">Дата заявки</th>
                               <th class="text-900 fw-medium sort pe-1 align-middle text-end" data-sort="enrolled">Доставка</th>
                               <th class="text-900 fw-medium sort pe-1 align-middle text-end text-end" data-sort="price">Итого</th>
                               <th class="text-900 fw-medium no-sort pe-1 align-middle data-table-row-action"></th>
                             </tr>
                           </thead>
                           <tbody class="list">
+                            {% for billing in billings %}
                             <tr class="btn-reveal-trigger fw-semi-bold">
-                              <td class="align-middle white-space-nowrap title"><a href="../app/e-learning/course/course-details.html">Нужно привести Zeekr 001</a></td>
-                              <td class="align-middle text-nowrap name"><a class="text-800" href="../app/e-learning/trainer-profile.html">Бишкек</a></td>
-                              <td class="align-middle white-space-nowrap text-end published">01/10/21</td>
-                              <td class="align-middle text-end enrolled">47,726</td>
-                              <td class="align-middle text-end price">$39.99</td>
+                              <td class="align-middle white-space-nowrap title"><a href="{% url 'crm_detail_billings' billing.id %}">{{ billing.type_product }}</a></td>
+                              <td class="align-middle text-nowrap billing_source"><a class="text-800" href="{% url 'crm_detail_billings' billing.id %}">{{ billing.billing_source }}</a></td>
+                              <td class="align-middle text-nowrap delivery_from"><a class="text-800" href="{% url 'crm_detail_billings' billing.id %}">{{ billing.delivery_from }}</a></td>
+                              <td class="align-middle text-nowrap delivery_to"><a class="text-800" href="{% url 'crm_detail_billings' billing.id %}">{{ billing.delivery_to }}</a></td>
+                              <td class="align-middle white-space-nowrap text-end published">{{ billing.created }}</td>
+                              <td class="align-middle text-end enrolled">{{ billing.delivery_price }} $</td>
+                              <td class="align-middle text-end price">{{ billing.total_price }}</td>
                               <td class="align-middle white-space-nowrap text-end">
                                 <div class="dropstart font-sans-serif position-static d-inline-block"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-popularPaidCourses-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
                                   <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-popularPaidCourses-1"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
@@ -105,48 +110,7 @@
                                 </div>
                               </td>
                             </tr>
-                            <tr class="btn-reveal-trigger fw-semi-bold">
-                              <td class="align-middle white-space-nowrap title"><a href="../app/e-learning/course/course-details.html">10 лофт столов для офиса</a></td>
-                              <td class="align-middle text-nowrap name"><a class="text-800" href="../app/e-learning/trainer-profile.html">Ош</a></td>
-                              <td class="align-middle white-space-nowrap text-end published">11/12/21</td>
-                              <td class="align-middle text-end enrolled">38,541</td>
-                              <td class="align-middle text-end price">$19.99</td>
-                              <td class="align-middle white-space-nowrap text-end">
-                                <div class="dropstart font-sans-serif position-static d-inline-block"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-popularPaidCourses-2" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
-                                  <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-popularPaidCourses-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="btn-reveal-trigger fw-semi-bold">
-                              <td class="align-middle white-space-nowrap title"><a href="../app/e-learning/course/course-details.html">20 ноутбуков Lenovo</a></td>
-                              <td class="align-middle text-nowrap name"><a class="text-800" href="../app/e-learning/trainer-profile.html">Нарын</a></td>
-                              <td class="align-middle white-space-nowrap text-end published">03/09/21</td>
-                              <td class="align-middle text-end enrolled">35,666</td>
-                              <td class="align-middle text-end price">$45.49</td>
-                              <td class="align-middle white-space-nowrap text-end">
-                                <div class="dropstart font-sans-serif position-static d-inline-block"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-popularPaidCourses-3" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
-                                  <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-popularPaidCourses-3"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr class="btn-reveal-trigger fw-semi-bold">
-                              <td class="align-middle white-space-nowrap title"><a href="../app/e-learning/course/course-details.html">5 велосипеда Lespo синего цвета</a></td>
-                              <td class="align-middle text-nowrap name"><a class="text-800" href="../app/e-learning/trainer-profile.html">Баткен</a></td>
-                              <td class="align-middle white-space-nowrap text-end published">31/12/21</td>
-                              <td class="align-middle text-end enrolled">29,988</td>
-                              <td class="align-middle text-end price">$99.99</td>
-                              <td class="align-middle white-space-nowrap text-end">
-                                <div class="dropstart font-sans-serif position-static d-inline-block"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-popularPaidCourses-4" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
-                                  <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-popularPaidCourses-4"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
-                                    <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
+                            {% endfor %}
                           </tbody>
                         </table>
                       </div>
@@ -395,7 +359,7 @@
                     <option value="week" selected="selected">Last 7 days</option>
                     <option value="month">Last month</option>
                   </select></div>
-                <div class="col-auto"><a class="btn btn-link btn-sm px-0 fw-medium" href="../app/e-learning/course/course-list.html">All Courses<span class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
+                <div class="col-auto"><a class="btn btn-link btn-sm px-0 fw-medium" href="{% url 'crm_index_billings' %}">Все лиды<span class="fas fa-chevron-right ms-1 fs-11"></span></a></div>
               </div>
             </div>
           </div>
