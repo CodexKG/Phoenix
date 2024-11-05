@@ -2,12 +2,12 @@
 {% load static %}
 {% block content %}
 <main class="main" id="top">
-    <div class="container-fluid" data-layout="container">
+    <div class="container" data-layout="container">
         {% include 'queenbee/include/header.html' %}
         
-        <div class="card p-4" style="width: 90%; margin: auto; height: 80vh;"> <!-- ширина 90% и высота 80vh -->
+        <div class="card p-4" style="max-width: 1200px; margin: auto; height: 80vh;"> <!-- ширина фиксирована -->
             <h3 class="text-center">Статистика посещаемости за последние 7 дней</h3>
-            <canvas id="visitChart" width="800" height="800"></canvas> <!-- большее разрешение для четкости -->
+            <canvas id="visitChart" width="1200" height="600"></canvas> <!-- ширина и высота для графика -->
 
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script>
@@ -26,14 +26,14 @@
                 const visitChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: {{ labels|safe }}, // Даты для оси X
+                        labels: {{ labels|safe }},
                         datasets: [
                             {% for entry in visits_data %}
                             {
                                 label: '{{ entry.path }}',
                                 data: {{ entry.daily_data|safe }},
-                                backgroundColor: colors[{{ forloop.counter0 }} % colors.length], // Уникальные цвета для каждого пути
-                                borderColor: colors[{{ forloop.counter0 }} % colors.length].replace('0.7', '1'), // Увеличиваем прозрачность для границы
+                                backgroundColor: colors[{{ forloop.counter0 }} % colors.length],
+                                borderColor: colors[{{ forloop.counter0 }} % colors.length].replace('0.7', '1'),
                                 borderWidth: 1
                             },
                             {% endfor %}
@@ -41,7 +41,7 @@
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: false, // Заполняет контейнер полностью
+                        maintainAspectRatio: false, 
                         scales: {
                             y: {
                                 beginAtZero: true,
