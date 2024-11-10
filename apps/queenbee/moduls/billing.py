@@ -3,23 +3,19 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
 from django.contrib.admin.utils import label_for_field
 from django.contrib import admin
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware
-from django.core import serializers
-from django.core.serializers.json import DjangoJSONEncoder
-from django.urls import reverse
-from django.contrib.auth.decorators import user_passes_test
 from django.db import transaction
 import uuid, json, logging, traceback, asyncio
+from asgiref.sync import async_to_sync
 
 from apps.crm.models import Billing
 from apps.crm.forms import BillingForm
 from apps.queenbee.permissions import permission_required
+from apps.telegrams.views import send_billing
 
 @require_POST
 def calculate_delivery(request):
@@ -66,18 +62,16 @@ def create_billing(request):
         delivery_to = request.POST.get('to_city')
         type_product = request.POST.get('appearance')
         
+        # Проверка обязательных полей
+        if not all([email, fullname, phone, delivery_from, delivery_to, type_product]):
+            return JsonResponse({'success': False, 'error': 'Все обязательные поля должны быть заполнены.'})
+        
         # Парсим fullname и разделяем его на first_name и last_name
         name_parts = fullname.split()
-        if len(name_parts) == 1:
-            first_name = name_parts[0]
-            last_name = ''  # Оставляем пустым, если фамилия не указана
-        elif len(name_parts) == 2:
-            first_name, last_name = name_parts
-        else:
-            first_name = name_parts[0]
-            last_name = ' '.join(name_parts[1:])  # Объединяем все оставшиеся части в last_name
-
-        # Преобразуем числовые данные с заменой запятых на точки
+        first_name = name_parts[0]
+        last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
+        
+        # Преобразуем числовые данные
         try:
             weight = float(request.POST.get('weight', '0').replace(',', '.'))
             length = float(request.POST.get('length', '0').replace(',', '.'))
@@ -86,9 +80,9 @@ def create_billing(request):
             volume_product = length * width * height
             delivery_price = float(request.POST.get('delivery_price', '0').replace(',', '.'))
         except ValueError:
-            return JsonResponse({'success': False, 'error': 'Некорректные числовые данные. Убедитесь, что все числовые значения введены правильно.'})
-
-        # Собираем данные для создания записи в модели Billing
+            return JsonResponse({'success': False, 'error': 'Некорректные числовые данные.'})
+        
+        # Создаем запись в модели Billing
         billing_data = {
             "email": email,
             "first_name": first_name,
@@ -107,15 +101,35 @@ def create_billing(request):
             "billing_status": Billing.BillingStatusChoices.ISSUED
         }
 
-        # Проверка наличия обязательных полей
-        if not all([email, first_name, phone, delivery_from, delivery_to, type_product]):
-            return JsonResponse({'success': False, 'error': 'Все обязательные поля должны быть заполнены.'})
-
-        # Создаем запись в модели Billing
-        billing = Billing(**billing_data)
-        billing.save()
-
-        return JsonResponse({'success': True, 'message': 'Заявка успешно создана'})
+        try:
+            billing = Billing(**billing_data)
+            billing.save()
+        except Exception as db_error:
+            return JsonResponse({'success': False, 'error': f'Ошибка базы данных: {db_error}'})
+        
+        # Отправляем уведомление для группы
+        try:
+            async_to_sync(send_billing)(
+                id=billing.id,
+                billing_source=billing.billing_source,
+                email=billing.email,
+                first_name=billing.first_name,
+                last_name=billing.last_name,
+                phone=billing.phone,
+                payment_code=billing.payment_code,
+                delivery_from=billing.delivery_from,
+                delivery_to=billing.delivery_to,
+                type_product=billing.type_product,
+                length_product=billing.length_product,
+                width_product=billing.width_product,
+                height_product=billing.height_product,
+                weight_product=billing.weight_product,
+                volume_product=billing.volume_product,
+                total_price=billing.total_price
+            )
+            return JsonResponse({'success': True, 'message': 'Заявка успешно создана'})
+        except Exception as send_error:
+            return JsonResponse({'success': False, 'error': f'Ошибка при отправке уведомления: {send_error}'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)})
     

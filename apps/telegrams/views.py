@@ -35,14 +35,11 @@ async def start(message: types.Message):
     else:
         await message.answer(f"С возвращением, {message.from_user.full_name}!")
 
-    # Запускаем отправку обновлений локации
-    # asyncio.create_task(send_location_updates(user_id, message.chat.id))
-
 async def send_billing(id, billing_source, email, first_name, last_name, phone,
                        payment_code, delivery_from, delivery_to, type_product,
                        length_product, width_product, height_product,
                        weight_product, volume_product, total_price):
-    await bot.send_message(-4552009522, f"""Новый лид с {billing_source} #{id}
+    await bot.send_message(-4555673389, f"""Новый лид с {billing_source} #{id}
 <b>Имя: </b>{first_name}
 <b>Фамилия: </b>{last_name}
 <b>Номер: </b>{phone}
@@ -57,6 +54,6 @@ async def send_billing(id, billing_source, email, first_name, last_name, phone,
 <b>Вес товара: </b>{weight_product}
 <b>Объем куб: </b>{volume_product}
 <b>Итоговая сумма: </b>{total_price}
-""")
+""", parse_mode="HTML")
 
 dp.include_router(router)
