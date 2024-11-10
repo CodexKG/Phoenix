@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.kanban',
     'apps.erp',
     'apps.cms',
+    'apps.telegrams',
 
     #rest
     'django_filters',

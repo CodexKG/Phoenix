@@ -228,16 +228,14 @@
 
 /* Центрирование модального контента и добавление скроллинга */
 .modal-content {
-    background-color: #fff;
+    max-height: 80vh;  /* Ограничение по высоте */
+    overflow-y: auto;  /* Добавление вертикальной прокрутки */
     padding: 20px;
     border-radius: 8px;
-    width: 90%;
-    max-width: 600px; /* Максимальная ширина окна */
-    max-height: 80%; /* Ограничиваем высоту окна для прокрутки */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Тень вокруг модального окна */
-    overflow-y: auto; /* Добавляем вертикальную прокрутку для контента */
-    text-align: left; /* Выравнивание по левому краю */
-    position: relative; /* Для кнопки закрытия */
+    width: 50%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: left;
 }
 
 /* Стили для инпута и кнопки */
