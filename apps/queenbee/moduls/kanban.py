@@ -7,6 +7,7 @@ import logging, json
 
 from apps.kanban import models, forms
 from apps.queenbee.permissions import permission_required
+from apps.erp.models import Employee
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +27,19 @@ def crm_kanban_index(request):
 def crm_kanban_detail(request, id):
     board = get_object_or_404(models.Board, id=id)
     lists = models.List.objects.filter(board=board).prefetch_related('card_lists')
-    for list in lists:
-        list.card_lists.all().order_by('position')  # Сортировка по позиции
-    return render(request, 'queenbee/kanban/detail.html', {'board': board, 'lists': lists})
+    employees = Employee.objects.all()
+
+    # Формы для добавления карточки и вложений
+    card_form = forms.CardForm()
+    attachment_formset = forms.AttachmentInlineFormset()
+
+    return render(request, 'queenbee/kanban/detail.html', {
+        'board': board,
+        'lists': lists,
+        'employees': employees,
+        'card_form': card_form,
+        'attachment_formset': attachment_formset,
+    })
 
 def crm_add_list(request, board_id):
     logger.info("Получен запрос на добавление списка")  # Логируем начало запроса
@@ -118,19 +129,43 @@ def crm_edit_board(request, board_id):
     return JsonResponse({'success': False, 'error': 'Неверный запрос'})
 
 #Карточки
+# Представление для создания карточки
 def crm_add_card(request, list_id):
+    list_obj = get_object_or_404(models.List, id=list_id)
+    
     if request.method == 'POST':
-        list_obj = get_object_or_404(models.List, id=list_id)
-        form = forms.CardForm(request.POST)
-        if form.is_valid():
+        form = forms.CardForm(request.POST, request.FILES)
+        formset = forms.AttachmentInlineFormset(request.POST, request.FILES)
+
+        if form.is_valid() and formset.is_valid():
+            # Создаем карточку
             card = form.save(commit=False)
-            card.user = request.user  # Присваиваем текущего пользователя
-            card.list = list_obj  # Присваиваем список
-            card.position = list_obj.card_lists.count() + 1  # Присваиваем позицию
+            card.user = request.user
+            card.list = list_obj
+            card.position = list_obj.card_lists.count() + 1
             card.save()
-            form.save_m2m()  # Сохраняем Many-to-Many поля (участники)
+            form.save_m2m()
+
+            # Сохраняем все вложения из formset и добавляем текущего пользователя к каждому из них
+            formset.instance = card
+            attachments = formset.save(commit=False)
+            for attachment in attachments:
+                attachment.user = request.user
+                attachment.save()
+            formset.save()
+
             return JsonResponse({'success': True, 'card_title': card.title, 'card_id': card.id})
-        return JsonResponse({'success': False, 'errors': form.errors})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors})
+    
+    else:
+        form = forms.CardForm()
+        formset = forms.AttachmentInlineFormset()
+
+    return render(request, 'kanban/card_form.html', {
+        'form': form,
+        'formset': formset,
+    })
     
 @csrf_exempt
 def crm_update_card_positions(request):

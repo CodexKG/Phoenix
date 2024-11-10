@@ -65,17 +65,35 @@
                             <div class="modal-content">
                                 <span class="close">&times;</span>
                                 <h2>Добавить новую карточку</h2>
-                                <form id="addCardForm">
+                                <form id="addCardForm" enctype="multipart/form-data">
                                     {% csrf_token %}
-                                    <input type="text" name="title" placeholder="Название" required><br>
-                                    <textarea name="description" rows="4" placeholder="Описание"></textarea><br>
-                                    <input type="datetime-local" name="due_date" placeholder="Срок выполнения"><br>
-                                    <select name="members" multiple>
-                                        {% for user in users %}
-                                        <option value="{{ user.id }}">{{ user.username }}</option>
-                                        {% endfor %}
-                                    </select><br>
+                                    {{ card_form.as_p }}
+                        
+                                    <h4>Добавить вложения:</h4>
+                                    {{ attachment_formset.management_form }}
+                                    {% for form in attachment_formset %}
+                                        <div class="attachment-form">
+                                            {{ form.file.label_tag }} {{ form.file }}
+                                            {% if form.instance.pk %}
+                                                <label for="{{ form.DELETE.id_for_label }}">Удалить</label>
+                                                {{ form.DELETE }}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                        
                                     <button type="submit">Добавить карточку</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div id="addAttachmentModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h2>Добавить вложение к карточке</h2>
+                                <form id="addAttachmentForm" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="file" name="file" required><br>
+                                    <button type="submit">Добавить вложение</button>
                                 </form>
                             </div>
                         </div>
@@ -124,7 +142,7 @@
                                         </button>
 
                                         <!-- Модальное окно для добавления карточки -->
-                                        <div id="addCardModal-{{ list.id }}" class="modal">
+                                        <!-- <div id="addCardModal-{{ list.id }}" class="modal">
                                             <div class="modal-content">
                                                 <span class="close" data-list-id="{{ list.id }}">&times;</span>
                                                 <h2>Добавить новую карточку</h2>
@@ -138,6 +156,26 @@
                                                         <option value="{{ user.id }}">{{ user.username }}</option>
                                                         {% endfor %}
                                                     </select><br>
+                                                    <button type="submit">Добавить карточку</button>
+                                                </form>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="modal" id="addCardModal">
+                                            <div class="modal-content">
+                                                <span class="close" onclick="closeModal()">×</span>
+                                                <h2>Добавить новую карточку</h2>
+                                                <form id="addCardForm">
+                                                    <input type="text" name="title" placeholder="Название" required>
+                                                    <textarea name="description" placeholder="Описание"></textarea>
+                                                    <input type="datetime-local" name="due_date">
+                                                    <select name="members" multiple>
+                                                        <!-- Опции членов команды -->
+                                                    </select>
+                                                    <div class="attachment-section">
+                                                        <label>Добавить вложения:</label>
+                                                        <input type="file" name="attachments" multiple>
+                                                    </div>
                                                     <button type="submit">Добавить карточку</button>
                                                 </form>
                                             </div>

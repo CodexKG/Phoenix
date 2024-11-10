@@ -11,9 +11,14 @@ class BoardAdmin(admin.ModelAdmin):
 class ListAdmin(admin.ModelAdmin):
     list_display = ('title', 'board', 'position', 'created_at', 'updated_at')
 
+class AttachmentTabularInline(admin.TabularInline):
+    model = models.Attachment
+    extra = 1
+
 @admin.register(models.Card)
 class CardAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'position', 'due_date', 'created_at', 'updated_at')
+    inlines = (AttachmentTabularInline, )
 
 @admin.register(models.Attachment)
 class AttachmentAdmin(admin.ModelAdmin):

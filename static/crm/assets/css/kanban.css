@@ -210,51 +210,34 @@
     width: auto; /* Убираем ширину на всю строку */
 }
 
-/* Стили для модального окна */
+/* Основные стили для модального окна */
 .modal {
-    display: none;
-    /* Скрыто по умолчанию */
-    position: fixed;
-    /* Окно фиксировано на экране */
-    z-index: 10180;
-    /* Поверх всех элементов */
+    display: none; /* Скрыто по умолчанию */
+    position: fixed; /* Фиксированное положение на экране */
+    z-index: 10180; /* Поверх всех элементов */
     left: 0;
     top: 0;
-    width: 100%;
-    /* Занимает всю ширину */
-    height: 100%;
-    /* Занимает всю высоту */
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Полупрозрачный темный фон для выделения окна */
-    /* display: flex; */
+    width: 100%; /* Занимает всю ширину */
+    height: 100%; /* Занимает всю высоту */
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный темный фон */
+    overflow: hidden; /* Убираем прокрутку самого модального фона */
+    display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    /* Убираем скролл */
 }
 
-/* Центрирование модального контента */
+/* Центрирование модального контента и добавление скроллинга */
 .modal-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    width: 40%;
-    /* Ширина модального окна */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    /* Тень вокруг модального окна */
-    text-align: center;
-    position: relative;
-    /* Для кнопки закрытия */
-}
-
-/* Кнопка закрытия */
-.close {
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
+    width: 90%;
+    max-width: 600px; /* Максимальная ширина окна */
+    max-height: 80%; /* Ограничиваем высоту окна для прокрутки */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Тень вокруг модального окна */
+    overflow-y: auto; /* Добавляем вертикальную прокрутку для контента */
+    text-align: left; /* Выравнивание по левому краю */
+    position: relative; /* Для кнопки закрытия */
 }
 
 /* Стили для инпута и кнопки */
@@ -319,6 +302,7 @@
     margin-bottom: 20px;
 }
 
+/* Стили для инпутов и полей формы */
 .modal-content input[type="text"],
 .modal-content textarea,
 .modal-content input[type="datetime-local"],
@@ -332,8 +316,7 @@
 }
 
 .modal-content textarea {
-    resize: vertical;
-    /* Позволим пользователям изменять высоту текстового поля */
+    resize: vertical; /* Позволим изменять высоту текстового поля */
 }
 
 .modal-content select {
@@ -348,14 +331,12 @@
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    width: 100%;
-    /* Кнопка занимает всю ширину */
+    width: 100%; /* Кнопка занимает всю ширину */
     margin-top: 10px;
 }
 
 .modal-content button:hover {
-    background-color: #d63810;
-    /* Сделаем темнее при наведении */
+    background-color: #d63810; /* Темнее при наведении */
 }
 
 .close {
@@ -456,13 +437,14 @@ tr {
     position: relative;
 }
 
+/* Кнопка закрытия */
 .close {
     position: absolute;
-    right: 15px;
-    top: 10px;
-    font-size: 20px;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
     cursor: pointer;
-    color: #888;
+    color: #555;
 }
 
 .close:hover {

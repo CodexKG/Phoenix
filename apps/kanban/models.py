@@ -1,6 +1,9 @@
 from django.db import models
+from PIL import Image
+import os
 
 from apps.hiveclient.models import User
+from apps.erp.models import Employee
 
 # Create your models here.
 """Kanban модели"""
@@ -84,12 +87,8 @@ class Card(models.Model):
         verbose_name="Срок выполнения",
         null=True, blank=True, 
     )
-    attachments = models.ManyToManyField(
-        'Attachment', related_name='cards', 
-        blank=True, verbose_name="Вложения"
-    )
     members = models.ManyToManyField(
-        User, related_name='cards', 
+        Employee, related_name='employee_cards', 
         blank=True, verbose_name="Участники"
     )
     created_at = models.DateTimeField(
@@ -98,6 +97,13 @@ class Card(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name="Дата обновления"
     )
+
+    def delete(self, *args, **kwargs):
+        # Удаляем все вложения, связанные с карточкой
+        for attachment in self.card_attachments.all():
+            attachment.delete()
+        # Теперь удаляем саму карточку
+        super(Card, self).delete(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -123,6 +129,40 @@ class Attachment(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата загрузки"
     )
+
+    def save(self, *args, **kwargs):
+        # Сначала вызываем оригинальный метод save(), чтобы файл был доступен
+        super().save(*args, **kwargs)
+
+        # Проверяем, является ли файл изображением
+        if self.file and self.file.name.split('.')[-1].lower() in ['jpg', 'jpeg', 'png']:
+            # Путь к текущему файлу
+            file_path = self.file.path
+
+            # Открываем изображение с помощью Pillow
+            image = Image.open(file_path)
+
+            # Создаем имя для нового файла с расширением .webp
+            new_file_path = os.path.splitext(file_path)[0] + '.webp'
+
+            # Сохраняем изображение в формате WebP
+            image.save(new_file_path, 'webp')
+
+            # Меняем путь к файлу на новый .webp
+            self.file.name = os.path.splitext(self.file.name)[0] + '.webp'
+
+            # Удаляем старый файл
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            # Сохраняем снова объект модели с новым файлом
+            super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Удаляем файл из файловой системы перед удалением записи из базы данных
+        if self.file and os.path.isfile(self.file.path):
+            os.remove(self.file.path)
+        super(Attachment, self).delete(*args, **kwargs)
 
     def __str__(self):
         return self.file.name

@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('addCardForm');
     let currentListId = null;
 
+    // Открытие модального окна для добавления карточки
     addCardButtons.forEach(function (button) {
         button.addEventListener('click', function () {
             currentListId = this.dataset.listId;
@@ -119,25 +120,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Закрытие модального окна
     closeModal.addEventListener('click', () => modal.style.display = 'none');
     window.addEventListener('click', (event) => {
         if (event.target === modal) modal.style.display = 'none';
     });
 
+    // Обработка формы добавления карточки
     if (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = new FormData(form);
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
+    
             fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': csrfToken
+                    'X-CSRFToken': csrfToken // Передаем CSRF-токен для безопасности
                 },
-                body: formData
+                body: formData // Отправляем данные формы, включая файлы
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
@@ -157,10 +165,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('Ошибка при добавлении карточки');
                 }
             })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при добавлении карточки. Пожалуйста, попробуйте еще раз.');
+            });
+        });
+    }
+
+    // Функция для открытия модального окна для добавления вложений
+    function openAttachmentModal() {
+        const attachmentModal = document.getElementById('addAttachmentModal');
+        if (attachmentModal) {
+            attachmentModal.style.display = 'flex';
+        }
+    }
+
+    // Управление модальным окном для добавления вложений
+    const attachmentForm = document.getElementById('addAttachmentForm');
+    if (attachmentForm) {
+        attachmentForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(attachmentForm);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+            fetch(`/admin/kanban/card/${currentCardId}/add_attachment/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Файл ${data.file_name} успешно добавлен`);
+                    attachmentForm.reset();
+                } else {
+                    alert('Ошибка при добавлении вложения');
+                }
+            })
             .catch(error => console.error('Ошибка:', error));
         });
-    } else {
-        console.error('Элемент формы не найден');
     }
 
     // Управление модальным окном для добавления списка
