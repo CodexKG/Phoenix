@@ -10,6 +10,64 @@
     const addListUrl = "{% url 'crm_add_list' board.id %}";
 </script>
 
+<!-- Модальное окно для добавления карточки -->
+<div id="addCardModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Добавить новую карточку</h2>
+        <form id="addCardForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ card_form.as_p }}
+
+            <h4>Добавить вложения:</h4>
+            {{ attachment_formset.management_form }}
+            {% for form in attachment_formset %}
+                <div class="attachment-form">
+                    {{ form.file.label_tag }} {{ form.file }}
+                    {% if form.instance.pk %}
+                        <label for="{{ form.DELETE.id_for_label }}">Удалить</label>
+                        {{ form.DELETE }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit">Добавить карточку</button>
+        </form>
+    </div>
+</div>
+
+<div id="addAttachmentModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Добавить вложение к карточке</h2>
+        <form id="addAttachmentForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file" required><br>
+            <button type="submit">Добавить вложение</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для просмотра карточки -->
+<div id="viewCardModal" class="modal">
+    <div class="modal-content">
+        <span id="closeIcon" class="close">&times;</span>
+        <h2 id="cardTitle"></h2>
+        <p id="cardDescription"></p>
+        <p><strong>Срок выполнения:</strong> <span id="cardDueDate"></span></p>
+        <p><strong>Создан пользователем:</strong> <span id="cardUser"></span></p>
+        <p><strong>Дата создания:</strong> <span id="cardCreatedAt"></span></p>
+        <p><strong>Обновлено:</strong> <span id="cardUpdatedAt"></span></p>
+        <p><strong>Вложения:</strong></p>
+        <ul id="cardAttachments"></ul>
+        <p><strong>Участники:</strong></p>
+        <ul id="cardMembers"></ul>
+        <button id="closeCardModal" class="close-btn">Закрыть</button>
+        <button id="closeCardModal" class="close-btn">Изменить</button>
+        <button class="delete-card-btn" data-card-id="{{ card.id }}">Удалить</button>
+    </div>
+</div>
+
 <main class="main" id="top">
     <div class="container" data-layout="container">
         {% include 'queenbee/include/header.html' %}
@@ -28,7 +86,7 @@
                 </form>
             </div>
         </div>
-
+        
         <div class="row g-3 mb-3">
             <div class="col-12">
                 <div class="kanban-board__header">
@@ -60,64 +118,6 @@
                             {% endfor %}
                         </div>                        
 
-                        <!-- Модальное окно для добавления карточки -->
-                        <div id="addCardModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h2>Добавить новую карточку</h2>
-                                <form id="addCardForm" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    {{ card_form.as_p }}
-                        
-                                    <h4>Добавить вложения:</h4>
-                                    {{ attachment_formset.management_form }}
-                                    {% for form in attachment_formset %}
-                                        <div class="attachment-form">
-                                            {{ form.file.label_tag }} {{ form.file }}
-                                            {% if form.instance.pk %}
-                                                <label for="{{ form.DELETE.id_for_label }}">Удалить</label>
-                                                {{ form.DELETE }}
-                                            {% endif %}
-                                        </div>
-                                    {% endfor %}
-                        
-                                    <button type="submit">Добавить карточку</button>
-                                </form>
-                            </div>
-                        </div>
-                        
-                        <div id="addAttachmentModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close">&times;</span>
-                                <h2>Добавить вложение к карточке</h2>
-                                <form id="addAttachmentForm" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <input type="file" name="file" required><br>
-                                    <button type="submit">Добавить вложение</button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- Модальное окно для просмотра карточки -->
-                        <div id="viewCardModal" class="modal">
-                            <div class="modal-content">
-                                <span id="closeIcon" class="close">&times;</span>
-                                <h2 id="cardTitle"></h2>
-                                <p id="cardDescription"></p>
-                                <p><strong>Срок выполнения:</strong> <span id="cardDueDate"></span></p>
-                                <p><strong>Создан пользователем:</strong> <span id="cardUser"></span></p>
-                                <p><strong>Дата создания:</strong> <span id="cardCreatedAt"></span></p>
-                                <p><strong>Обновлено:</strong> <span id="cardUpdatedAt"></span></p>
-                                <p><strong>Вложения:</strong></p>
-                                <ul id="cardAttachments"></ul>
-                                <p><strong>Участники:</strong></p>
-                                <ul id="cardMembers"></ul>
-                                <button id="closeCardModal" class="close-btn">Закрыть</button>
-                                <button id="closeCardModal" class="close-btn">Изменить</button>
-                                <button class="delete-card-btn" data-card-id="{{ card.id }}">Удалить</button>
-                            </div>
-                        </div>
-
                         <!-- Кнопка для открытия модального окна -->
                         <button class="add-card-btn" data-list-id="{{ list.id }}">Добавить карточку</button>
                     </div>
@@ -133,53 +133,13 @@
                         </thead>
                         <tbody>
                             {% for list in lists %}
-                            <tr data-list-id="{{ list.id }}">
+                            <tr id="table-list-{{ list.id }}" data-list-id="{{ list.id }}" class="table-list">
                                 <td>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <b>{{ list.title }}</b>
                                         <button class="add-card-btn" data-list-id="{{ list.id }}">
                                             Добавить карточку
                                         </button>
-
-                                        <!-- Модальное окно для добавления карточки -->
-                                        <!-- <div id="addCardModal-{{ list.id }}" class="modal">
-                                            <div class="modal-content">
-                                                <span class="close" data-list-id="{{ list.id }}">&times;</span>
-                                                <h2>Добавить новую карточку</h2>
-                                                <form class="addCardForm" data-list-id="{{ list.id }}">
-                                                    {% csrf_token %}
-                                                    <input type="text" name="title" placeholder="Название" required><br>
-                                                    <textarea name="description" rows="4" placeholder="Описание"></textarea><br>
-                                                    <input type="datetime-local" name="due_date" placeholder="Срок выполнения"><br>
-                                                    <select name="members" multiple>
-                                                        {% for user in users %}
-                                                        <option value="{{ user.id }}">{{ user.username }}</option>
-                                                        {% endfor %}
-                                                    </select><br>
-                                                    <button type="submit">Добавить карточку</button>
-                                                </form>
-                                            </div>
-                                        </div> -->
-
-                                        <div class="modal" id="addCardModal">
-                                            <div class="modal-content">
-                                                <span class="close" onclick="closeModal()">×</span>
-                                                <h2>Добавить новую карточку</h2>
-                                                <form id="addCardForm">
-                                                    <input type="text" name="title" placeholder="Название" required>
-                                                    <textarea name="description" placeholder="Описание"></textarea>
-                                                    <input type="datetime-local" name="due_date">
-                                                    <select name="members" multiple>
-                                                        <!-- Опции членов команды -->
-                                                    </select>
-                                                    <div class="attachment-section">
-                                                        <label>Добавить вложения:</label>
-                                                        <input type="file" name="attachments" multiple>
-                                                    </div>
-                                                    <button type="submit">Добавить карточку</button>
-                                                </form>
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <div class="table-cards sortable" data-list-id="{{ list.id }}">
