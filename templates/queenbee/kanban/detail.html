@@ -113,9 +113,8 @@
                                 <h4>{{ card.title }}</h4>
                                 <p>{{ card.description|truncatewords:4 }}</p>
                             </div>
-                            {% empty %}
-                            <p class="no-tasks-message">Нет задач в этом списке</p>
                             {% endfor %}
+                            <p class="no-tasks-message">Нет задач в этом списке</p>
                         </div>                        
 
                         <!-- Кнопка для открытия модального окна -->
@@ -149,9 +148,8 @@
                                             <b>✅ {{ card.title }}</b>
                                             <p>{{ card.description|truncatewords:4 }}</p>
                                         </div>
-                                        {% empty %}
-                                        <p class="no-tasks-message">Нет задач в этом списке</p>
                                         {% endfor %}
+                                        <p class="no-tasks-message">Нет задач в этом списке</p>
                                     </div>
                                 </td>
                             </tr>
