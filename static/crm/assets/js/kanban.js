@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateEmptyMessage(listElement) {
         const noTasksMessage = listElement.querySelector('.no-tasks-message');
         const hasCards = listElement.querySelectorAll('.kanban-card, .table-card').length > 0;
-        
+
         if (noTasksMessage) {
             noTasksMessage.style.display = hasCards ? 'none' : 'block';
         }
@@ -85,13 +85,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             cardIds: cardIds
                         })
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.success) {
-                            console.error('Ошибка при обновлении позиций карточек:', data.error);
-                        }
-                    })
-                    .catch(error => console.error('Ошибка:', error));
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.success) {
+                                console.error('Ошибка при обновлении позиций карточек:', data.error);
+                            }
+                        })
+                        .catch(error => console.error('Ошибка:', error));
                 }
             });
         });
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const formData = new FormData(form);
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
+
             fetch(`/admin/kanban/list/${currentListId}/add_card/`, {
                 method: 'POST',
                 headers: {
@@ -140,35 +140,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: formData // Отправляем данные формы, включая файлы
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
-                    if (listContainer && data.card_id && data.card_title) {
-                        const newCard = document.createElement('div');
-                        newCard.classList.add('kanban-card');
-                        newCard.dataset.cardId = data.card_id;
-                        newCard.innerHTML = `<h3>${data.card_title}</h3>`;
-                        listContainer.appendChild(newCard);
-                        updateEmptyMessage(listContainer.closest('.kanban-list'));
-                    } else {
-                        console.error('Не удалось создать карточку. Проверьте данные.');
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    modal.style.display = 'none';
-                    form.reset();
-                } else {
-                    alert('Ошибка при добавлении карточки');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Произошла ошибка при добавлении карточки. Пожалуйста, попробуйте еще раз.');
-            });
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
+                        const listContainer2 = document.querySelector(`#table-list-${currentListId} .table-cards`);
+                        if (listContainer || listContainer2 && data.card_id && data.card_title) {
+                            const newCard = document.createElement('div');
+                            newCard.classList.add('kanban-card');
+                            newCard.dataset.cardId = data.card_id;
+                            newCard.innerHTML = `<h3>${data.card_title}</h3>`;
+                            listContainer.appendChild(newCard);
+                            updateEmptyMessage(listContainer.closest('.kanban-list'));
+
+                            const newCard2 = document.createElement('div');
+                            newCard2.classList.add('table-card');
+                            newCard2.dataset.cardId = data.card_id;
+                            newCard2.innerHTML = `
+                             <img width="20" src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-4.png" alt=""><b>✅ ${data.card_title}</b> `;
+                            listContainer2.appendChild(newCard2);
+                            updateEmptyMessage(listContainer2.closest('.table-list'));
+                        } else {
+                            console.error('Не удалось создать карточку. Проверьте данные.');
+                        }
+                        modal.style.display = 'none';
+                        form.reset();
+                    } else {
+                        alert('Ошибка при добавлении карточки');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при добавлении карточки. Пожалуйста, попробуйте еще раз.');
+                });
         });
     }
 
@@ -187,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const formData = new FormData(attachmentForm);
             const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
+
             fetch(`/admin/kanban/card/${currentCardId}/add_attachment/`, {
                 method: 'POST',
                 headers: {
@@ -195,16 +204,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(`Файл ${data.file_name} успешно добавлен`);
-                    attachmentForm.reset();
-                } else {
-                    alert('Ошибка при добавлении вложения');
-                }
-            })
-            .catch(error => console.error('Ошибка:', error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Файл ${data.file_name} успешно добавлен`);
+                        attachmentForm.reset();
+                    } else {
+                        alert('Ошибка при добавлении вложения');
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
         });
     }
 
@@ -233,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         const formData = new FormData(addListForm);
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
+
         fetch(addListUrl, {
             method: 'POST',
             headers: {
@@ -241,18 +250,18 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {  // Проверка успешности ответа
-                addListModal.style.display = 'none';
-                addListForm.reset();
-                location.reload(); // Перезагрузка страницы после успешного добавления
-            } else {
-                console.error('Ошибка данных сервера:', data);
-                alert('Ошибка при добавлении списка');
-            }
-        })
-        .catch(error => console.error('Ошибка:', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {  // Проверка успешности ответа
+                    addListModal.style.display = 'none';
+                    addListForm.reset();
+                    location.reload(); // Перезагрузка страницы после успешного добавления
+                } else {
+                    console.error('Ошибка данных сервера:', data);
+                    alert('Ошибка при добавлении списка');
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
     });
 
     // Управление модальным окном для просмотра карточки
@@ -298,17 +307,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     method: 'POST',
                     headers: { 'X-CSRFToken': csrfToken }
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        kanbanCard.remove();
-                        updateEmptyMessage(kanbanCard.closest('.kanban-list'));
-                        alert('Карточка удалена');
-                    } else {
-                        alert('Ошибка удаления карточки: ' + data.error);
-                    }
-                })
-                .catch(error => console.error('Ошибка:', error));
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            kanbanCard.remove();
+                            updateEmptyMessage(kanbanCard.closest('.kanban-list'));
+                            alert('Карточка удалена');
+                        } else {
+                            alert('Ошибка удаления карточки: ' + data.error);
+                        }
+                    })
+                    .catch(error => console.error('Ошибка:', error));
             }
         });
     });
