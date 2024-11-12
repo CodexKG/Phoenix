@@ -1,7 +1,8 @@
 from django import forms
 
-from apps.kanban import models 
+from apps.kanban import models
 from apps.erp.models import Employee
+
 
 class ListForm(forms.ModelForm):
     class Meta:
@@ -14,10 +15,18 @@ class ListForm(forms.ModelForm):
             })
         }
 
+
 class BoardForm(forms.ModelForm):
     class Meta:
         model = models.Board
         fields = ['title']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-title-table',
+                'placeholder': 'Название доски'
+            })
+        }
+
 
 class CardForm(forms.ModelForm):
     due_date = forms.DateTimeField(
@@ -38,6 +47,7 @@ class CardForm(forms.ModelForm):
         model = models.Card
         fields = ['title', 'description', 'due_date', 'members']
 
+
 # Создаем InlineFormSet для вложений
 AttachmentInlineFormset = forms.inlineformset_factory(
     models.Card,
@@ -46,6 +56,7 @@ AttachmentInlineFormset = forms.inlineformset_factory(
     extra=1,
     can_delete=True
 )
+
 
 class AttachmentForm(forms.ModelForm):
     file = forms.FileField(

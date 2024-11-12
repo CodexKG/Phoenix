@@ -4,10 +4,10 @@
 
 <style>
 .kanban-board {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    /* display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-    overflow-x: auto;
+    overflow-x: auto; */
 }
 
 .kanban-board__container {
@@ -15,6 +15,7 @@
     padding: 10px;
     border-radius: 8px;
     min-width: 250px;
+    margin-bottom: 15px;
     flex-grow: 1;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Более глубокая тень */
 }
@@ -128,7 +129,6 @@
     padding: 10px 20px;
     background-color: #F23F12;
     color: white;
-    border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
@@ -151,7 +151,7 @@
                 const modal = document.getElementById('addBoardModal');
                 const closeModal = document.querySelector('.close');
                 const form = document.getElementById('addBoardForm');
-                const kanbanBoard = document.getElementById('kanbanBoard');
+                const kanbanBoard = document.querySelector('#kanbanBoard .row');
             
                 // Открыть модальное окно
                 openAddBoardModalButton.addEventListener('click', function() {
@@ -188,15 +188,21 @@
                     .then(data => {
                         if (data.title) {
                             // Создаем новый HTML элемент для доски
+                            const newColumn = document.createElement('div');
+                            newColumn.classList.add('col-md-4');
+
                             const newBoard = document.createElement('div');
                             newBoard.classList.add('kanban-board__container');
                             newBoard.id = `board-${data.board_id}`;
                             newBoard.innerHTML = `
-                                <h2><a href="/admin/kanban/${data.board_id}/">${data.title}</a></h2>
+                                <h3><a href="/admin/kanban/${data.board_id}/">${data.title}</a></h3>
                             `;
+
+                            // Вставляем newBoard внутрь col-md-4
+                            newColumn.appendChild(newBoard);
             
                             // Добавляем новую доску в конец списка
-                            kanbanBoard.insertBefore(newBoard, kanbanBoard.firstChild);
+                            kanbanBoard.insertBefore(newColumn, kanbanBoard.firstChild);
 
                             // Закрываем модальное окно и очищаем форму
                             modal.style.display = 'none';
@@ -285,24 +291,26 @@
         </script>
 
         <div class="row g-3 mb-3">
-            <div class="col-12">
-                <!-- Кнопка открытия модального окна -->
-                <button id="openAddBoardModal" class="btn add-list-btn">Добавить доску</button>
+            <!-- Кнопка открытия модального окна -->
+            <button id="openAddBoardModal" class="btn add-list-btn">Добавить доску</button>
 
-                <div class="kanban-board mt-4" id="kanbanBoard">
+            <div class="kanban-board mt-4" id="kanbanBoard">
+                <div class="row">
                     {% for board in boards %}
-                    <div class="kanban-board__container visible" id="board-{{ board.id }}">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h2><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.title }}</a></h2>
-                            <div class="dropdown">
-                                <button class="dropdown-btn">⋮</button> <!-- Иконка с тремя точками -->
-                                <div class="dropdown-content">
-                                    <a href="#" class="edit-board" data-id="{{ board.id }}">Изменить название</a>
-                                    <a href="#" class="delete-board" data-id="{{ board.id }}">Удалить</a>
+                    <div class="col-md-4">
+                        <div class="kanban-board__container visible" id="board-{{ board.id }}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.title }}</a></h3>
+                                <div class="dropdown">
+                                    <button class="dropdown-btn">⋮</button> <!-- Иконка с тремя точками -->
+                                    <div class="dropdown-content">
+                                        <a href="#" class="edit-board" data-id="{{ board.id }}">Изменить название</a>
+                                        <a href="#" class="delete-board" data-id="{{ board.id }}">Удалить</a>
+                                    </div>
                                 </div>
                             </div>
+                            <p><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.updated_at }}</a></p>
                         </div>
-                        <p><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.updated_at }}</a></p>
                     </div>
                     {% endfor %}
                 </div>

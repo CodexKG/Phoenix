@@ -22,6 +22,7 @@
     border-radius: 8px;
     min-width: 250px;
     max-width: 300px;
+    height: 100%;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
@@ -43,7 +44,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    flex-grow: 1; /* Основное изменение, чтобы занять оставшееся место */
+    flex-grow: 1;
+    /* Основное изменение, чтобы занять оставшееся место */
     margin-bottom: 15px;
 }
 
@@ -186,7 +188,8 @@
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    width: 100%; /* Занимает всю ширину */
+    width: 100%;
+    /* Занимает всю ширину */
 }
 
 .add-card-btn:hover {
@@ -195,32 +198,46 @@
 }
 
 .no-tasks-message {
-    pointer-events: none; /* Отключает взаимодействие */
-    user-select: none; /* Запрещает выделение текста */
+    pointer-events: none;
+    /* Отключает взаимодействие */
+    user-select: none;
+    /* Запрещает выделение текста */
     color: #888;
     text-align: center;
     padding: 15px 0;
-    margin-right: 25px; /* Добавляет отступ слева */
+    margin-right: 25px;
+    /* Добавляет отступ слева */
 }
 
 .kanban-board-table .add-card-btn {
-    padding: 4px 10px; /* Уменьшаем внутренние отступы */
-    font-size: 12px; /* Уменьшаем размер шрифта */
-    border-radius: 5px; /* Делаем углы более округлыми */
-    width: auto; /* Убираем ширину на всю строку */
+    padding: 4px 10px;
+    /* Уменьшаем внутренние отступы */
+    font-size: 12px;
+    /* Уменьшаем размер шрифта */
+    border-radius: 5px;
+    /* Делаем углы более округлыми */
+    width: auto;
+    /* Убираем ширину на всю строку */
 }
 
 /* Основные стили для модального окна */
 .modal {
-    display: none; /* Скрыто по умолчанию */
-    position: fixed; /* Фиксированное положение на экране */
-    z-index: 10180; /* Поверх всех элементов */
+    display: none;
+    /* Скрыто по умолчанию */
+    position: fixed;
+    /* Фиксированное положение на экране */
+    z-index: 10180;
+    /* Поверх всех элементов */
     left: 0;
     top: 0;
-    width: 100%; /* Занимает всю ширину */
-    height: 100%; /* Занимает всю высоту */
-    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный темный фон */
-    overflow: hidden; /* Убираем прокрутку самого модального фона */
+    width: 100%;
+    /* Занимает всю ширину */
+    height: 100%;
+    /* Занимает всю высоту */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Полупрозрачный темный фон */
+    overflow: hidden;
+    /* Убираем прокрутку самого модального фона */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -228,8 +245,10 @@
 
 /* Центрирование модального контента и добавление скроллинга */
 .modal-content {
-    max-height: 80vh;  /* Ограничение по высоте */
-    overflow-y: auto;  /* Добавление вертикальной прокрутки */
+    max-height: 80vh;
+    /* Ограничение по высоте */
+    overflow-y: auto;
+    /* Добавление вертикальной прокрутки */
     padding: 20px;
     border-radius: 8px;
     width: 50%;
@@ -314,7 +333,8 @@
 }
 
 .modal-content textarea {
-    resize: vertical; /* Позволим изменять высоту текстового поля */
+    resize: vertical;
+    /* Позволим изменять высоту текстового поля */
 }
 
 .modal-content select {
@@ -329,12 +349,14 @@
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    width: 100%; /* Кнопка занимает всю ширину */
+    width: 100%;
+    /* Кнопка занимает всю ширину */
     margin-top: 10px;
 }
 
 .modal-content button:hover {
-    background-color: #d63810; /* Темнее при наведении */
+    background-color: #d63810;
+    /* Темнее при наведении */
 }
 
 .close {
@@ -430,7 +452,7 @@ tr {
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     width: 90%;
-    max-width: 400px;
+    /* max-width: 400px; */
     text-align: center;
     position: relative;
 }
