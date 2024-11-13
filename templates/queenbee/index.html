@@ -110,6 +110,23 @@
                                 </div>
                               </td>
                             </tr>
+                            {% empty %}
+                            <tr class="btn-reveal-trigger fw-semi-bold">
+                              <td class="align-middle white-space-nowrap title"><a href="">Данных</a></td>
+                              <td class="align-middle text-nowrap billing_source"><a class="text-800" href="">нету</a></td>
+                              <td class="align-middle text-nowrap delivery_from"><a class="text-800" href="">нету</a></td>
+                              <td class="align-middle text-nowrap delivery_to"><a class="text-800" href="">нету</a></td>
+                              <td class="align-middle white-space-nowrap text-end published">нету</td>
+                              <td class="align-middle text-end enrolled">нету</td>
+                              <td class="align-middle text-end price">нету</td>
+                              <td class="align-middle white-space-nowrap text-end">
+                                <div class="dropstart font-sans-serif position-static d-inline-block"><button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-popularPaidCourses-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                                  <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-popularPaidCourses-1"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                                    <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
                             {% endfor %}
                           </tbody>
                         </table>
