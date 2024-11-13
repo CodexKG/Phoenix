@@ -26,9 +26,54 @@
     <link rel="stylesheet" href="{% static 'assets/css/default.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/default-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <style>
+        .myModal30 {
+            z-index: 10000 !important;
+        }
+        .modal-footer {
+            justify-content: space-around;
+        }
+    </style>
 </head>
 
+
+
 <body class="theme-red">
+    <!-- Модальное окно Bootstrap -->
+    <div class="modal myModal30 fade" id="myModal30" tabindex="-1" aria-labelledby="myModalLabel30" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel30">Добро пожаловать на наш сайт!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="contact__form" method="POST" id="contact-form">
+                        <div class="form-grp">
+                            <input type="text" name="name_modal" placeholder="Введите ваше имя:">
+                        </div>
+                        <div class="form-grp">
+                            <input type="phone" name="phone_modal" placeholder="Введите ваш номер телефона:">
+                        </div>
+                        <button class="btn red-btn w-100 justify-content-center">получить индивидуальный расчет  
+                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Отправляя сводения чорез электронную форму. Вы даете согласие на обработку, сбор, храненне и передачу третьим лицам представленной Вами информации на усповиях 
+                                <a href="#">Политики обработки пеосональных данных </a>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% block content %}
 
     {% endblock %}
@@ -48,6 +93,42 @@
     <script src="{% static 'assets/js/aos.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script>
+        // Открываем модальное окно через 30 секунд после загрузки страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                const myModal = new bootstrap.Modal(document.getElementById('myModal30'), {
+                    backdrop: 'static', // Чтобы пользователь не мог закрыть окно, нажав вне его
+                    keyboard: false     // Отключает закрытие модального окна по нажатию клавиши ESC
+                });
+                myModal.show();
+            }, 30000); // 30000 миллисекунд = 30 секунд
+
+            const submitButton = document.getElementById('submit-btn');
+            const form = document.getElementById('contact-form');
+            const modal = new bootstrap.Modal(document.getElementById('myModal30')); // Создаем экземпляр модального окна
+
+            // Обработчик для кнопки отправки формы
+            submitButton.addEventListener('click', function () {
+                // Проверка наличия данных в форме
+                if (form.checkValidity()) {
+                    form.submit(); // Отправляем форму
+
+                    // После отправки прокручиваем к секции "Калькулятор", если она на текущей странице, иначе переходим на главную
+                    if (window.location.href.includes('#calculator') || document.getElementById('calculator')) {
+                        // Если секция существует на текущей странице, прокручиваем к ней
+                        window.location.href = '#calculator';
+                    } else {
+                        // Если секции нет на текущей странице, переходим на нужную страницу с якорем
+                        window.location.href = 'https://plc.kg#calculator';
+                    }
+
+                    // Закрываем модальное окно
+                    modal.hide();
+                } else {
+                    alert('Пожалуйста, заполните все поля.');
+                }
+            });
+        });
         SVGInject(document.querySelectorAll("img.injectable"));
     </script>
 </body>
