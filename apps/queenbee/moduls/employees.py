@@ -9,30 +9,35 @@ import traceback, logging, json
 
 from apps.erp.models import Employee
 from apps.erp.forms import EmployeeForm
+from apps.queenbee.permissions import permission_required
+
+logger = logging.getLogger(__name__)
 
 @staff_member_required(login_url='/admin/login')
+@permission_required('crm_employee_index', 'Просмотр раздела Сотрудники')
 def crm_employee_index(request):
     return render(request, 'queenbee/employee/index.html')
 
 @staff_member_required(login_url='/admin/login')
+@permission_required('crm_employee_detail', 'Детальный просмотр раздела Сотрудники')
 def crm_employee_detail(request, id=None):
     employee = get_object_or_404(Employee, id=id) if id else None
 
     if request.method == "POST":
+        logger.info("Request POST")
         form = EmployeeForm(request.POST, request.FILES, instance=employee)
+        logger.info(f"{'update' in request.POST and form.is_valid()}")
+        logger.info(f"{form.is_valid()}")
+        logger.info(f"{'update' in request.POST}")
         if "update" in request.POST and form.is_valid():
-            # log_change.delay(request.user.id, f"Обновлены данные сотрудника {form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')} пользователем {request.user.username} {request.user.first_name} {request.user.last_name}")
             form.save()
-            return redirect('crm_employee_detail', id=employee.id)
+            return redirect('crm_employee_index')
         elif "delete" in request.POST:
-            # log_change.delay(request.user.id, f"Удалены данные сотрудника {employee.first_name} {employee.last_name} пользователем {request.user.username} {request.user.first_name} {request.user.last_name}")
             employee.delete()
             return redirect('crm_employee_index')
-        else:
-            if form.is_valid():
-                form.save()
-                # log_change.delay(request.user.id, f"Добавлены данные сотрудника {form.cleaned_data.get('first_name')} {form.cleaned_data.get('last_name')} пользователем {request.user.username} {request.user.first_name} {request.user.last_name}")
-                return redirect('crm_employee_index')
+        elif "save" in request.POST and form.is_valid():
+            form.save()
+            return redirect('crm_employee_index')
     else:
         form = EmployeeForm(instance=employee)
 

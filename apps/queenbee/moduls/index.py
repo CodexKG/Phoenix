@@ -5,8 +5,10 @@ from datetime import timedelta
 
 from apps.crm.models import Billing
 from apps.cms.models import Visit
+from apps.queenbee.permissions import permission_required
 
 @staff_member_required(login_url='/admin/login')
+@permission_required('crm_index', 'Просмотр главного раздела')
 def crm_index(request):
     # Определяем период (например, последние 14 дней)
     last_two_weeks = timezone.now() - timedelta(days=14)

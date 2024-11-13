@@ -4,7 +4,6 @@
     <main class="main" id="top">
         <div class="container" data-layout="container">
           {% include 'queenbee/include/header.html' %}
-  
             <div class="row g-0">
                 <div class="col-lg-8 pe-lg-2">
                   <div class="card mb-3">
@@ -23,12 +22,11 @@
                             {% endif %}
                           </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">Добавить</button>
                         {% if employee.id %}
-                        <form method="post">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
-                        </form>
+                        <button type="submit" class="btn btn-primary" name="update">Обновить</button>
+                        <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
                         {% endif %}
                       </form>
                     </div>
