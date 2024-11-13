@@ -198,6 +198,7 @@
 }
 
 .no-tasks-message {
+    display: block;
     pointer-events: none;
     /* Отключает взаимодействие */
     user-select: none;

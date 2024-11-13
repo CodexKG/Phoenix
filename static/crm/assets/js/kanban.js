@@ -55,53 +55,162 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Функция для инициализации Sortable.js для перемещения карточек в канбан-доске и таблице
+    // Первоначальная инициализация Sortable.js для всех списков
+    initializeSortable();
+
+
+
     function initializeSortable() {
-        const listContainers = document.querySelectorAll('.sortable');
-        listContainers.forEach(function (container) {
+        const kanbanContainers = document.querySelectorAll('.kanban-cards');
+        const tableContainers = document.querySelectorAll('.table-cards');
+
+        kanbanContainers.forEach(container => {
             new Sortable(container, {
-                group: 'kanban',
+                group: 'shared',
                 animation: 150,
                 ghostClass: 'sortable-ghost',
                 onEnd: function (evt) {
-                    // Обновляем пустые сообщения в обоих списках: отправителе и получателе
-                    updateEmptyMessage(evt.from.closest('.kanban-list, tr'));
-                    updateEmptyMessage(evt.to.closest('.kanban-list, tr'));
-
-                    // Обновление позиций карточек на сервере
+                    const listId = evt.to.dataset.listId;
                     const cardIds = Array.from(evt.to.children)
                         .map(card => card.dataset.cardId)
-                        .filter(id => id !== null && id !== undefined);
+                        .filter(id => id !== null && id !== undefined); // Только валидные ID
 
-                    const listId = evt.to.getAttribute('data-list-id');
-                    fetch('/admin/kanban/update_card_positions/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': csrfToken
-                        },
-                        body: JSON.stringify({
-                            listId: listId,
-                            cardIds: cardIds
-                        })
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (!data.success) {
-                                console.error('Ошибка при обновлении позиций карточек:', data.error);
-                            }
-                        })
-                        .catch(error => console.error('Ошибка:', error));
+                    toggleEmptyMessage(evt.from.closest('.kanban-list'));
+                    toggleEmptyMessage(evt.to.closest('.kanban-list'));
+                    syncAndSave(listId, cardIds, 'table');
+                }
+            });
+        });
+
+        tableContainers.forEach(container => {
+            new Sortable(container, {
+                group: 'shared',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function (evt) {
+                    const listId = evt.to.dataset.listId;
+                    const cardIds = Array.from(evt.to.children)
+                        .map(card => card.dataset.cardId)
+                        .filter(id => id !== null && id !== undefined); // Только валидные ID
+
+                    toggleEmptyMessage(evt.from.closest('.table-list'));
+                    toggleEmptyMessage(evt.to.closest('.table-list'));
+                    syncAndSave(listId, cardIds, 'kanban');
                 }
             });
         });
     }
 
-    // Первоначальная инициализация Sortable.js для всех списков
-    initializeSortable();
+    function toggleEmptyMessage(container) {
+        if (container) {
+            const noTasksMessage = container.querySelector('.no-tasks-message');
+            const hasTasks = container.querySelectorAll('.kanban-card, .table-card').length > 0;
+            if (noTasksMessage) {
+                noTasksMessage.style.display = hasTasks ? 'none' : 'block';
+            }
+        }
+    }
+
+    function updateTableOrder(listId, cardIds) {
+        const tableContainer = document.querySelector(`.table-cards[data-list-id="${listId}"]`);
+        if (tableContainer) {
+            tableContainer.innerHTML = '';  // Очищаем таблицу перед обновлением
+
+            cardIds.forEach(cardId => {
+                const existingTableCard = document.querySelector(`.table-card[data-card-id="${cardId}"]`);
+                if (existingTableCard) {
+                    existingTableCard.remove();
+                }
+
+                const kanbanCard = document.querySelector(`.kanban-card[data-card-id="${cardId}"]`);
+                if (kanbanCard) {
+                    const tableCard = document.createElement('div');
+                    tableCard.classList.add('table-card');
+                    tableCard.dataset.cardId = cardId;
+                    tableCard.innerHTML = `
+                        <img width="20" src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-4.png" alt="">
+                        <b>✅ ${kanbanCard.querySelector('h4').innerText}</b>
+                        <p>${kanbanCard.querySelector('p').innerText}</p>
+                    `;
+                    tableContainer.appendChild(tableCard);
+                }
+            });
+
+            toggleEmptyMessage(tableContainer.closest('.table-list'));
+        }
+    }
+
+    function updateKanbanOrder(listId, cardIds) {
+        const kanbanContainer = document.querySelector(`.kanban-cards[data-list-id="${listId}"]`);
+        if (kanbanContainer) {
+            kanbanContainer.innerHTML = '';  // Очищаем канбан перед обновлением
+
+            cardIds.forEach(cardId => {
+                const existingKanbanCard = document.querySelector(`.kanban-card[data-card-id="${cardId}"]`);
+                if (existingKanbanCard) {
+                    existingKanbanCard.remove();
+                }
+
+                const tableCard = document.querySelector(`.table-card[data-card-id="${cardId}"]`);
+                if (tableCard) {
+                    const kanbanCard = document.createElement('div');
+                    kanbanCard.classList.add('kanban-card');
+                    kanbanCard.dataset.cardId = cardId;
+                    kanbanCard.innerHTML = `
+                        <h4>${tableCard.querySelector('b').innerText}</h4>
+                        <p>${tableCard.querySelector('p').innerText}</p>
+                    `;
+                    kanbanContainer.appendChild(kanbanCard);
+                }
+            });
+
+            toggleEmptyMessage(kanbanContainer.closest('.kanban-list'));
+        }
+    }
+
+
+    function syncAndSave(listId, cardIds, target) {
+        if (target === 'table') {
+            updateTableOrder(listId, cardIds);
+        } else if (target === 'kanban') {
+            updateKanbanOrder(listId, cardIds);
+        }
+
+        fetch('/admin/kanban/update_card_positions/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ listId: listId, cardIds: cardIds })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Ошибка при сохранении порядка на сервере:', data.error);
+                } else {
+                    // Обновляем сообщения о пустоте для каждого списка на основе данных с сервера
+                    if (data.taskCounts) {
+                        for (let [listId, count] of Object.entries(data.taskCounts)) {
+                            const listContainer = document.querySelector(`[data-list-id="${listId}"]`);
+                            if (listContainer) {
+                                const noTasksMessage = listContainer.querySelector('.no-tasks-message');
+                                if (noTasksMessage) {
+                                    noTasksMessage.style.display = count > 0 ? 'none' : 'block';
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .catch(error => console.error('Ошибка при сохранении порядка:', error));
+    }
 
     // Обновляем сообщение для каждого списка при загрузке страницы
     document.querySelectorAll('.kanban-list').forEach(function (listElement) {
+        updateEmptyMessage(listElement);
+    });
+    document.querySelectorAll('.table-list').forEach(function (listElement) {
         updateEmptyMessage(listElement);
     });
 
@@ -147,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
+                    console.log(data)
                     if (data.success) {
                         const listContainer = document.querySelector(`#list-${currentListId} .kanban-cards`);
                         const listContainer2 = document.querySelector(`#table-list-${currentListId} .table-cards`);
@@ -154,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             const newCard = document.createElement('div');
                             newCard.classList.add('kanban-card');
                             newCard.dataset.cardId = data.card_id;
-                            newCard.innerHTML = `<h3>${data.card_title}</h3>`;
+                            newCard.innerHTML = `<h4>${data.card_title}</h4><p>${data.card_description}</p>`;
                             listContainer.appendChild(newCard);
                             updateEmptyMessage(listContainer.closest('.kanban-list'));
 
@@ -162,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             newCard2.classList.add('table-card');
                             newCard2.dataset.cardId = data.card_id;
                             newCard2.innerHTML = `
-                             <img width="20" src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-4.png" alt=""><b>✅ ${data.card_title}</b> `;
+                             <img width="20" src="https://icons.veryicon.com/png/o/miscellaneous/linear-icon-45/hamburger-menu-4.png" alt=""><b>✅ ${data.card_title}</b><p>${data.card_description}</p>`;
                             listContainer2.appendChild(newCard2);
                             updateEmptyMessage(listContainer2.closest('.table-list'));
                         } else {
