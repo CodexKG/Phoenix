@@ -1,0 +1,117 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{{ setting.title }}</title>
+    <meta name="description" content="Phoenix Logistics - Обеспечиваем быструю, надежную и эффективную доставку вашего товара.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Phoenix, Phoenix Logistics, Логистика, Логистика Китай, Китай, Товары, Карго, Карго Китай">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/odometer.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/default.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/default-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+    <style>
+        .myModal30 {
+            z-index: 10000 !important;
+        }
+        .modal-footer {
+            justify-content: space-around;
+        }
+
+        .modal30{
+            width: 100% !important;
+        }
+    </style>
+</head>
+
+
+
+<body class="theme-red">
+    <!-- Модальное окно Bootstrap -->
+    <div class="modal myModal30 fade" id="myModal30" tabindex="-1" aria-labelledby="myModalLabel30" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal30">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel30">Добро пожаловать на наш сайт!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Здесь вы можете получить индивидуальный расчет стоимости доставки вашего груза. С помощью нашего калькулятора вы сможете быстро и точно определить стоимость доставки в любую точку мира, основываясь на параметрах вашего груза и маршрута.<br>
+
+                        Просто нажмите на кнопку ниже, и мы предложим вам расчет, учитывая все важные детали.
+                        <br>
+                        Получите расчет уже сейчас и узнайте, как сделать вашу доставку безопасной и удобной!
+                        
+                        </p>
+                    <button class="btn red-btn w-100 justify-content-center" id="submit-btn-modal">получить индивидуальный расчет  
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- JS here -->
+    <script src="{% static 'assets/js/vendor/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.appear.js' %}"></script>
+    <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/js/svg-inject.min.js' %}"></script>
+    <script src="{% static 'assets/js/ajax-form.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.marquee.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'assets/js/wow.min.js' %}"></script>
+    <script src="{% static 'assets/js/aos.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script>
+        // Открываем модальное окно через 30 секунд после загрузки страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            const myModal = new bootstrap.Modal(document.getElementById('myModal30'));
+            setTimeout(function () {
+                myModal.show();
+            }, 30000); // 30000 миллисекунд = 30 секунд
+
+            const submitButton = document.getElementById('submit-btn-modal');
+            // Обработчик для кнопки отправки формы
+            submitButton.addEventListener('click', function () {
+                // Закрываем модальное окно
+                myModal.hide();
+                if (window.location.href.includes('#calculator') || document.getElementById('calculator')) {
+                    // Если секция существует на текущей странице, прокручиваем к ней
+                    window.location.href = '#calculator';
+                } else {
+                    // Если секции нет на текущей странице, переходим на нужную страницу с якорем
+                    window.location.href = `${window.location.origin}#calculator`;
+                }
+            });
+        });
+        SVGInject(document.querySelectorAll("img.injectable"));
+    </script>
+</body>
+
+</html>

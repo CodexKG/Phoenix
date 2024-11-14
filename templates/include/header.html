@@ -1,0 +1,60 @@
+{% load static %}
+<header class="transparent-header">
+    <div class="tg-header__area tg-header__area-three">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="tgmenu__wrap">
+                        <div class="logo">
+                            <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logo02.svg' %}" alt="Logo"></a>
+                        </div>
+                        <div class="logo d-none">
+                            <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logo02.svg' %}" alt="Logo"></a>
+                        </div>
+                        <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-xl-flex">
+                            <ul class="navigation">
+                                <li class="active"><a href="{% url 'index' %}">Главная</a></li>
+                                <li><a href="{% url 'about' %}">о компании</a></li>
+                                <li><a href="{% url 'faq' %}">Справочная информация</a></li>
+                                <li><a href="{% url 'contact' %}">контакты</a></li>
+                            </ul>
+                        </div>
+                        <div class="tgmenu__action tgmenu__action-three d-none d-md-flex">
+                            <ul class="list-wrap">
+                                <li class="header-btn">
+                                    <a href="{% url 'contact' %}" class="btn btn-three">отслеживание посылок</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mobile-nav-toggler mobile-nav-toggler-two">
+                            <i class="tg-flaticon-menu-1"></i>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu  -->
+                    <div class="tgmobile__menu">
+                        <nav class="tgmobile__menu-box">
+                            <div class="close-btn"><i class="tg-flaticon-close-1"></i></div>
+                            <div class="nav-logo">
+                                <a href="{% url 'index' %}"><img src="{% static 'assets/img/logo/logo02.svg' %}" alt="Logo"></a>
+                            </div>
+                            <div class="tgmobile__menu-outer">
+                                <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
+                            </div>
+                            <div class="social-links">
+                                <ul class="list-wrap">
+                                    <li><a href="{% url 'index' %}"><i class="fab fa-telegram"></i></a></li>
+                                    <li><a href="{% url 'index' %}"><i class="fab fa-whatsapp"></i></a></li>
+                                    <li><a href="{% url 'index' %}"><i class="fab fa-instagram"></i></a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="tgmobile__menu-backdrop"></div>
+                    <!-- End Mobile Menu -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

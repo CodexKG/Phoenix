@@ -1,0 +1,129 @@
+{% extends 'include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+    <!--Preloader-->
+    <div id="preloader">
+        <div class="tg-preloader-block">
+            <div class="tg-spinner-eff">
+                <div class="tg-bar tg-bar-top"></div>
+                <div class="tg-bar tg-bar-right"></div>
+                <div class="tg-bar tg-bar-bottom"></div>
+                <div class="tg-bar tg-bar-left"></div>
+            </div>
+        </div>
+    </div>
+    <!--Preloader-end -->
+
+    <!-- Scroll-top -->
+    <button class="scroll__top scroll-to-target" data-target="html">
+        <i class="fas fa-angle-up"></i>
+    </button>
+    <!-- Scroll-top-end-->
+
+    <!-- header-area -->
+    {% include 'include/header.html' %}
+    <!-- header-area-end -->
+
+    <!-- main-area -->
+    <main class="fix">
+
+        <!-- contact-area -->
+        <section class="contact__area section-py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="contact__form-wrap">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img src="assets/img/contact.png" alt="">
+                                </div>
+                                <div class="col-md-8">
+                                    <h2 class="title">Получите <span class="main-color-text">быстрый расчет стоимости</span> <br>
+                                        доставки за <span class="main-color-text">30 минут:</span></h2>
+                                    <form action="https://themeadapt.com/tf/logistex/assets/mail.php" class="contact__form" method="POST" id="contact-form">
+                                        <div class="form-grp">
+                                            <input type="text" name="name" placeholder="Введите ваше имя:">
+                                        </div>
+                                        <div class="form-grp">
+                                            <input type="phone" name="phone" placeholder="Введите ваш номер телефона:">
+                                        </div>
+                                        <div class="form-grp">
+                                            <input type="email" name="email" placeholder="Введите ваш email:">
+                                        </div>
+                                        <div class="form-grp">
+                                            <textarea name="message" placeholder="Ваше сообщение:"></textarea>
+                                        </div>
+                                        <button class="btn red-btn w-100 justify-content-center">получить индивидуальный расчет  
+                                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Даю согласие на обработку моих 
+                                                <a href="#">Персональных данных</a>
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <p class="ajax-response mb-0"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section__title mb-20">
+                            <h2 class="title">Как <span class="main-color-text">нас</span> найти:</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="contact__info-item">
+                            <h4 class="title">Наш аддрес</h4>
+                            <p class="info-one">Город Бишкек. Технопарк ул.Горького 1/2</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="contact__info-item">
+                            <h4 class="title">Наши контакты</h4>
+                            <p class="info-one">+996 509 005 888</p>
+                            <p class="info-one">office@plc.kg</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="contact__info-item">
+                            <h4 class="title">Наши соц. сети</h4>
+                            <div class="footer__social footer__social-two">
+                                <ul class="list-wrap">
+                                    <li><a href="https://www.telegram.com/" target="_blank"><i class="fab fa-telegram"></i></a></li>
+                                    <li><a href="https://www.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                                    <li><a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="contact-map contact-map-two">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48409.69813174607!2d-74.05163325136718!3d40.68264649999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25bae694479a3%3A0xb9949385da52e69e!2sBarclays%20Center!5e0!3m2!1sen!2sbd!4v1684309529719!5m2!1sen!2sbd" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- contact-area-end -->
+
+    </main>
+    <!-- main-area-end -->
+
+
+    <!-- footer-area -->
+    {% include 'include/footer.html' %}
+    <!-- footer-area-end -->
+
+{% endblock %}

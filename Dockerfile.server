@@ -1,0 +1,47 @@
+# Используем официальный Python образ в качестве базового
+FROM python:3.10-slim
+
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    gcc \
+    python3-dev \
+    netcat-openbsd \
+    postgresql-client \
+    rabbitmq-server \
+    && apt-get clean
+
+# Устанавливаем рабочую директорию в контейнере
+WORKDIR /app
+
+# Создаем виртуальное окружение
+RUN python -m venv /opt/venv
+
+# Обновляем PATH, чтобы использовать виртуальное окружение
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Копируем файлы requirements.txt в рабочую директорию
+COPY requirements.txt /app/
+
+# Устанавливаем зависимости Python в виртуальном окружении
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копируем остальные файлы проекта в рабочую директорию
+COPY . /app/
+
+# Указываем переменную окружения для Django
+ENV DJANGO_SETTINGS_MODULE=core.settings
+
+# Копируем скрипты entrypoint и init_db.sh
+COPY shellscripts/entrypoint.sh /entrypoint.sh
+COPY shellscripts/init_db.sh /docker-entrypoint-initdb.d/init_db.sh
+
+# Делаем скрипты исполняемыми
+RUN chmod +x /entrypoint.sh
+RUN chmod +x /docker-entrypoint-initdb.d/init_db.sh
+
+# Указываем скрипт entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Запускаем сервер Django с gunicorn
+CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:12002"]

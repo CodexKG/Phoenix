@@ -1,0 +1,106 @@
+{% extends 'include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+    <!--Preloader-->
+    <div id="preloader">
+        <div class="tg-preloader-block">
+            <div class="tg-spinner-eff">
+                <div class="tg-bar tg-bar-top"></div>
+                <div class="tg-bar tg-bar-right"></div>
+                <div class="tg-bar tg-bar-bottom"></div>
+                <div class="tg-bar tg-bar-left"></div>
+            </div>
+        </div>
+    </div>
+    <!--Preloader-end -->
+
+    <!-- Scroll-top -->
+    <button class="scroll__top scroll__top-two scroll-to-target" data-target="html">
+        <i class="fas fa-angle-up"></i>
+    </button>
+    <!-- Scroll-top-end-->
+
+    <!-- header-area -->
+    {% include 'include/header.html' %}
+    <!-- header-area-end -->
+
+    <!-- main-area -->
+    <main class="fix">
+
+        <!-- area-bg -->
+        <div class="section-pt-130" data-background="assets/img/bg/vector_bg03.svg">
+
+            <!-- project-area -->
+            <section class="project__area-two section-pb-100 bg-gray">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-8">
+                            <div class="section__title mb-50">
+                                <h2 class="title">наши <span class="main-color-text">услуги</span></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                <div class="project__thumb-two">
+                                    <a href="#"><img src="assets/img/project/project_img04.jpg" alt="img"></a>
+                                </div>
+                                <div class="project__content-two">
+                                    <h2 class="title">Доставка по городам России</h2>
+                                    <span><a href="#">Подробнее</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                <div class="project__thumb-two">
+                                    <a href="#"><img src="assets/img/project/project_img10.jpg" alt="img"></a>
+                                </div>
+                                <div class="project__content-two">
+                                    <h2 class="title">Доставка по городам Кыргызстана</h2>
+                                    <span><a href="#">Подробнее</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                <div class="project__thumb-two">
+                                    <a href="#"><img src="assets/img/project/project_img09.jpg" alt="img"></a>
+                                </div>
+                                <div class="project__content-two">
+                                    <h2 class="title">Доставка по городам Белорусии</h2>
+                                    <span><a href="#">Подробнее</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                <div class="project__thumb-two">
+                                    <a href="#"><img src="assets/img/project/project_img09.jpg" alt="img"></a>
+                                </div>
+                                <div class="project__content-two">
+                                    <h2 class="title">Доставка по городам Китая</h2>
+                                    <span><a href="#">Подробнее</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- project-area-end -->
+        </div>
+        <!-- area-bg-end -->
+
+    </main>
+    <!-- main-area-end -->
+
+    <!-- footer-area -->
+    {% include 'include/footer.html' %}
+    <!-- footer-area-end -->
+
+{% endblock %}

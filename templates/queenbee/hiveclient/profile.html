@@ -1,0 +1,279 @@
+{% include 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+    <!-- ===============================================--><!--    Main Content--><!-- ===============================================-->
+    <main class="main" id="top">
+      <div class="container" data-layout="container">
+        {% include 'queenbee/include/header.html' %}
+          <div class="card mb-3">
+            <div class="card-header position-relative min-vh-25 mb-7">
+              {% if employee.image != "no_image.jpg" %}
+              <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{{employee.image.url}}" width="200" alt="" /></div>
+              {% else %}
+              <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png" width="200" alt="" /></div>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-8">
+                  <h4 class="mb-1"> {{employee.last_name}} {{employee.first_name}}<span data-bs-toggle="tooltip" data-bs-placement="right" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></h4>
+                  <h5 class="fs-9 fw-normal">{{employee.employee_position}}</h5>
+                  <div class="border-bottom border-dashed my-4 d-lg-none"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row g-0">
+            <div class="col-lg-8 pe-lg-2">
+              <div class="card mb-3">
+                <div class="card-header bg-body-tertiary">
+                  <h5 class="mb-0">Биография</h5>
+                  </div>
+                  <div class="card-body text-justify">
+                  {% if employee.bio %}
+                  <p>{{ employee.bio }}</p>
+                  {% else %}
+                  <p>Биография не указана</p>
+                  {% endif %}
+                  <p id="user-bio" class="mb-0 text-1000">{{employee.bio}}</p>
+                  <button id="toggle-bio" class="btn btn-link d-block w-100 btn-intro-collapse" type="button">
+                          <span id="button-text">Показать больше</span>
+                          <span class="fas fa-chevron-down ms-2 fs-11"></span>
+                  </button>
+                </div>
+              </div>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const userBio = document.getElementById('user-bio');
+                    const toggleButton = document.getElementById('toggle-bio');
+                    const buttonText = document.getElementById('button-text');
+                    const originalText = userBio.textContent;
+                    const maxLength = 150;
+                    if (originalText.length > maxLength) {
+                        userBio.textContent = originalText.substring(0, maxLength) + '...';
+                        toggleButton.style.display = 'block';
+                    } else {
+                        toggleButton.style.display = 'none';
+                    }
+                    toggleButton.addEventListener('click', function() {
+                        if (buttonText.textContent === 'Показать больше') {
+                            userBio.textContent = originalText;
+                            buttonText.textContent = 'скрыть';
+                            toggleButton.querySelector('.fas').classList.remove('fa-chevron-down');
+                            toggleButton.querySelector('.fas').classList.add('fa-chevron-up');
+                        } else {
+                            userBio.textContent = originalText.substring(0, maxLength) + '...';
+                            buttonText.textContent = 'Показать больше';
+                            toggleButton.querySelector('.fas').classList.remove('fa-chevron-up');
+                            toggleButton.querySelector('.fas').classList.add('fa-chevron-down');
+                        }
+                    });
+                });
+              </script>
+              <div class="card mb-3">
+                <div class="card-header bg-body-tertiary d-flex justify-content-between">
+                  <h5 class="mb-0">Журнал активности</h5><a class="font-sans-serif" href="../../app/social/activity-log.html"></a>
+                </div>
+                <div class="card-body fs-10 p-0">
+                  <a class="border-bottom-0 notification rounded-0 border-x-0 border border-300" href="#!">
+                    <div class="notification-avatar">
+                      <div class="avatar avatar-xl me-3">
+                        <div class="avatar-emoji rounded-circle">
+                          <img src="{% static 'crm/assets/img/logos/1682748621_papik-pro-p-smail-vipolneno-galochka-png-4.png' %}" alt="Emoji" class="img-fluid rounded-circle" />
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="notification-body">
+                      <p class="mb-1"><strong>Дата регистрации - {{employee.first_name}} {{employee.last_name}}</strong></p>
+                      <span class="notification-time">{{employee.created}}</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="card mb-3 mb-lg-0">
+                <div class="card-header bg-body-tertiary">
+                  <h5 class="mb-0">Фотографии</h5>
+                </div>
+                <div class="card-body overflow-hidden">
+                  <div class="row g-0">
+                    {% if photos %}
+                    {% for employee in employee.users_employee.all %}
+                    <div class="col-6 p-1">
+                      <a class="glightbox"  data-gallery="gallery1">
+                        <img class="img-fluid rounded" src="{{ employee.image.url }}" alt="..." />
+                      </a>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="d-flex"><a> <img class="img-fluid" src="{{employee.logo.url}}" alt="" width="56" /></a>
+                      <p class="text-1000 mb-0">Фотографии не найдены</p>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 ps-lg-2">
+              <div class="sticky-sidebar">
+                <div class="card mb-3">
+                  <div class="card-header bg-body-tertiary">
+                    <h5 class="mb-0">Опыт работы</h5>
+                  </div>
+                  <div class="card-body fs-10">
+                    {% if experiences %}
+                      {% for employee in employee.user_experience.all %}
+                      <div class="d-flex"><a> <img class="img-fluid" src="{{employee.logo.url}}" alt="" width="56" /></a>
+                        <div class="flex-1 position-relative ps-3">
+                          <h6 class="fs-9 mb-0">{{employee.position}}<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></h6>
+                          <p class="mb-1"> <a>{{employee.title}}</a></p>
+                          <p class="text-1000 mb-0">{{employee.year}}</p>
+                          <p class="text-1000 mb-0">{{employee.location}}</p>
+                          <div class="border-bottom border-dashed my-3"></div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                    {% else %}
+                    <div class="d-flex"><a> <img class="img-fluid" src="{{employee.logo.url}}" alt="" width="56" /></a>
+                        <p class="text-1000 mb-0">Опыт работы не указан</p>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="card mb-3">
+                  <div class="card-header bg-body-tertiary">
+                    <h5 class="mb-0">Образование</h5>
+                  </div>
+                  <div class="card-body fs-10">
+                    {% if educations %}
+                    {% for employee in employee.education.all %}
+                    <div class="d-flex"><a> <img class="img-fluid" src="{{employee.logo.url}}" alt="" width="56" /></a>
+                      <div class="flex-1 position-relative ps-3">
+                        <h6 class="fs-9 mb-0"> <a>{{employee.university}}<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></a></h6>
+                        <p class="text-1000 mb-0">{{employee.year}}</p>
+                        <p class="text-1000 mb-0">{{employee.location}}</p>
+                        <div class="border-bottom border-dashed my-3"></div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="d-flex"><a> <img class="img-fluid" src="{{employee.logo.url}}" alt="" width="56" /></a>
+                      <p class="text-1000 mb-0">Образование не указан</p>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% include 'queenbee/include/footer.html' %}
+        </div>
+        <div class="modal fade" id="authentication-modal" tabindex="-1" role="dialog" aria-labelledby="authentication-modal-label" aria-hidden="true">
+          <div class="modal-dialog mt-6" role="document">
+            <div class="modal-content border-0">
+              <div class="modal-header px-5 position-relative modal-shape-header bg-shape">
+                <div class="position-relative z-1">
+                  <h4 class="mb-0 text-white" id="authentication-modal-label">Register</h4>
+                  <p class="fs-10 mb-0 text-white">Please create your free Falcon account</p>
+                </div><button class="btn-close position-absolute top-0 end-0 mt-2 me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body py-4 px-5">
+                <form>
+                  <div class="mb-3"><label class="form-label" for="modal-auth-name">Name</label><input class="form-control" type="text" autocomplete="on" id="modal-auth-name" /></div>
+                  <div class="mb-3"><label class="form-label" for="modal-auth-email">Email address</label><input class="form-control" type="email" autocomplete="on" id="modal-auth-email" /></div>
+                  <div class="row gx-2">
+                    <div class="mb-3 col-sm-6"><label class="form-label" for="modal-auth-password">Password</label><input class="form-control" type="password" autocomplete="on" id="modal-auth-password" /></div>
+                    <div class="mb-3 col-sm-6"><label class="form-label" for="modal-auth-confirm-password">Confirm Password</label><input class="form-control" type="password" autocomplete="on" id="modal-auth-confirm-password" /></div>
+                  </div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="modal-auth-register-checkbox" /><label class="form-label" for="modal-auth-register-checkbox">I accept the <a href="#!">terms </a>and <a class="white-space-nowrap" href="#!">privacy policy</a></label></div>
+                  <div class="mb-3"><button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Register</button></div>
+                </form>
+                <div class="position-relative mt-5">
+                  <hr />
+                  <div class="divider-content-center">or register with</div>
+                </div>
+                <div class="row g-2 mt-2">
+                  <div class="col-sm-6"><a class="btn btn-outline-google-plus btn-sm d-block w-100" href="#"><span class="fab fa-google-plus-g me-2" data-fa-transform="grow-8"></span> google</a></div>
+                  <div class="col-sm-6"><a class="btn btn-outline-facebook btn-sm d-block w-100" href="#"><span class="fab fa-facebook-square me-2" data-fa-transform="grow-8"></span> facebook</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main><!-- ===============================================--><!--    End of Main Content--><!-- ===============================================-->
+
+    <div class="offcanvas offcanvas-end settings-panel border-0" id="settings-offcanvas" tabindex="-1" aria-labelledby="settings-offcanvas">
+      <div class="offcanvas-header settings-panel-header bg-shape">
+        <div class="z-1 py-1">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <h5 class="text-white mb-0 me-2"><span class="fas fa-palette me-2 fs-9"></span>Settings</h5><button class="btn btn-primary btn-sm rounded-pill mt-0 mb-0" data-theme-control="reset" style="font-size:12px"> <span class="fas fa-redo-alt me-1" data-fa-transform="shrink-3"></span>Reset</button>
+          </div>
+          <p class="mb-0 fs-10 text-white opacity-75"> Set your own customized style</p>
+        </div>
+        <div class="z-1" data-bs-theme="dark"><button class="btn-close z-1 mt-0" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
+      </div>
+      <div class="offcanvas-body scrollbar-overlay px-x1 h-100" id="themeController">
+        <h5 class="fs-9">Color Scheme</h5>
+        <p class="fs-10">Choose the perfect color mode for your app.</p>
+        <div class="btn-group d-block w-100 btn-group-navbar-style">
+          <div class="row gx-2">
+            <div class="col-4"><input class="btn-check" id="themeSwitcherLight" name="theme-color" type="radio" value="light" data-theme-control="theme" /><label class="btn d-inline-block btn-navbar-style fs-10" for="themeSwitcherLight"> <span class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0" src="{% static 'crm/assets/img/generic/falcon-mode-default.jpg' %}" alt=""/></span><span class="label-text">Light</span></label></div>
+            <div class="col-4"><input class="btn-check" id="themeSwitcherDark" name="theme-color" type="radio" value="dark" data-theme-control="theme" /><label class="btn d-inline-block btn-navbar-style fs-10" for="themeSwitcherDark"> <span class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0" src="{% static 'crm/assets/img/generic/falcon-mode-dark.jpg' %}" alt=""/></span><span class="label-text"> Dark</span></label></div>
+            <div class="col-4"><input class="btn-check" id="themeSwitcherAuto" name="theme-color" type="radio" value="auto" data-theme-control="theme" /><label class="btn d-inline-block btn-navbar-style fs-10" for="themeSwitcherAuto"> <span class="hover-overlay mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0" src="{% static 'crm/assets/img/generic/falcon-mode-auto.jpg' %}" alt=""/></span><span class="label-text"> Auto</span></label></div>
+          </div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-start"><img class="me-2" src="{% static 'crm/assets/img/icons/left-arrow-from-left.svg' %}" width="20" alt="" />
+            <div class="flex-1">
+              <h5 class="fs-9">RTL Mode</h5>
+              <p class="fs-10 mb-0">Switch your language direction </p><a class="fs-10" href="../../documentation/customization/configuration.html">RTL Documentation</a>
+            </div>
+          </div>
+          <div class="form-check form-switch"><input class="form-check-input ms-0" id="mode-rtl" type="checkbox" data-theme-control="isRTL" /></div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-start"><img class="me-2" src="{% static 'crm/assets/img/icons/arrows-h.svg' %}" width="20" alt="" />
+            <div class="flex-1">
+              <h5 class="fs-9">Fluid Layout</h5>
+              <p class="fs-10 mb-0">Toggle container layout system </p><a class="fs-10" href="../../documentation/customization/configuration.html">Fluid Documentation</a>
+            </div>
+          </div>
+          <div class="form-check form-switch"><input class="form-check-input ms-0" id="mode-fluid" type="checkbox" data-theme-control="isFluid" /></div>
+        </div>
+        <hr />
+        <div class="d-flex align-items-start"><img class="me-2" src="{% static 'crm/assets/img/icons/paragraph.svg' %}" width="20" alt="" />
+          <div class="flex-1">
+            <h5 class="fs-9 d-flex align-items-center">Navigation Position</h5>
+            <p class="fs-10 mb-2">Select a suitable navigation system for your web application </p>
+            <div><select class="form-select form-select-sm" aria-label="Navbar position" data-theme-control="navbarPosition">
+                <option value="vertical">Vertical</option>
+                <option value="top">Top</option>
+                <option value="combo">Combo</option>
+                <option value="double-top">Double Top</option>
+              </select></div>
+          </div>
+        </div>
+        <hr />
+        <h5 class="fs-9 d-flex align-items-center">Vertical Navbar Style</h5>
+        <p class="fs-10 mb-0">Switch between styles for your vertical navbar </p>
+        <p> <a class="fs-10" href="../../modules/components/navs-and-tabs/vertical-navbar.html#navbar-styles">See Documentation</a></p>
+        <div class="btn-group d-block w-100 btn-group-navbar-style">
+          <div class="row gx-2">
+            <div class="col-6"><input class="btn-check" id="navbar-style-transparent" type="radio" name="navbarStyle" value="transparent" data-theme-control="navbarStyle" /><label class="btn d-block w-100 btn-navbar-style fs-10" for="navbar-style-transparent"> <img class="img-fluid img-prototype" src="{% static 'crm/assets/img/generic/default.png' %}" alt="" /><span class="label-text"> Transparent</span></label></div>
+            <div class="col-6"><input class="btn-check" id="navbar-style-inverted" type="radio" name="navbarStyle" value="inverted" data-theme-control="navbarStyle" /><label class="btn d-block w-100 btn-navbar-style fs-10" for="navbar-style-inverted"> <img class="img-fluid img-prototype" src="{% static 'crm/assets/img/generic/inverted.png' %}" alt="" /><span class="label-text"> Inverted</span></label></div>
+            <div class="col-6"><input class="btn-check" id="navbar-style-card" type="radio" name="navbarStyle" value="card" data-theme-control="navbarStyle" /><label class="btn d-block w-100 btn-navbar-style fs-10" for="navbar-style-card"> <img class="img-fluid img-prototype" src="{% static 'crm/assets/img/generic/card.png' %}" alt="" /><span class="label-text"> Card</span></label></div>
+            <div class="col-6"><input class="btn-check" id="navbar-style-vibrant" type="radio" name="navbarStyle" value="vibrant" data-theme-control="navbarStyle" /><label class="btn d-block w-100 btn-navbar-style fs-10" for="navbar-style-vibrant"> <img class="img-fluid img-prototype" src="{% static 'crm/assets/img/generic/vibrant.png' %}" alt="" /><span class="label-text"> Vibrant</span></label></div>
+          </div>
+        </div>
+        <div class="text-center mt-5"><img class="mb-4" src="{% static 'crm/assets/img/icons/spot-illustrations/47.png' %}" alt="" width="120" />
+          <h5>Like What You See?</h5>
+          <p class="fs-10">Get Falcon now and create beautiful dashboards with hundreds of widgets.</p><a class="mb-3 btn btn-primary" href="https://themes.getbootstrap.com/product/falcon-admin-dashboard-webapp-template/" target="_blank">Purchase</a>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

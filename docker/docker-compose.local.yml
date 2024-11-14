@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db_phoenix:
+    image: postgres:13
+    env_file:
+      - ../.env
+    volumes:
+      - postgres_data_phoenix:/var/lib/postgresql/data
+
+  rabbitmq_phoenix:
+    image: rabbitmq:3-management
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+
+  web_phoenix:
+    build:
+      context: ..
+      dockerfile: Dockerfile.local
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ../:/app
+    env_file:
+      - ../.env
+    depends_on:
+      - db_phoenix
+      - rabbitmq_phoenix
+    expose:
+      - "8000"
+
+  phoenix_bot:
+    build:
+      context: ..
+      dockerfile: Dockerfile.local
+    command: python manage.py bot
+    volumes:
+      - ../:/app
+    env_file:
+      - ../.env
+    depends_on:
+      - db_phoenix
+      - rabbitmq_phoenix
+    # networks:
+    #   - mno_network
+
+  nginx_phoenix:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/nginx.local.conf:/etc/nginx/nginx.conf:ro
+      - ../static:/app/static
+      - ../media:/app/media
+    depends_on:
+      - web_phoenix
+
+volumes:
+  postgres_data_phoenix:

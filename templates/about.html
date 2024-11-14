@@ -1,0 +1,219 @@
+{% extends 'include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+    <!--Preloader-->
+    <div id="preloader">
+        <div class="tg-preloader-block">
+            <div class="tg-spinner-eff">
+                <div class="tg-bar tg-bar-top"></div>
+                <div class="tg-bar tg-bar-right"></div>
+                <div class="tg-bar tg-bar-bottom"></div>
+                <div class="tg-bar tg-bar-left"></div>
+            </div>
+        </div>
+    </div>
+    <!--Preloader-end -->
+
+    <!-- Scroll-top -->
+    <button class="scroll__top scroll__top-two scroll-to-target" data-target="html">
+        <i class="fas fa-angle-up"></i>
+    </button>
+    <!-- Scroll-top-end-->
+
+    <!-- header-area -->
+    {% include 'include/header.html' %}
+    <!-- header-area-end -->
+
+    <!-- main-area -->
+    <main class="fix">
+
+        <!-- about-area -->
+        <section class="about__area-two section-py-120">
+            <div class="container">
+                <div class="row align-items-center justify-content-center gutter-24">
+                    <div class="col-lg-6 col-md-9">
+                        <div class="about__img-two">
+                            <img src="{% static 'assets/img/about_main_img.png' %}" alt="{{ setting.title }}">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about__content-two">
+                            <div class="section__title section__title-two mb-20">
+                                <h3 class="title_about">Мы - компания <span class="main-color-text">Phoenix logistic</span> надежный партнер в мире логистики, стремящийся сделать ваш бизнес успешным, а процесс <span class="main-color-text">доставки</span> - безупречным.</h3>
+                            </div>
+                            <p class="info-one">Это ваш надежный партнер в мире грузоперевозок. Мы предлагаем полный спектр логистических услуг, обеспечивая быструю и безопасную доставку грузов по всему миру. Наша компания работает с международными партнерами, что позволяет организовать доставку в любую точку планеты. Мы используем передовые технологии для отслеживания и управления грузами в режиме реального времени, обеспечивая прозрачность и контроль на каждом этапе логистической цепочки. Это ваш надежный партнер в мире грузоперевозок. Мы предлагаем полный спектр логистических услуг, обеспечивая быструю и безопасную доставку грузов по всему миру.</p>
+                            <p>Phoenix Logistic предлагает индивидуальные решения, адаптированные под уникальные потребности каждого клиента. Мы предоставляем автомобильные, железнодорожные, морские и авиаперевозки, а также мультимодальные перевозки, что позволяет оптимизировать процесс доставки. Мы стремимся стать вашим долгосрочным партнером, обеспечивая логистику, на которую можно положиться.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- about-area-end -->
+
+        <!-- services-area -->
+        <section class="services__area-two grey-bg section-pt-120 section-pb-90">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section__title mb-60 mb-md-30">
+                            <h2 class="title">Мы - компания <span class="main-color-text">Phoenix logistic</span> 
+                                надежный партнер в мире логистики</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="section__content mb-50 descr">
+                            <p>стремящийся сделать ваш бизнес 
+                                успешным, а процесс 
+                                <span class="main-color-text">доставки</span> - безупречным.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container custom-container">
+                <div class="row gutter-60 justify-content-center">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="services__item-two">
+                            <div class="services__item-top">
+                                <div class="services__icon-two">
+                                    <i class="flaticon-truck"></i>
+                                </div>
+                                <h2 class="title"><a href="#">Глобальная сеть и<br>масштабируемость: </a></h2>
+                            </div>
+                            <div class="services__content-two">
+                                <p>Компания предоставляет услуги по перевозке грузов по всему миру, предлагая доступ к глобальной сети партнеров и транспортных маршрутов. Это позволяет масштабировать бизнес клиентов и оперативно реагировать на изменения спроса.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="services__item-two">
+                            <div class="services__item-top">
+                                <div class="services__icon-two">
+                                    <i class="flaticon-truck"></i>
+                                </div>
+                                <h2 class="title"><a href="#">Глобальная сеть и<br>масштабируемость: </a></h2>
+                            </div>
+                            <div class="services__content-two">
+                                <p>Компания предоставляет услуги по перевозке грузов по всему миру, предлагая доступ к глобальной сети партнеров и транспортных маршрутов. Это позволяет масштабировать бизнес клиентов и оперативно реагировать на изменения спроса.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="services__item-two">
+                            <div class="services__item-top">
+                                <div class="services__icon-two">
+                                    <i class="flaticon-truck"></i>
+                                </div>
+                                <h2 class="title"><a href="#">Глобальная сеть и<br>масштабируемость: </a></h2>
+                            </div>
+                            <div class="services__content-two">
+                                <p>Компания предоставляет услуги по перевозке грузов по всему миру, предлагая доступ к глобальной сети партнеров и транспортных маршрутов. Это позволяет масштабировать бизнес клиентов и оперативно реагировать на изменения спроса.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- services-area-end -->
+
+        <!-- brand-area -->
+        <div class="brand__area">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="section__title mb-50">
+                            <h2 class="title">наши <span class="main-color-text">партнеры</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper brand-active fix">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/first-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/second-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/third-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/forth-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/fifth-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- brand-area-end -->
+
+        <!-- counter-area -->
+        <section class="counter__area counter__bg section-pt-90 section-pb-90" data-background="assets/img/bg/vector_bg05.svg">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="section__title white-title mb-50">
+                            <h2 class="title">
+                                Мы <span class="black-color-text">в циврах</span>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">1255</span></h2>
+                                <p>Договоров подписано</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">450</span></h2>
+                                <p>Постоянных клиентов</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">20000</span></h2>
+                                <p>Грузов отправлено</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">40</span></h2>
+                                <p>Человек в команде</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- counter-area-end -->
+
+    </main>
+    <!-- main-area-end -->
+
+    <!-- footer-area -->
+    {% include 'include/footer.html' %}
+    <!-- footer-area-end -->
+
+{% endblock %}

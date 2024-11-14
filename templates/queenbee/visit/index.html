@@ -1,0 +1,76 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+<main class="main" id="top">
+    <div class="container" data-layout="container">
+        {% include 'queenbee/include/header.html' %}
+        
+        <div class="card p-4" style="max-width: 1200px; margin: auto; height: 80vh;"> <!-- ширина фиксирована -->
+            <h3 class="text-center">Статистика посещаемости за последние 7 дней</h3>
+            <canvas id="visitChart" width="1200" height="600"></canvas> <!-- ширина и высота для графика -->
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('visitChart').getContext('2d');
+                
+                // Генерация массива цветов
+                const colors = [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(255, 159, 64, 0.7)'
+                ];
+
+                const visitChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ labels|safe }},
+                        datasets: [
+                            {% for entry in visits_data %}
+                            {
+                                label: '{{ entry.path }}',
+                                data: {{ entry.daily_data|safe }},
+                                backgroundColor: colors[{{ forloop.counter0 }} % colors.length],
+                                borderColor: colors[{{ forloop.counter0 }} % colors.length].replace('0.7', '1'),
+                                borderWidth: 1
+                            },
+                            {% endfor %}
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false, 
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Количество посещений'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Дата'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    padding: 20
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+
+        {% include 'queenbee/include/footer.html' %}
+    </div>
+</main>
+{% endblock %}

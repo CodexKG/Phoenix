@@ -1,0 +1,322 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+.kanban-board {
+    /* display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    overflow-x: auto; */
+}
+
+.kanban-board__container {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 250px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Более глубокая тень */
+}
+
+.kanban-list {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); /* Улучшенная тень */
+}
+
+.kanban-card {
+    background-color: #fffbf0;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Более сильная тень */
+    color: black; /* Текст становится черным */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+.kanban-card h4 {
+    color: black; /* Заголовки черные */
+    text-decoration: none; /* Убираем линию под заголовком */
+}
+
+.kanban-card p {
+    color: black; /* Описание тоже черное */
+}
+
+/* Для ссылок в заголовках */
+.kanban-board__container a {
+    color: black; /* Черный цвет для ссылок */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+.kanban-board__container a:hover {
+    color: #0056b3; /* Добавляем эффект при наведении */
+}
+
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 10180;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 40%; /* Устанавливаем ширину модального окна */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.add-list-btn {
+    padding: 10px 20px;
+    background-color: #F23F12;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-list-btn:hover {
+    background-color: #d63810;
+    color: white;
+}
+</style>
+
+<main class="main" id="top">
+    <div class="container" data-layout="container">
+        {% include 'queenbee/include/header.html' %}
+        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const openAddBoardModalButton = document.getElementById('openAddBoardModal');
+                const modal = document.getElementById('addBoardModal');
+                const closeModal = document.querySelector('.close');
+                const form = document.getElementById('addBoardForm');
+                const kanbanBoard = document.querySelector('#kanbanBoard .row');
+            
+                // Открыть модальное окно
+                openAddBoardModalButton.addEventListener('click', function() {
+                    modal.style.display = 'flex';  // Открываем модальное окно с использованием flex для центрирования
+                });
+            
+                // Закрыть модальное окно
+                closeModal.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+            
+                // Закрытие модального окна при клике вне его
+                window.addEventListener('click', function(event) {
+                    if (event.target == modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            
+                // Отправить данные формы через AJAX
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+            
+                    const formData = new FormData(form);
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+                    fetch("{% url 'crm_add_board' %}", {  // Используем отдельную функцию для добавления доски
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.title) {
+                            // Создаем новый HTML элемент для доски
+                            const newColumn = document.createElement('div');
+                            newColumn.classList.add('col-md-4');
+
+                            const newBoard = document.createElement('div');
+                            newBoard.classList.add('kanban-board__container');
+                            newBoard.id = `board-${data.board_id}`;
+                            newBoard.innerHTML = `
+                                <h3><a href="/admin/kanban/${data.board_id}/">${data.title}</a></h3>
+                            `;
+
+                            // Вставляем newBoard внутрь col-md-4
+                            newColumn.appendChild(newBoard);
+            
+                            // Добавляем новую доску в конец списка
+                            kanbanBoard.insertBefore(newColumn, kanbanBoard.firstChild);
+
+                            // Закрываем модальное окно и очищаем форму
+                            modal.style.display = 'none';
+                            form.reset();
+                        } else {
+                            alert('Ошибка при добавлении доски');
+                        }
+                    })
+                    .catch(error => console.error('Ошибка:', error));
+                });
+            });
+        </script>
+
+        <!-- Модальное окно -->
+        <div id="addBoardModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Добавить новую доску</h2>
+                <form id="addBoardForm">
+                    {% csrf_token %}
+                    {{ form.title }}
+                    <button type="submit" class="btn add-list-btn">Добавить доску</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Обработка удаления доски
+                document.querySelectorAll('.delete-board').forEach(function(deleteBtn) {
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const boardId = this.dataset.id;
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                        
+                        if (confirm("Вы уверены, что хотите удалить эту доску?")) {
+                            fetch(`/admin/kanban/delete_board/${boardId}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrfToken
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.getElementById(`board-${boardId}`).remove(); // Удалить доску из DOM
+                                } else {
+                                    alert('Ошибка при удалении доски');
+                                }
+                            })
+                            .catch(error => console.error('Ошибка:', error));
+                        }
+                    });
+                });
+
+                // Обработка изменения названия доски
+                document.querySelectorAll('.edit-board').forEach(function(editBtn) {
+                    editBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const boardId = this.dataset.id;
+                        const newTitle = prompt("Введите новое название доски:");
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                        if (newTitle) {
+                            fetch(`/admin/kanban/edit_board/${boardId}/`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRFToken': csrfToken,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ title: newTitle })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.querySelector(`#board-${boardId} h2 a`).textContent = newTitle; // Обновить название
+                                } else {
+                                    alert('Ошибка при изменении названия доски');
+                                }
+                            })
+                            .catch(error => console.error('Ошибка:', error));
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <div class="row g-3 mb-3">
+            <!-- Кнопка открытия модального окна -->
+            <button id="openAddBoardModal" class="btn add-list-btn">Добавить доску</button>
+            <a href="{% url 'crm_kanban_index' %}" class="btn add-list-btn">Инструкция</a>
+
+            <div class="kanban-board mt-4" id="kanbanBoard">
+                <div class="row">
+                    {% for board in boards %}
+                    <div class="col-md-4">
+                        <div class="kanban-board__container visible" id="board-{{ board.id }}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.title }}</a></h3>
+                                <div class="dropdown">
+                                    <button class="dropdown-btn">⋮</button> <!-- Иконка с тремя точками -->
+                                    <div class="dropdown-content">
+                                        <a href="#" class="edit-board" data-id="{{ board.id }}">Изменить название</a>
+                                        <a href="#" class="delete-board" data-id="{{ board.id }}">Удалить</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><a href="{% url 'crm_kanban_detail' board.id %}">{{ board.updated_at }}</a></p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

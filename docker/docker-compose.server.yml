@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db_phoenix:
+    image: postgres:13
+    env_file:
+      - ../.env
+    volumes:
+      - phoenix_postgres_data:/var/lib/postgresql/data
+
+  rabbitmq_phoenix:
+    image: rabbitmq:3-management
+    ports:
+      - "12000:5672"   # Поменяли порт для RabbitMQ AMQP на 12000
+      - "12001:15672"  # Поменяли порт для RabbitMQ management на 12001
+
+  web_phoenix:
+    build:
+      context: ..
+      dockerfile: Dockerfile.server
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:12002 # Поменяли порт на 12002
+    volumes:
+      - ../:/app
+      - ../static:/app/static
+      - ../media:/app/media
+    env_file:
+      - ../.env
+    depends_on:
+      - db_phoenix
+      - rabbitmq_phoenix
+    expose:
+      - "12002"  # Поменяли порт на 12002
+
+  phoenix_bot:
+    build:
+      context: ..
+      dockerfile: Dockerfile.server
+    command: python manage.py bot
+    volumes:
+      - ../:/app
+    env_file:
+      - ../.env
+    depends_on:
+      - db_phoenix
+      - rabbitmq_phoenix
+    # networks:
+    #   - phoenix_network
+
+  nginx_phoenix:
+    image: nginx:latest
+    ports:
+      - "12003:80"    # Поменяли порт для HTTP на 12003
+    volumes:
+      - ../nginx/nginx.server.conf:/etc/nginx/nginx.conf:ro
+      - ../static:/app/static
+      - ../media:/app/media
+      - /etc/letsencrypt/live/phoenix.webtm.ru/fullchain.pem:/etc/nginx/certs/fullchain.pem:ro
+      - /etc/letsencrypt/live/phoenix.webtm.ru/privkey.pem:/etc/nginx/certs/privkey.pem:ro
+    depends_on:
+      - web_phoenix
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  phoenix_postgres_data:

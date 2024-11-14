@@ -1,0 +1,913 @@
+{% extends 'include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+    <!--Preloader-->
+    <div id="preloader">
+        <div class="tg-preloader-block">
+            <div class="tg-spinner-eff">
+                <div class="tg-bar tg-bar-top"></div>
+                <div class="tg-bar tg-bar-right"></div>
+                <div class="tg-bar tg-bar-bottom"></div>
+                <div class="tg-bar tg-bar-left"></div>
+            </div>
+        </div>
+    </div>
+    <!--Preloader-end -->
+
+    <!-- Scroll-top -->
+    <button class="scroll__top scroll-to-target" data-target="html">
+        <i class="fas fa-angle-up"></i>
+    </button>
+    <!-- Scroll-top-end-->
+
+    <!-- header-area -->
+    {% include 'include/header.html' %}
+    <!-- header-area-end -->
+
+    <!-- main-area -->
+    <main class="fix">
+
+        <!-- slider-area -->
+        <section class="slider__area">
+            <div class="swiper-container slider__active">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide slider__single">
+                        <div class="slider__bg" data-background="{% static 'assets/img/banner/bg-main.jpg' %}"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- slider-area-end -->
+
+        <!-- newsletter-area -->
+        <section class="newsletter__area">
+            <div class="container">
+                <div class="newsletter__wrap">
+                    <div class="row gx-0">
+                        <div class="col-lg-6">
+                            <div class="newsletter__content-left">
+                                <div class="experiences__wrap">
+                                    <h2 class="count">10</h2>
+                                    <span><strong>Лет Опыта</strong></span>
+                                </div>
+                                <h2 class="title">Безопасная доставка вашего груза транспортом в любую точку мира</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="newsletter__content">
+                                <h2 class="title">Самый распространенный вид перевозок для доставки грузов на короткие и средние расстояния.</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- newsletter-area-end -->
+
+        <style>
+            html {
+                scroll-behavior: smooth;
+            }
+        </style>
+
+        <!-- about-area -->
+        <section class="about__area-three section-about-p">
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="about__content-three">
+                            <a href="#calculator" class="btn">оставить заявку
+                                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- about-area-end -->
+
+        <!-- services-area -->
+        <section class="services__area-two grey-bg section-pt-120 section-pb-90">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <div class="section__title mb-60 mb-md-30">
+                            <h2 class="title">Мы - компания <span class="main-color-text">Phoenix logistic</span> 
+                                надежный партнер в мире логистики</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="section__content mb-50 descr">
+                            <p>стремящийся сделать ваш бизнес 
+                                успешным, а процесс 
+                                <span class="main-color-text">доставки</span> - безупречным.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container custom-container">
+                <div class="row gutter-60 justify-content-center">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="services__item-two">
+                            <div class="services__item-top">
+                                <div class="services__icon-two">
+                                    <i class="flaticon-truck"></i>
+                                </div>
+                                <h2 class="title"><a href="#">Глобальная сеть и<br>масштабируемость: </a></h2>
+                            </div>
+                            <div class="services__content-two">
+                                <p>Компания предоставляет услуги по перевозке грузов по всему миру, предлагая доступ к глобальной сети партнеров и транспортных маршрутов. Это позволяет масштабировать бизнес клиентов и оперативно реагировать на изменения спроса.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="services__item-two">
+                            <div class="services__item-top">
+                                <div class="services__icon-two">
+                                    <i class="flaticon-truck"></i>
+                                </div>
+                                <h2 class="title"><a href="#">Глобальная сеть и<br>масштабируемость: </a></h2>
+                            </div>
+                            <div class="services__content-two">
+                                <p>Компания предоставляет услуги по перевозке грузов по всему миру, предлагая доступ к глобальной сети партнеров и транспортных маршрутов. Это позволяет масштабировать бизнес клиентов и оперативно реагировать на изменения спроса.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="services__item-two">
+                            <div class="services__item-top">
+                                <div class="services__icon-two">
+                                    <i class="flaticon-truck"></i>
+                                </div>
+                                <h2 class="title"><a href="#">Глобальная сеть и<br>масштабируемость: </a></h2>
+                            </div>
+                            <div class="services__content-two">
+                                <p>Компания предоставляет услуги по перевозке грузов по всему миру, предлагая доступ к глобальной сети партнеров и транспортных маршрутов. Это позволяет масштабировать бизнес клиентов и оперативно реагировать на изменения спроса.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- services-area-end -->
+
+        <!-- HTML Структура формы и модального окна -->
+        <!-- request-area -->
+        <div class="request__area-two" id="calculator">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section__title mb-20">
+                            <h2 class="title"><span class="main-color-text">Калькулятор доставки</span><br>грузов из разных стран:</h2>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="request__wrap">
+                            <div class="request__tab-wrap">
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane show active" id="request-tab-pane" role="tabpanel" aria-labelledby="request-tab" tabindex="0">
+                                        <form class="request__form request__form-two">
+                                            <div class="row gutter-20">
+                                                <div class="col-lg-3">
+                                                    <span class="title">Откуда:</span>
+                                                    <div class="form-grp select-grp">
+                                                        <select name="from_city" class="orderby" required>
+                                                            <option value="" disabled selected>Выберите город</option>
+                                                            <option value="Урумчи">Урумчи</option>
+                                                            <option value="Гуанджоу">Гуанджоу</option>
+                                                            <option value="Москва">Иву</option>
+                                                        </select>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Куда:</span>
+                                                    <div class="form-grp select-grp">
+                                                        <select name="to_city" class="orderby" required>
+                                                            <option value="" disabled selected>Выберите город</option>
+                                                            <option value="Бишкек">Бишкек</option>
+                                                            <option value="Ош">Ош</option>
+                                                        </select>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Вид:</span>
+                                                    <div class="form-grp select-grp">
+                                                        <select name="appearance" class="orderby" required>
+                                                            <option value="" disabled selected>Выберите вид</option>
+                                                            <option value="Автозапчасти и аксессуары">Автозапчасти и аксессуары</option>
+                                                            <option value="Головные уборы">Головные уборы</option>
+                                                            <option value="Игрушки и канцелярские принадлежности">Игрушки и канцелярские принадлежности</option>
+                                                            <option value="Освещение">Освещение</option>
+                                                            <option value="Мебель и фурнитура">Мебель и фурнитура</option>
+                                                        </select>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Телефон:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="phone" placeholder="Ваш номер телефона" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row gutter-20">
+                                                <div class="col-lg-3">
+                                                    <span class="title">Длина:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="length" placeholder="Длина груза (в метрах)" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Ширина:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="width" placeholder="Ширина груза (в метрах)" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Высота:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="height" placeholder="Высота груза (в метрах)" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Вес:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="weight" placeholder="Вес груза (в кг)" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">Почта:</span>
+                                                    <div class="form-grp">
+                                                        <input type="email" name="email" placeholder="example@mail.com" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <span class="title">ФИО:</span>
+                                                    <div class="form-grp">
+                                                        <input type="text" name="fullname" placeholder="ФИО" required>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <button type="button" class="btn calculate-btn" style="margin-top: 31px;">Рассчитать</button>
+                                                    <div class="form-check" style="margin-top: 10px;">
+                                                        <input class="form-check-input" type="checkbox" name="consent" id="flexRadioDefault2" required>
+                                                        <label class="form-check-label" for="flexRadioDefault2">
+                                                            Даю согласие на обработку моих <br>
+                                                            <a href="#">Персональных данных</a>
+                                                        </label>
+                                                        <small class="error-message" style="color: red; display: none;">Это поле обязательно</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно для отображения стоимости доставки -->
+        <div id="deliveryModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('deliveryModal').style.display='none'">&times;</span>
+                <div class="modal-body">
+                    <!-- Здесь будет отображена стоимость доставки -->
+                </div>
+                <button class="confirm-order">Подтвердить заявку</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно для подтверждения отправки заявки -->
+        <div id="confirmationModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="document.getElementById('confirmationModal').style.display='none'">&times;</span>
+                <div class="modal-body">
+                    Заявка успешно отправлена!
+                </div>
+            </div>
+        </div>
+
+        <!-- Стилизация модального окна -->
+        <style>
+            /* Стили для модального окна */
+            .modal {
+                display: none; /* Скрыто по умолчанию */
+                position: fixed; /* Фиксированное положение */
+                z-index: 1000; /* Увеличиваем z-index, чтобы окно было поверх других элементов */
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto; /* Разрешаем прокрутку, если контент превышает высоту окна */
+                background-color: rgba(0,0,0,0.5); /* Полупрозрачный черный фон */
+            }
+        
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto; /* Центровка по вертикали */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%; /* Можно изменить ширину по необходимости */
+                position: relative;
+                z-index: 1001; /* Устанавливаем уровень поверх фона модального окна */
+                border-radius: 8px; /* Закругленные углы */
+            }
+        
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+            }
+        
+            .modal-body {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+        
+            .confirm-order {
+                background-color: #ff4500;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+        
+            .confirm-order:hover {
+                background-color: #e03d00;
+            }
+        </style>
+
+        <!-- JavaScript для обработки формы и модального окна -->
+        <script>
+            document.querySelector('.calculate-btn').addEventListener('click', function(event) {
+                event.preventDefault(); // Остановка стандартного поведения
+
+                // Убираем сообщения об ошибках
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+                let isValid = true;
+                const formData = new FormData(document.querySelector('.request__form'));
+
+                formData.forEach((value, key) => {
+                    const field = document.querySelector(`[name="${key}"]`);
+
+                    // Заменяем запятые на точки для корректного восприятия чисел
+                    if (value.includes(',')) {
+                        value = value.replace(',', '.');
+                        formData.set(key, value); // Обновляем значение в formData
+                    }
+
+                    if (!value) {
+                        field.nextElementSibling.style.display = 'inline';
+                        field.style.border = '1px solid red';
+                        isValid = false;
+                    } else {
+                        field.style.border = '1px solid #ced4da';
+                    }
+                });
+                
+                if (!isValid) {
+                    return; // Останавливаем процесс, если форма не прошла проверку
+                }
+
+                // Преобразуем значения в числа
+                const length = parseFloat(formData.get('length')) || 0;
+                const width = parseFloat(formData.get('width')) || 0;
+                const height = parseFloat(formData.get('height')) || 0;
+                const weight = parseFloat(formData.get('weight')) || 0;
+
+                // Вычисляем объем и стоимость доставки
+                const volume = length * width * height;
+                let deliveryPrice = 0;
+
+                if (volume > 0 && weight > 0) {
+                    deliveryPrice = (weight / volume) * 0.35;
+                    deliveryPrice = deliveryPrice.toFixed(2); // Округление до 2 знаков после запятой
+                }
+
+                // Отображаем результат
+                const modal = document.getElementById('deliveryModal');
+                modal.querySelector('.modal-body').innerHTML = `Стоимость доставки: ${deliveryPrice} USD`;
+                modal.style.display = 'block';
+
+                // Сохраняем рассчитанную стоимость для последующего использования
+                document.querySelector('.confirm-order').dataset.deliveryPrice = deliveryPrice;
+            });
+
+            // Обработчик для подтверждения заявки
+            document.querySelector('.confirm-order').addEventListener('click', function() {
+                const formData = new FormData(document.querySelector('.request__form'));
+                const deliveryPrice = this.dataset.deliveryPrice;
+
+                formData.append('delivery_price', deliveryPrice); // Добавляем цену доставки к данным формы
+
+                // Отправляем данные на сервер для записи в модель Billing
+                fetch('/admin/create_billing/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Скрываем окно с расчетом доставки
+                        document.getElementById('deliveryModal').style.display = 'none';
+                        
+                        // Показываем модальное окно подтверждения заявки
+                        const confirmationModal = document.getElementById('confirmationModal');
+                        confirmationModal.style.display = 'block';
+
+                        // Очищаем форму после успешной отправки
+                        clearForm();
+                    } else {
+                        alert('Ошибка: ' + data.error);
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+            });
+
+            // Функция для очистки формы
+            function clearForm() {
+                const formElements = document.querySelectorAll('.request__form input, .request__form select');
+                formElements.forEach(element => {
+                    if (element.type === 'checkbox') {
+                        element.checked = false;
+                    } else {
+                        element.value = '';
+                    }
+                    element.style.border = '1px solid #ced4da'; // Сбрасываем стили границы
+                });
+            }
+
+            // Функция для получения CSRF-токена
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Закрытие модального окна
+            document.querySelectorAll('.close').forEach(closeButton => {
+                closeButton.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+        </script>
+
+        <!-- area-bg -->
+        <div class="area__bg section-pt-130" data-background="{% static 'assets/img/bg-footer.png' %}">
+
+            <!-- project-area -->
+            <section class="project__area-two section-pb-100">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-8">
+                            <div class="section__title white-title mb-50">
+                                <h2 class="title">наши <span class="main-color-text">услуги</span></h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-4">
+                            <div class="view-all-btn text-end mb-50">
+                                <a href="#" class="btn white-btn">Все услуги</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-container project-active-two">
+                        <div class="swiper-wrapper">
+
+                            <div class="swiper-slide">
+                                <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                    <div class="project__thumb-two">
+                                        <a href="#"><img src="{% static 'assets/img/project/project_img04.jpg' %}" alt="img"></a>
+                                    </div>
+                                    <div class="project__content-two">
+                                        <h2 class="title">Доставка по городам России</h2>
+                                        <span><a href="#">Подробнее</a></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                    <div class="project__thumb-two">
+                                        <a href="#"><img src="{% static 'assets/img/project/project_img10.jpg' %}" alt="img"></a>
+                                    </div>
+                                    <div class="project__content-two">
+                                        <h2 class="title">Доставка по городам Кыргызстана</h2>
+                                        <span><a href="#">Подробнее</a></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                    <div class="project__thumb-two">
+                                        <a href="#"><img src="{% static 'assets/img/project/project_img09.jpg' %}" alt="img"></a>
+                                    </div>
+                                    <div class="project__content-two">
+                                        <h2 class="title">Доставка по городам Белорусии</h2>
+                                        <span><a href="#">Подробнее</a></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <div class="project__item-two wow img-custom-anim-top" data-wow-duration="1.5s" data-wow-delay="0.2s">
+                                    <div class="project__thumb-two">
+                                        <a href="#"><img src="{% static 'assets/img/project/project_img09.jpg' %}" alt="img"></a>
+                                    </div>
+                                    <div class="project__content-two">
+                                        <h2 class="title">Доставка по городам Китая</h2>
+                                        <span><a href="#">Подробнее</a></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- project-area-end -->
+        </div>
+        <!-- area-bg-end -->
+
+        <!-- brand-area -->
+        <div class="brand__area">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="section__title mb-50">
+                            <h2 class="title">наши <span class="main-color-text">партнеры</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper brand-active fix">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/first-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/second-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/third-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/forth-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="brand__item">
+                                <img src="{% static 'assets/img/brand/fifth-partner.png' %}" alt="img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- brand-area-end -->
+
+        <!-- about-area -->
+        <section class="about__area-two section-py-120">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="section__title mb-50">
+                            <h2 class="title"><span class="main-color-text">Упаковка</span> при отправке<br>грузов и товаров</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center justify-content-center gutter-24">
+                    <div class="col-lg-4">
+                        <div class="about__content-two">
+                            <div class="about__content-inner-2">
+                                <div class="about__clients-box-2">
+                                    <div class="counter__item">
+                                        <div class="">
+                                            <h2>Упаковка плотным скотчем</h2>
+                                            <p>Самый простой способ упаковки – подходит для нехрупких
+                                                грузов. Помогает от промокания упаковки и от сильных
+                                                повреждений самого товара.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="about__clients-box-2">
+                                    <div class="counter__item">
+                                        <div class="">
+                                            <h2>Паллета + скотч</h2>
+                                            <p>Подходит для грузов, объем которых более 1 м3. Помогает
+                                                зафиксировать весь груз (все коробки) в одном
+                                                положении, упростить процессы погруз/разгруза и
+                                                оптимизировать расходы погруз/разгруза.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="about__clients-box-2">
+                                    <div class="counter__item">
+                                        <div class="">
+                                            <h2>Водонепроницаемые мешки
+                                                + скотч (+обрешетка)</h2>
+                                            <p>Подходит для одежды, тканей и подобных грузов,
+                                                где очень важно, чтобы груз не промок.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="about__clients-box-2">
+                                    <div class="counter__item">
+                                        <div class="">
+                                            <h2>Деревянная обрешетка+скотч</h2>
+                                            <p>Подходит грузов всех типов и размеров. Помогает
+                                                полностью сохранить заводскую упаковку товара, а
+                                                также уберечь товар от любых механических
+                                                повреждений.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-9">
+                        <div class="about__img-two">
+                            <img src="{% static 'assets/img/russiamap.png' %}" alt="img" data-aos="fade-right" data-aos-delay="400">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- about-area-end -->
+        <!-- counter-area -->
+        <section class="counter__area counter__bg section-pt-90 section-pb-90" data-background="{% static 'assets/img/kr.png' %}">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-8">
+                        <div class="section__title white-title mb-50">
+                            <h2 class="title">
+                                Мы <span class="black-color-text">в цифрах</span>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">1255</span></h2>
+                                <p>Договоров подписано</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">450</span></h2>
+                                <p>Постоянных клиентов</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">20000</span></h2>
+                                <p>Грузов отправлено</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="counter__item-two">
+                            <div class="counter__content-two">
+                                <h2 class="count"><span class="counter-number">40</span></h2>
+                                <p>Человек в команде</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- counter-area-end -->
+
+        <!-- faq-area -->
+        <section class="faq__area bg-black section-py-140">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-12">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-md-8">
+                                <div class="section__title white-title mb-50">
+                                    <h2 class="title">
+                                        Популярные вопросы <br><span class="main-color-text">по логистике с Китаем:</span>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faq__wrap-two">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Работаете ли вы с юридическими лицами по доставке грузов из Китая?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Да, мы специализируемся именно на работе с юридическими лицами. Мы заключаем договор,предоставляем контрагента и выдаем полный пакет закрывающих документов. С нами ваш бизнес будет защищен.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            От какой минимальной партии или суммы можно начать работу?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Что необходимо для начала сотрудничества?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Какие у меня будут гарантии?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            Страхуются ли грузы и в каких случаях она вступает в силу?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Куда приезжают грузы в РФ?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Работаете ли вы с НДС?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Работаете ли вы с юридическими лицами по доставке грузов из Китая?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- faq-area-end -->
+
+        <!-- contact-area -->
+        <section class="contact__area section-py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="contact__form-wrap">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img src="{% static 'assets/img/contact.png' %}" alt="">
+                                </div>
+                                <div class="col-md-8">
+                                    <h2 class="title">Получите <span class="main-color-text">быстрый расчет стоимости</span> <br>
+                                        доставки за <span class="main-color-text">30 минут:</span></h2>
+                                    <form action="https://themeadapt.com/tf/logistex/assets/mail.php" class="contact__form" method="POST" id="contact-form">
+                                        <div class="form-grp">
+                                            <input type="text" name="name" placeholder="Введите ваше имя:">
+                                        </div>
+                                        <div class="form-grp">
+                                            <input type="phone" name="phone" placeholder="Введите ваш номер телефона:">
+                                        </div>
+                                        <div class="form-grp">
+                                            <input type="email" name="email" placeholder="Введите ваш email:">
+                                        </div>
+                                        <div class="form-grp">
+                                            <textarea name="message" placeholder="Ваше сообщение:"></textarea>
+                                        </div>
+                                        <button class="btn red-btn w-100 justify-content-center">получить индивидуальный расчет  
+                                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                                <path d="M1 12.0969L12.0969 0.999996M12.0969 0.999996H1M12.0969 0.999996V12.0969" stroke="currentcolor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault2">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Даю согласие на обработку моих 
+                                                <a href="#">Персональных данных</a>
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <p class="ajax-response mb-0"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- contact-area-end -->
+
+    </main>
+    <!-- main-area-end -->
+
+    <!-- footer-area -->
+    {% include 'include/footer.html' %}
+    <!-- footer-area-end -->
+
+{% endblock %}

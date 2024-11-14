@@ -1,0 +1,158 @@
+{% extends 'include/homepage.html' %}
+{% load static %}
+{% block content %}
+
+    <!--Preloader-->
+    <div id="preloader">
+        <div class="tg-preloader-block">
+            <div class="tg-spinner-eff">
+                <div class="tg-bar tg-bar-top"></div>
+                <div class="tg-bar tg-bar-right"></div>
+                <div class="tg-bar tg-bar-bottom"></div>
+                <div class="tg-bar tg-bar-left"></div>
+            </div>
+        </div>
+    </div>
+    <!--Preloader-end -->
+
+    <!-- Scroll-top -->
+    <button class="scroll__top scroll-to-target" data-target="html">
+        <i class="fas fa-angle-up"></i>
+    </button>
+    <!-- Scroll-top-end-->
+
+    <!-- header-area -->
+    {% include 'include/header.html' %}
+    <!-- header-area-end -->
+
+    <!-- main-area -->
+    <main class="fix">
+
+        <!-- faq-area -->
+        <section class="faq__area bg-gray section-py-140">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-xl-12">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 col-md-8">
+                                <div class="section__title mb-50">
+                                    <h2 class="title">
+                                        Популярные вопросы <br><span class="main-color-text">по логистике с Китаем:</span>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="faq__wrap-two">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Работаете ли вы с юридическими лицами по доставке грузов из Китая?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Да, мы специализируемся именно на работе с юридическими лицами. Мы заключаем договор,предоставляем контрагента и выдаем полный пакет закрывающих документов. С нами ваш бизнес будет защищен.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            От какой минимальной партии или суммы можно начать работу?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Что необходимо для начала сотрудничества?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            Какие у меня будут гарантии?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                            Страхуются ли грузы и в каких случаях она вступает в силу?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Куда приезжают грузы в РФ?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Работаете ли вы с НДС?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                            Работаете ли вы с юридическими лицами по доставке грузов из Китая?
+                                        </button>
+                                    </h2>
+                                    <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <p>Gorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam pellentesque nec nam nulla facilisi etiam aliquam.Lorem ipsum dolor sit amet, consectetur adipiscing elit empor incididunt ut labore et dolore magna uam pellentesque nec nam nulla facilisi etiam aliquam.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- faq-area-end -->
+
+    </main>
+    <!-- main-area-end -->
+
+    <!-- footer-area -->
+    {% include 'include/footer.html' %}
+    <!-- footer-area-end -->
+
+{% endblock %}
