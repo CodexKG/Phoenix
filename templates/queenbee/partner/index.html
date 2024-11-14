@@ -1,0 +1,150 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static %}
+{% block content %}
+    <!-- ===============================================--><!--    Main Content--><!-- ===============================================-->
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+
+          {% include 'queenbee/include/header.html' %}
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                  fetchTableData();
+              });
+
+              function fetchTableData() {
+              fetch('/admin/get_group_data/') // Убедитесь, что URL верный
+                  .then(response => {
+                  if (!response.ok) {
+                      throw new Error(`HTTP error! Status: ${response.status}`);
+                  }
+                  return response.json();
+                  })
+                  .then(data => {
+                  const fieldNames = data.field_names;
+                  const groups = data.groups;
+                  const thead = document.querySelector('.table thead tr');
+                  const tbody = document.querySelector('.table tbody');
+
+                  // Отображаем заголовки столбцов
+                  thead.innerHTML = '';
+                  Object.keys(fieldNames).forEach(field => {
+                      const th = document.createElement('th');
+                      th.textContent = fieldNames[field];
+                      thead.appendChild(th);
+                  });
+
+                  // Проверяем, есть ли смены
+                  if (groups.length === 0) {
+                    // Если смен нет, отображаем сообщение
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3">Группы разрешения не найдены.</td></tr>';
+                  } else {
+                  // Отображаем данные категорий
+                  tbody.innerHTML = '';
+                  groups.forEach(group => {
+                      const tr = document.createElement('tr');
+                      Object.keys(group).forEach((field, index) => {
+                      const td = document.createElement('td');
+                      if (index === 0) { // Если это первый элемент (например, ID), создаем ссылку
+                          const a = document.createElement('a');
+                          a.href = `/admin/group/${group[field]}/`; // Ссылка на детальный просмотр
+                          a.textContent = group[field];
+                          td.appendChild(a);
+                      } else {
+                          td.textContent = group[field];
+                      }
+                      tr.appendChild(td);
+                      });
+                      tbody.appendChild(tr);
+                  });
+                  }
+                  })
+                  .catch(error => {
+                  console.error('Error fetching estimate data:', error);
+                  const tbody = document.querySelector('.table tbody');
+                  tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3">Произошла ошибка при загрузке данных.</td></tr>';
+                  });
+              }
+            </script>
+            <div class="row mb-3">
+              <div class="col">
+                <div class="card bg-100 shadow-none border">
+                  <div class="row gx-0 flex-between-center">
+                    <div class="col-sm-auto d-flex align-items-center"><img class="ms-n2" src="{% static 'crm/assets/img/illustrations/crm-bar-chart.png' %}" alt="" width="90" />
+                      <div>
+                        <h6 class="text-primary fs-10 mb-0">Добро пожаловать </h6>
+                        <h4 class="text-primary fw-bold mb-0">BigBee <span class="text-info fw-medium">CRM</span></h4>
+                      </div><img class="ms-n4 d-md-none d-lg-block" src="{% static 'crm/assets/img/illustrations/crm-line-chart.png' %}" alt="" width="150" />
+                    </div>
+                    <div class="col-md-auto p-3">
+                      <form class="row align-items-center g-3" method="get">
+                          <div class="col-auto">
+                              <h6 class="text-700 mb-0">Показаны данные для: </h6>
+                          </div>
+                          <div class="col-md-auto position-relative">
+                              <input class="form-control form-control-sm datetimepicker ps-4" id="CRMDateRange" type="text" name="CRMDateRange" data-options="{&quot;locale&quot;: &quot;ru&quot;, &quot;mode&quot;:&quot;range&quot;,&quot;dateFormat&quot;:&quot;M d&quot;,&quot;disableMobile&quot;:true, &quot;defaultDate&quot;: [&quot;{{ default_start_date }}&quot;, &quot;{{ default_end_date }}&quot;] }"/>
+                              <span class="fas fa-calendar-alt text-primary position-absolute top-50 translate-middle-y ms-2"></span>
+                          </div>
+                          <button type="submit" class="btn btn-primary btn-sm">Показать</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mb-3" id="ordersTable" data-list='{"valueNames":["order","date","address","status","amount"],"page":10,"pagination":true}'>
+              <div class="card-header">
+                <div class="row flex-between-center">
+                  <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                    <h5 class="fs-9 mb-0 text-nowrap py-2 py-xl-0">Группа разрешений</h5>
+                  </div>
+                  <div class="col-8 col-sm-auto ms-auto text-end ps-0">
+                    <div id="orders-actions">
+                      <button class="btn btn-falcon-default btn-sm" type="button" onclick="window.location.href = '{% url 'crm_group_add' %}'">
+                        <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ms-1">Добавить</span>
+                      </button>
+
+                      <button class="btn btn-falcon-default btn-sm mx-2" type="button">
+                        <span class="fas fa-filter" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ms-1">Фильтры</span>
+                      </button>
+            
+                      <button class="btn btn-falcon-default btn-sm" type="button">
+                        <span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span>
+                        <span class="d-none d-sm-inline-block ms-1">Выгрузить</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive scrollbar">
+                  <table class="table table-sm table-striped fs-10 mb-0 overflow-hidden">
+                    <thead class="bg-200">
+                      <tr>
+
+                      </tr>
+                    </thead>
+                    <tbody class="list" id="table-orders-body">
+                      <tr class="btn-reveal-trigger">
+
+                        <div id="buttonContainer" class="text-center mt-3"></div>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <!-- Место для кнопки под таблицей -->
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="d-flex align-items-center justify-content-center"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+                  <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
+                </div>
+              </div>
+            </div>
+            {% include 'queenbee/include/footer.html' %}
+          </div>
+        </div>
+      </main><!-- ===============================================--><!--    End of Main Content--><!-- ===============================================-->
+      
+{% endblock %}

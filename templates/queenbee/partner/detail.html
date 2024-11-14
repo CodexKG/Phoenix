@@ -1,0 +1,40 @@
+{% extends 'queenbee/include/homepage.html' %}
+{% load static custom_filters %}
+{% block content %}
+    <main class="main" id="top">
+        <div class="container" data-layout="container">
+          {% include 'queenbee/include/header.html' %}
+            <div class="row g-0">
+                <div class="col-lg-8 pe-lg-2">
+                  <div class="card mb-3">
+                    <div class="card-header bg-body-tertiary">
+                      <h6 class="mb-0">Сотрудник</h6>
+                    </div>
+                    <div class="card-body">
+                      <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                          <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field|add_class:"form-control" }}
+                            {% if field.help_text %}
+                              <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                          </div>
+                        {% endfor %}
+                        {% if partner.id %}
+                        <button type="submit" class="btn btn-primary" name="update">Обновить</button>
+                        <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+                        {% endif %}
+                      </form>
+                    </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            {% include 'queenbee/include/footer.html' %}
+        </div>
+      </main>
+{% endblock %}
