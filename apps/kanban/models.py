@@ -91,6 +91,10 @@ class Card(models.Model):
         Employee, related_name='employee_cards', 
         blank=True, verbose_name="Участники"
     )
+    is_archive = models.BooleanField(
+        default=False, verbose_name="Архивация",
+        blank=True, null=True
+    )
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата создания"
     )
