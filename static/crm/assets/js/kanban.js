@@ -388,10 +388,83 @@ document.addEventListener('DOMContentLoaded', function () {
     const viewCloseModal = document.getElementById('closeCardModal');
 
     function showModalWithCardData(card) {
-        document.getElementById('cardTitle').innerText = card.querySelector('h4')?.innerText || "Нет названия";
-        document.getElementById('cardDescription').innerText = card.querySelector('p')?.innerText || "Нет описания";
-        viewModal.style.display = 'flex';
+        // Лог для проверки переданных данных карточки
+        console.log('Card data:', card);
+
+        // Получение данных карточки
+        document.getElementById('cardTitle').innerText = card.dataset.title || "Нет названия";
+        document.getElementById('cardDescription').innerText = card.dataset.description || "Нет описания";
+        document.getElementById('cardDueDate').innerText = card.dataset.dueDate || "Нет данных";
+        document.getElementById('cardUser').innerText = card.dataset.user || "Не указано";
+        document.getElementById('cardCreatedAt').innerText = card.dataset.createdAt || "Нет данных";
+        document.getElementById('cardUpdatedAt').innerText = card.dataset.updatedAt || "Нет данных";
+
+        // Найдём элемент вложений по уникальному ID карточки
+        const cardId = card.dataset.cardId;
+
+        // Выполняем fetch для получения вложений с сервера
+        fetch(`/admin/kanban/card/${cardId}/attachments/`, {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Очищаем модальное окно вложений перед добавлением новых данных
+                const attachmentsModalList = document.getElementById('cardAttachmentsModal');
+
+                if (attachmentsModalList) {
+                    attachmentsModalList.innerHTML = '';
+                } else {
+                    console.error('Элемент cardAttachmentsModal не найден');
+                    return;
+                }
+
+                if (data.success && data.attachments.length > 0) {
+                    // Добавляем вложения в модальное окно
+                    data.attachments.forEach(attachment => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = attachment.file_url;
+                        a.target = '_blank';
+                        a.textContent = attachment.file_name;
+                        li.appendChild(a);
+                        attachmentsModalList.appendChild(li);
+                    });
+                } else {
+                    // Если вложений нет, отображаем сообщение "Нет вложений"
+                    const li = document.createElement('li');
+                    li.textContent = 'Нет вложений';
+                    attachmentsModalList.appendChild(li);
+                }
+
+                // Открываем модальное окно
+                const viewModal = document.getElementById('viewCardModal');
+                if (viewModal) {
+                    viewModal.style.display = 'flex';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при получении вложений:', error);
+
+                // Открываем модальное окно и показываем сообщение об ошибке
+                const attachmentsModalList = document.getElementById('cardAttachmentsModal');
+                if (attachmentsModalList) {
+                    const li = document.createElement('li');
+                    li.textContent = 'Ошибка при загрузке вложений';
+                    attachmentsModalList.appendChild(li);
+                }
+
+                const viewModal = document.getElementById('viewCardModal');
+                if (viewModal) {
+                    viewModal.style.display = 'flex';
+                }
+            });
     }
+
+
+
 
     viewCloseIcon.addEventListener('click', () => viewModal.style.display = 'none');
     viewCloseModal.addEventListener('click', () => viewModal.style.display = 'none');

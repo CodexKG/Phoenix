@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.db.models import Prefetch
 import logging
 import json
 
@@ -31,12 +32,17 @@ def crm_kanban_index(request):
 @permission_required('crm_kanban_detail', 'Детальный просмотр раздела Задачник')
 def crm_kanban_detail(request, id):
     board = get_object_or_404(models.Board, id=id)
-    # Получаем все списки, карточки и вложения в одном запросе
+
+    # Предзагрузка карточек с вложениями для каждого списка на доске
+    cards_with_attachments = models.Card.objects.prefetch_related(
+        'card_attachments')
+
     lists = models.List.objects.filter(
         board=board
     ).prefetch_related(
-        'card_lists__card_attachments'  # Предзагрузка вложений для каждой карточки
+        Prefetch('card_lists', queryset=cards_with_attachments, to_attr='cards')
     )
+
     employees = Employee.objects.all()
 
     # Формы для добавления карточки и вложений
@@ -50,6 +56,22 @@ def crm_kanban_detail(request, id):
         'card_form': card_form,
         'attachment_form': attachment_form,
     })
+
+
+@staff_member_required(login_url='/admin/login/')
+def get_card_attachments(request, card_id):
+    try:
+        card = models.Card.objects.get(id=card_id)
+        attachments = card.card_attachments.all()
+        attachments_data = [
+            {
+                'file_name': attachment.file.name,
+                'file_url': attachment.file.url
+            } for attachment in attachments
+        ]
+        return JsonResponse({'success': True, 'attachments': attachments_data})
+    except models.Card.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Карточка не найдена'})
 
 
 # def crm_kanban_detail(request, id):
