@@ -198,15 +198,16 @@
 }
 
 .no-tasks-message {
-    display: block;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-style: italic;
+    font-weight: 300;
     pointer-events: none;
-    /* Отключает взаимодействие */
     user-select: none;
-    /* Запрещает выделение текста */
-    color: #888;
-    text-align: center;
-    padding: 15px 0;
-    margin-right: 25px;
+
     /* Добавляет отступ слева */
 }
 
@@ -491,4 +492,32 @@ tr {
 
 .table-card p {
     margin: 0;
+}
+
+
+/* .kanban-cards,
+.table-cards {
+    border: 2px dashed #007bff !important;
+    background-color: #f0f8ff !important;
+    transition: background-color 0.3s ease, border 0.3s ease !important;
+} */
+
+/* Дополнительное выделение для пустых контейнеров */
+.kanban-list .no-tasks-message,
+.table-list .no-tasks-message {
+    /* background-color: #ffcccb !important;
+    /* Светло-красный фон для сообщений о пустоте */
+    /* border: 1px solid #ff0000 !important; */
+    /* Красная граница для выделения пустых сообщений */
+    /* padding: 10px !important;
+    border-radius: 5px !important;
+    text-align: center !important;*/
+    position: absolute;
+    width: 100%;
+}
+
+.sortable {
+    position: relative;
+    height: 100%;
+    min-height: 60px;
 }

@@ -2,13 +2,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 from django.http import JsonResponse
+from django.db.models import Prefetch
 import logging
 import json
 
 from apps.kanban import models, forms
 from apps.queenbee.permissions import permission_required
 from apps.erp.models import Employee
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,21 +32,65 @@ def crm_kanban_index(request):
 @permission_required('crm_kanban_detail', 'Детальный просмотр раздела Задачник')
 def crm_kanban_detail(request, id):
     board = get_object_or_404(models.Board, id=id)
+
+    # Предзагрузка карточек с вложениями для каждого списка на доске
+    cards_with_attachments = models.Card.objects.prefetch_related(
+        'card_attachments')
+
     lists = models.List.objects.filter(
-        board=board).prefetch_related('card_lists')
+        board=board
+    ).prefetch_related(
+        Prefetch('card_lists', queryset=cards_with_attachments, to_attr='cards')
+    )
+
     employees = Employee.objects.all()
 
     # Формы для добавления карточки и вложений
     card_form = forms.CardForm()
-    attachment_formset = forms.AttachmentInlineFormset()
+    attachment_form = forms.AttachmentForm()
 
     return render(request, 'queenbee/kanban/detail.html', {
         'board': board,
         'lists': lists,
         'employees': employees,
         'card_form': card_form,
-        'attachment_formset': attachment_formset,
+        'attachment_form': attachment_form,
     })
+
+
+@staff_member_required(login_url='/admin/login/')
+def get_card_attachments(request, card_id):
+    try:
+        card = models.Card.objects.get(id=card_id)
+        attachments = card.card_attachments.all()
+        attachments_data = [
+            {
+                'file_name': attachment.file.name,
+                'file_url': attachment.file.url
+            } for attachment in attachments
+        ]
+        return JsonResponse({'success': True, 'attachments': attachments_data})
+    except models.Card.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Карточка не найдена'})
+
+
+# def crm_kanban_detail(request, id):
+#     board = get_object_or_404(models.Board, id=id)
+#     lists = models.List.objects.filter(
+#         board=board).prefetch_related('card_lists')
+#     employees = Employee.objects.all()
+
+#     # Формы для добавления карточки и вложений
+#     card_form = forms.CardForm()
+#     attachment_formset = forms.AttachmentInlineFormset()
+
+#     return render(request, 'queenbee/kanban/detail.html', {
+#         'board': board,
+#         'lists': lists,
+#         'employees': employees,
+#         'card_form': card_form,
+#         'attachment_formset': attachment_formset,
+#     })
 
 
 def crm_add_list(request, board_id):
@@ -138,45 +185,47 @@ def crm_edit_board(request, board_id):
             return JsonResponse({'success': False, 'error': 'Доска не найдена'})
     return JsonResponse({'success': False, 'error': 'Неверный запрос'})
 
-# Карточки
-# Представление для создания карточки
-
 
 def crm_add_card(request, list_id):
     list_obj = get_object_or_404(models.List, id=list_id)
 
     if request.method == 'POST':
-        form = forms.CardForm(request.POST, request.FILES)
-        formset = forms.AttachmentInlineFormset(request.POST, request.FILES)
+        card_form = forms.CardForm(request.POST, request.FILES)
+        if card_form.is_valid():
+            try:
+                # Создаем карточку
+                card = card_form.save(commit=False)
+                card.user = request.user
+                card.list = list_obj
+                card.position = list_obj.card_lists.count() + 1
+                card.save()  # Сохраняем карточку
+                card_form.save_m2m()
 
-        if form.is_valid() and formset.is_valid():
-            # Создаем карточку
-            card = form.save(commit=False)
-            card.user = request.user
-            card.list = list_obj
-            card.position = list_obj.card_lists.count() + 1
-            card.save()
-            form.save_m2m()
+                # Сохранение файлов вложений
+                files = request.FILES.getlist('file')
+                for file in files:
+                    models.Attachment.objects.create(
+                        card=card,
+                        user=request.user,
+                        file=file
+                    )
 
-            # Сохраняем все вложения из formset и добавляем текущего пользователя к каждому из них
-            formset.instance = card
-            attachments = formset.save(commit=False)
-            for attachment in attachments:
-                attachment.user = request.user
-                attachment.save()
-            formset.save()
+                return JsonResponse({'success': True, 'card_title': card.title, 'card_description': card.description, 'card_id': card.id})
 
-            return JsonResponse({'success': True, 'card_title': card.title, 'card_description': card.description, 'card_id': card.id})
+            except IntegrityError:
+                # Если поймали ошибку дубликата, то просто возвращаем ошибку пользователю
+                return JsonResponse({'success': False, 'error': 'Произошла ошибка с созданием карточки. Попробуйте снова.'}, status=500)
+
         else:
-            return JsonResponse({'success': False, 'errors': form.errors})
+            return JsonResponse({'success': False, 'errors': card_form.errors}, status=400)
 
     else:
-        form = forms.CardForm()
-        formset = forms.AttachmentInlineFormset()
+        card_form = forms.CardForm()
+        attachment_form = forms.AttachmentForm()
 
     return render(request, 'kanban/card_form.html', {
-        'form': form,
-        'formset': formset,
+        'form': card_form,
+        'attachment_form': attachment_form,
     })
 
 

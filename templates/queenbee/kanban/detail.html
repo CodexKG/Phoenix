@@ -14,7 +14,7 @@
 <div id="addCardModal" class="modal bd-example-modal-lg">
     <div class="modal-content card-modal">
         <span class="close">&times;</span>
-        <h2>Добавить новую карточку</h2>
+        <!-- <h2>Добавить новую карточку</h2>
         <form id="addCardForm" enctype="multipart/form-data">
             {% csrf_token %}
             {{ card_form.as_p }}
@@ -32,6 +32,49 @@
             {% endfor %}
 
             <button type="submit">Добавить карточку</button>
+        </form> -->
+
+        <h2>Добавить новую карточку</h2>
+        <form id="addCardForm" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            
+            <!-- Форма для добавления новой карточки -->
+            <div class="card-form">
+                {{ card_form.as_p }}
+                {% if card_form.errors %}
+                    <div class="error-messages">
+                        {% for field, errors in card_form.errors.items %}
+                            <strong>{{ field }}:</strong>
+                            <ul>
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <!-- Поле для добавления вложений -->
+            <h4>Добавить вложения:</h4>
+            <div class="attachment-form">
+                {{ attachment_form.file }}
+                {% if attachment_form.errors %}
+                    <div class="error-messages">
+                        {% for field, errors in attachment_form.errors.items %}
+                            <strong>{{ field }}:</strong>
+                            <ul>
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
+            <!-- Кнопка для добавления карточки -->
+            <button type="submit" class="btn btn-primary mt-3">Добавить карточку</button>
         </form>
     </div>
 </div>
@@ -59,7 +102,7 @@
         <p><strong>Дата создания:</strong> <span id="cardCreatedAt"></span></p>
         <p><strong>Обновлено:</strong> <span id="cardUpdatedAt"></span></p>
         <p><strong>Вложения:</strong></p>
-        <ul id="cardAttachments"></ul>
+        <ul id="cardAttachmentsModal"></ul>
         <p><strong>Участники:</strong></p>
         <ul id="cardMembers"></ul>
         <button id="closeCardModal" class="close-btn">Закрыть</button>
@@ -116,7 +159,7 @@
                                 <p>{{ card.description|truncatewords:4 }}</p>
                             </div>
                             {% endfor %}
-                            <p class="no-tasks-message">Нет задач в этом списке</p>
+                            <div class="no-tasks-message" aria-hidden="true">Нет задач в этом списке</div>
                         </div>                        
 
                         <!-- Кнопка для открытия модального окна -->
@@ -151,7 +194,7 @@
                                             <p>{{ card.description|truncatewords:4 }}</p>
                                         </div>
                                         {% endfor %}
-                                        <p class="no-tasks-message">Нет задач в этом списке</p>
+                                        <div class="no-tasks-message" aria-hidden="true">Нет задач в этом списке</div>
                                     </div>
                                 </td>
                             </tr>
